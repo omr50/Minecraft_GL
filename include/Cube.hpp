@@ -21,7 +21,10 @@ public:
 
     // non static members
     glm::mat4 model_matrix;
-    GLuint face_textures[6];
+    GLuint face_textures[3];
+    // all 4 sides use same texture
+
+    void add_textures(std::string top_filename, std::string bottom_filename, std::string sides_filename);
     // even better than the images have the loaded textures instead (using stb_image)
     // const char* texture_files[6] = {
     // "front.png", "back.png", "left.png", "right.png", "bottom.png", "top.png"

@@ -1,3 +1,5 @@
+// interface for objects that
+// are renderable.
 class Renderable
 {
 public:

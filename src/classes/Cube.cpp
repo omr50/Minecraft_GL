@@ -1,5 +1,8 @@
 #include "../../include/Cube.hpp"
 #include "../../include/Shader.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+#include <iostream>
 
 float Cube::front_face_vertices[30] = { // Front face
     -0.5f,
@@ -85,5 +88,33 @@ void Cube::setup_vbo_vao_shaders()
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
 
         glBindVertexArray(0);
+    }
+}
+
+void Cube::add_textures(std::string top_filename, std::string bottom_filename, std::string sides_filename)
+{
+    unsigned char *image;
+    int width, height, channels;
+
+    for (int i = 0; i < 3; i++)
+    {
+        image = stbi_load(top_filename.c_str(), &width, &height, &channels, 0);
+        if (!image)
+        {
+            std::cerr << "Failed to load texture " << top_filename << std::endl;
+        }
+
+        glGenTextures(1, &face_textures[i]);
+        glBindTexture(GL_TEXTURE_2D, face_textures[i]);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        GLenum format = channels == 4 ? GL_RGBA : GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        stbi_image_free(image);
     }
 }
