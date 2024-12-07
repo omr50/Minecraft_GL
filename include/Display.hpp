@@ -4,14 +4,17 @@
 #include <gl/glew.h>
 #include <SDL2/SDL.h>
 #include "./EventHandler.hpp"
+#include "./Camera.hpp"
+#include "./Renderer.hpp"
 
 class Display
 {
 private:
     SDL_Window *window = nullptr;
     bool running = true;
-    EventHandler event_handler = EventHandler(&this->running);
-    // Renderer renderer;
+    Camera camera = Camera();
+    EventHandler event_handler = EventHandler(&camera, window, &this->running);
+    Renderer renderer = Renderer();
     bool centered = true;
 
 public:

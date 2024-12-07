@@ -18,6 +18,8 @@ public:
     static float bottom_face_vertices[30];
     static float top_face_vertices[30];
     static float *faces[6];
+    int x;
+    int y;
 
     static void setup_vbo_vao_shaders();
 

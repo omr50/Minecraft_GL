@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
+#include "./Camera.hpp"
 
 class EventHandler
 {
@@ -8,9 +9,14 @@ class EventHandler
 private:
     SDL_Event e;
     bool *running = nullptr;
+    bool moved = false;
+    bool centered = true;
+    bool software_mouse_move_event;
+    Camera *camera;
+    SDL_Window *window;
 
 public:
-    EventHandler(bool *running);
+    EventHandler(Camera *camera, SDL_Window *window, bool *running);
     void event_handler();
     void keyboard_handler();
     void mouse_movement_handler();

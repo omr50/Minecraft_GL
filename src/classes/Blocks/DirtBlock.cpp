@@ -1,5 +1,12 @@
 #include "../../../include/Blocks/DirtBlock.hpp"
 
+DirtBlock::DirtBlock(int x, int y, std::string top_texture, std::string bottom_texture, std::string side_texture)
+{
+    this->x = x;
+    this->y = y;
+    this->add_textures(top_texture, bottom_texture, side_texture);
+}
+
 void DirtBlock::update_state()
 {
 }

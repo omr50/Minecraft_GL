@@ -19,4 +19,5 @@ public:
     void add_block(Cube *cube);
     void render_blocks();
     void send_matrix_to_shader(glm::mat4 *matrix);
+    void create_test_dirt_blocks(int num);
 };

@@ -1,4 +1,5 @@
 #include "../../include/Renderer.hpp"
+#include "../../include/Blocks/DirtBlock.hpp"
 #include <iostream>
 
 void Renderer::add_block(Cube *blocks)
@@ -30,4 +31,13 @@ void Renderer::send_matrix_to_shader(glm::mat4 *matrix)
         exit(EXIT_FAILURE);
     }
     glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(*matrix));
+}
+
+void Renderer::create_test_dirt_blocks(int num)
+{
+
+    for (int i = 0; i < num; i++)
+    {
+        all_blocks.push_back(new DirtBlock("../textures/dirt_bottom", "../textures/dirt_side.png", "../textures/dirt_side.png"));
+    }
 }
