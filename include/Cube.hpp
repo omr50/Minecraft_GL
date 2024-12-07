@@ -1,8 +1,10 @@
+#pragma once
 #include "../include/Renderable.hpp"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <string>
 
-class Cube
+class Cube : public Renderable
 {
 public:
     static float cube_vertices[180];
@@ -25,6 +27,7 @@ public:
     // all 4 sides use same texture
 
     void add_textures(std::string top_filename, std::string bottom_filename, std::string sides_filename);
+    void create_model_matrix(int offset_x, int offset_y);
     // even better than the images have the loaded textures instead (using stb_image)
     // const char* texture_files[6] = {
     // "front.png", "back.png", "left.png", "right.png", "bottom.png", "top.png"

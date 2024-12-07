@@ -3,10 +3,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 #include <iostream>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
 
 float Cube::front_face_vertices[30] = { // Front face
-    -0.5f,
-    -0.5f, +0.5f, 0.0f, 0.0f,
+    -0.5f, -0.5f, +0.5f, 0.0f, 0.0f,
     +0.5f, -0.5f, +0.5f, 1.0f, 0.0f,
     +0.5f, +0.5f, +0.5f, 1.0f, 1.0f,
     +0.5f, +0.5f, +0.5f, 1.0f, 1.0f,
@@ -117,4 +118,9 @@ void Cube::add_textures(std::string top_filename, std::string bottom_filename, s
         glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(image);
     }
+}
+
+void Cube::create_model_matrix(int offset_x, int offset_y)
+{
+    model_matrix = glm::translate(glm::vec3(offset_x, offset_y, -1.0f));
 }

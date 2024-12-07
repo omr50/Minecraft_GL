@@ -1,5 +1,6 @@
 // interface for objects that
 // are renderable.
+#pragma once
 class Renderable
 {
 public:
