@@ -16,6 +16,7 @@ public:
     std::vector<Cube *> all_blocks;
     Camera *camera;
 
+    Renderer(Camera *camera);
     void add_block(Cube *cube);
     void render_blocks();
     void send_matrix_to_shader(glm::mat4 *matrix);

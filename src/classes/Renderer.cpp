@@ -1,6 +1,9 @@
 #include "../../include/Renderer.hpp"
 #include "../../include/Blocks/DirtBlock.hpp"
 #include <iostream>
+#include <filesystem>
+
+Renderer::Renderer(Camera *camera) : camera(camera) {}
 
 void Renderer::add_block(Cube *blocks)
 {
@@ -36,8 +39,11 @@ void Renderer::send_matrix_to_shader(glm::mat4 *matrix)
 void Renderer::create_test_dirt_blocks(int num)
 {
 
+    Cube::setup_vbo_vao_shaders();
     for (int i = 0; i < num; i++)
     {
-        all_blocks.push_back(new DirtBlock("../textures/dirt_bottom", "../textures/dirt_side.png", "../textures/dirt_side.png"));
+
+        std::cout << "Current Working Directory: " << std::filesystem::current_path() << std::endl;
+        all_blocks.push_back(new DirtBlock(0, i, "dirt_bottom.png", "dirt_side.png", "dirt_side.png"));
     }
 }

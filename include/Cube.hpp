@@ -7,7 +7,6 @@
 class Cube : public Renderable
 {
 public:
-    static float cube_vertices[180];
     static GLuint face_vaos[6], face_vbos[6];
     static GLuint cube_vbo, cube_vao, texture_id;
     static GLuint shader_program;
@@ -29,7 +28,7 @@ public:
     // all 4 sides use same texture
 
     void add_textures(std::string top_filename, std::string bottom_filename, std::string sides_filename);
-    void create_model_matrix(int offset_x, int offset_y);
+    void create_model_matrix();
     // even better than the images have the loaded textures instead (using stb_image)
     // const char* texture_files[6] = {
     // "front.png", "back.png", "left.png", "right.png", "bottom.png", "top.png"

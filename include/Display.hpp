@@ -14,7 +14,7 @@ private:
     bool running = true;
     Camera camera = Camera();
     EventHandler event_handler = EventHandler(&camera, window, &this->running);
-    Renderer renderer = Renderer();
+    Renderer renderer = Renderer(&camera);
     bool centered = true;
 
 public:

@@ -39,7 +39,7 @@ void EventHandler::event_handler()
 
 void EventHandler::keyboard_handler()
 {
-    glm::vec3 direction_vector;
+    glm::vec3 direction_vector = {0.0, 0.0, 0.0};
     auto key = e.key.keysym.sym;
     if (key == SDLK_w)
     {

@@ -1,4 +1,5 @@
 #include "../../include/Camera.hpp"
+#include <iostream>
 
 Camera::Camera() {}
 
@@ -12,9 +13,15 @@ void Camera::update_camera_position(glm::vec3 direction)
 
 glm::mat4 Camera::create_view_matrix()
 {
+    printf("-A\n");
+    printf("%p is the address of position?\n", (void *)&position);
+
+    printf("Position: %f %f %f\n", position.x, position.y, position.z);
     glm::mat4 translation_matrix = glm::translate(glm::mat4(1.0f), -position);
+    printf("A\n");
     // inverse the camera rotation to be applied to objects
     glm::mat4 rotation_matrix = glm::transpose(glm::yawPitchRoll(yaw, pitch, roll));
+    printf("B\n");
 
     return rotation_matrix * translation_matrix;
 }

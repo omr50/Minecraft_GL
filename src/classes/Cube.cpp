@@ -6,6 +6,10 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 
+GLuint Cube::face_vaos[6] = {0}, Cube::face_vbos[6] = {0};
+GLuint Cube::cube_vbo = 0, Cube::cube_vao = 0, Cube::texture_id = 0;
+GLuint Cube::shader_program;
+
 float Cube::front_face_vertices[30] = { // Front face
     -0.5f, -0.5f, +0.5f, 0.0f, 0.0f,
     +0.5f, -0.5f, +0.5f, 1.0f, 0.0f,
@@ -96,13 +100,14 @@ void Cube::add_textures(std::string top_filename, std::string bottom_filename, s
 {
     unsigned char *image;
     int width, height, channels;
+    const char *files[] = {top_filename.c_str(), bottom_filename.c_str(), sides_filename.c_str()};
 
     for (int i = 0; i < 3; i++)
     {
-        image = stbi_load(top_filename.c_str(), &width, &height, &channels, 0);
+        image = stbi_load(files[i], &width, &height, &channels, 0);
         if (!image)
         {
-            std::cerr << "Failed to load texture " << top_filename << std::endl;
+            std::cerr << "Failed to load texture " << files[i] << std::endl;
         }
 
         glGenTextures(1, &face_textures[i]);
@@ -120,7 +125,7 @@ void Cube::add_textures(std::string top_filename, std::string bottom_filename, s
     }
 }
 
-void Cube::create_model_matrix(int offset_x, int offset_y)
+void Cube::create_model_matrix()
 {
-    model_matrix = glm::translate(glm::vec3(offset_x, offset_y, -1.0f));
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3((float)x, (float)y, -1.0f));
 }
