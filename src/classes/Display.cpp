@@ -58,11 +58,11 @@ void Display::main_loop()
     std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
     std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
     renderer.create_test_dirt_blocks(4);
-
+    glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     while (running)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

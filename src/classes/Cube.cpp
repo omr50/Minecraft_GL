@@ -11,57 +11,63 @@ GLuint Cube::cube_vbo = 0, Cube::cube_vao = 0, Cube::texture_id = 0;
 GLuint Cube::shader_program;
 
 float Cube::front_face_vertices[30] = { // Front face
-    -0.5f, -0.5f, +0.5f, 0.0f, 0.0f,
-    +0.5f, -0.5f, +0.5f, 1.0f, 0.0f,
-    +0.5f, +0.5f, +0.5f, 1.0f, 1.0f,
-    +0.5f, +0.5f, +0.5f, 1.0f, 1.0f,
-    -0.5f, +0.5f, +0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, +0.5f, 0.0f, 0.0f};
+    -0.5f, -0.5f, +0.5f, 0.0f, 1.0f,
+    +0.5f, -0.5f, +0.5f, 1.0f, 1.0f,
+    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f,
+    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f,
+    -0.5f, +0.5f, +0.5f, 0.0f, 0.0f,
+    -0.5f, -0.5f, +0.5f, 0.0f, 1.0f};
 
 float Cube::back_face_vertices[30] = {
     // Back face
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-    -0.5f, +0.5f, -0.5f, 0.0f, 1.0f,
-    +0.5f, +0.5f, -0.5f, 1.0f, 1.0f,
-    +0.5f, +0.5f, -0.5f, 1.0f, 1.0f,
-    +0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f};
+    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, // Bottom-left
+    +0.5f, -0.5f, -0.5f, 0.0f, 1.0f, // Bottom-right
+    +0.5f, +0.5f, -0.5f, 0.0f, 0.0f, // Top-right
+    +0.5f, +0.5f, -0.5f, 0.0f, 0.0f, // Top-right (reused)
+    -0.5f, +0.5f, -0.5f, 1.0f, 0.0f, // Top-left
+    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f  // Bottom-left (reused)
+
+};
 
 float Cube::left_face_vertices[30] = {
     // Left face
-    -0.5f, +0.5f, +0.5f, 1.0f, 0.0f,
-    -0.5f, +0.5f, -0.5f, 1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, +0.5f, 0.0f, 0.0f,
-    -0.5f, +0.5f, +0.5f, 1.0f, 0.0f};
+    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, // Bottom-left
+    -0.5f, -0.5f, +0.5f, 0.0f, 1.0f, // Bottom-right
+    -0.5f, +0.5f, +0.5f, 0.0f, 0.0f, // Top-right
+    -0.5f, +0.5f, +0.5f, 0.0f, 0.0f, // Top-right (reused)
+    -0.5f, +0.5f, -0.5f, 1.0f, 0.0f, // Top-left
+    -0.5f, -0.5f, -0.5f, 1.0f, 1.0f  // Bottom-left (reused)
+};
 
 float Cube::right_face_vertices[30] = {
     // Right face
-    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f,
-    +0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    +0.5f, +0.5f, -0.5f, 1.0f, 1.0f,
-    +0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f,
-    +0.5f, -0.5f, +0.5f, 0.0f, 0.0f};
+    +0.5f, -0.5f, +0.5f, 1.0f, 1.0f, // Bottom-left
+    +0.5f, -0.5f, -0.5f, 0.0f, 1.0f, // Bottom-right
+    +0.5f, +0.5f, -0.5f, 0.0f, 0.0f, // Top-right
+    +0.5f, +0.5f, -0.5f, 0.0f, 0.0f, // Top-right (reused)
+    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f, // Top-left
+    +0.5f, -0.5f, +0.5f, 1.0f, 1.0f  // Bottom-left (reused)
+};
 
 float Cube::bottom_face_vertices[30] = {
     // Bottom face
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-    +0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-    +0.5f, -0.5f, +0.5f, 1.0f, 0.0f,
-    +0.5f, -0.5f, +0.5f, 1.0f, 0.0f,
-    -0.5f, -0.5f, +0.5f, 0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f};
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, // Bottom-left
+    +0.5f, -0.5f, -0.5f, 1.0f, 0.0f, // Bottom-right
+    +0.5f, -0.5f, +0.5f, 1.0f, 1.0f, // Top-right
+    +0.5f, -0.5f, +0.5f, 1.0f, 1.0f, // Top-right (reused)
+    -0.5f, -0.5f, +0.5f, 0.0f, 1.0f, // Top-left
+    -0.5f, -0.5f, -0.5f, 0.0f, 0.0f  // Bottom-left (reused)
+};
 
 float Cube::top_face_vertices[30] = {
     // Top face
-    -0.5f, +0.5f, -0.5f, 0.0f, 0.0f,
-    -0.5f, +0.5f, +0.5f, 0.0f, 1.0f,
-    +0.5f, +0.5f, +0.5f, 1.0f, 1.0f,
-    +0.5f, +0.5f, +0.5f, 1.0f, 1.0f,
-    +0.5f, +0.5f, -0.5f, 1.0f, 0.0f,
-    -0.5f, +0.5f, -0.5f, 0.0f, 0.0f};
+    -0.5f, +0.5f, -0.5f, 0.0f, 1.0f, // Bottom-left
+    +0.5f, +0.5f, -0.5f, 1.0f, 1.0f, // Bottom-right
+    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f, // Top-right
+    +0.5f, +0.5f, +0.5f, 1.0f, 0.0f, // Top-right (reused)
+    -0.5f, +0.5f, +0.5f, 0.0f, 0.0f, // Top-left
+    -0.5f, +0.5f, -0.5f, 0.0f, 1.0f  // Bottom-left (reused)
+};
 
 float *Cube::faces[6] = {
     Cube::front_face_vertices,
@@ -127,5 +133,25 @@ void Cube::add_textures(std::string top_filename, std::string bottom_filename, s
 
 void Cube::create_model_matrix()
 {
-    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3((float)x, (float)y, -1.0f));
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3((float)x, (float)y, (float)z));
+}
+
+void Cube::draw()
+{
+    for (int face = 0; face < 6; face++)
+    {
+        glActiveTexture(GL_TEXTURE0);
+        // Decide which texture to use (top, bottom, sides) based on face index:
+        GLuint texToUse = (face == 5) ? face_textures[1] : // Bottom face
+                              (face == 4) ? face_textures[0]
+                                          :     // Top face
+                              face_textures[2]; // Other sides
+
+        glBindTexture(GL_TEXTURE_2D, texToUse);
+        GLint textureLoc = glGetUniformLocation(Cube::shader_program, "ourTexture");
+        glUniform1i(textureLoc, 0);
+
+        glBindVertexArray(face_vaos[face]);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
 }

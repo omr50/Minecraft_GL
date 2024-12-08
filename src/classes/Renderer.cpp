@@ -1,5 +1,8 @@
 #include "../../include/Renderer.hpp"
 #include "../../include/Blocks/DirtBlock.hpp"
+#include "../../include/Blocks/SandBlock.hpp"
+#include "../../include/Blocks/GrassBlock.hpp"
+#include "../../include/Blocks/StoneBlock.hpp"
 #include <iostream>
 #include <filesystem>
 
@@ -26,7 +29,6 @@ void Renderer::render_blocks()
 
 void Renderer::send_matrix_to_shader(glm::mat4 *matrix)
 {
-
     GLuint mvp_location = glGetUniformLocation(Cube::shader_program, "mvp");
     if (mvp_location == -1)
     {
@@ -40,10 +42,13 @@ void Renderer::create_test_dirt_blocks(int num)
 {
 
     Cube::setup_vbo_vao_shaders();
-    for (int i = 0; i < num; i++)
+    for (int i = 0; i < 16; i++)
     {
-
-        std::cout << "Current Working Directory: " << std::filesystem::current_path() << std::endl;
-        all_blocks.push_back(new DirtBlock(0, i, "dirt_bottom.png", "dirt_side.png", "dirt_side.png"));
+        for (int j = 0; j < 16; j++)
+            for (int k = 0; k < 60; j++)
+            {
+                std::cout << "Current Working Directory: " << std::filesystem::current_path() << std::endl;
+                all_blocks.push_back(new StoneBlock(i, k, j, "../textures/stone.png"));
+            }
     }
 }

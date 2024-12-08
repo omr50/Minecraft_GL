@@ -3,9 +3,9 @@
 #include "../Renderable.hpp"
 #include <string>
 
-class DirtBlock : public Cube
+class StoneBlock : public Cube
 {
 public:
-    DirtBlock(int x, int y, int z, std::string texture);
+    StoneBlock(int x, int y, int z, std::string texture);
     void update_state() override;
 };

@@ -19,6 +19,7 @@ public:
     static float *faces[6];
     int x;
     int y;
+    int z;
 
     static void setup_vbo_vao_shaders();
 
@@ -29,6 +30,7 @@ public:
 
     void add_textures(std::string top_filename, std::string bottom_filename, std::string sides_filename);
     void create_model_matrix();
+    void draw() override;
     // even better than the images have the loaded textures instead (using stb_image)
     // const char* texture_files[6] = {
     // "front.png", "back.png", "left.png", "right.png", "bottom.png", "top.png"
