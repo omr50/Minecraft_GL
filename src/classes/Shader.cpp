@@ -29,22 +29,18 @@ void Shader::load_shader_src(GLenum shader_type)
 
 void Shader::create_shader(GLenum shader_type)
 {
-    printf("shader before: %d\n", vertex_shader);
     set_shader(shader_type, glCreateShader(shader_type));
-    printf("shader after: %d\n", vertex_shader);
     load_shader_src(shader_type);
     std::string src_str = get_shader_src_string(shader_type);
     const GLchar *shader_src_str = src_str.c_str();
     GLint shader_length = src_str.length();
     GLuint shader = get_shader(shader_type);
     glShaderSource(shader, 1, &shader_src_str, &shader_length);
-    printf("shader src\n");
     compile_shader(shader_type);
 }
 
 void Shader::compile_shader(GLenum shader_type)
 {
-    printf("Compiling?\n");
     GLuint shader = get_shader(shader_type);
     glCompileShader(shader);
     shader_error_detection(shader_type, GL_COMPILE_STATUS, false);
@@ -56,7 +52,6 @@ void Shader::attach_and_link_shaders()
     glAttachShader(shader_program, fragment_shader);
     glBindAttribLocation(shader_program, 0, "position");
     glBindAttribLocation(shader_program, 1, "aTexCoord");
-    printf("linking here?\n");
     glLinkProgram(shader_program);
     shader_error_detection(0, GL_LINK_STATUS, true);
 }

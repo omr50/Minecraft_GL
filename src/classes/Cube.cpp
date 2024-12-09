@@ -9,6 +9,7 @@
 GLuint Cube::face_vaos[6] = {0}, Cube::face_vbos[6] = {0};
 GLuint Cube::cube_vbo = 0, Cube::cube_vao = 0, Cube::texture_id = 0;
 GLuint Cube::shader_program;
+std::unordered_map<std::string, std::array<GLuint, 3>> Cube::texture_map;
 
 float Cube::front_face_vertices[30] = { // Front face
     -0.5f, -0.5f, +0.5f, 0.0f, 1.0f,
@@ -102,11 +103,19 @@ void Cube::setup_vbo_vao_shaders()
     }
 }
 
-void Cube::add_textures(std::string top_filename, std::string bottom_filename, std::string sides_filename)
+Cube::Cube() {}
+
+Cube::Cube(int x, int y, int z, std::string block_type) : x((float)x), y((float)y), z((float)z), block_type(block_type)
+{
+    create_model_matrix();
+}
+
+void Cube::add_textures(std::string block_type, std::string top_filename, std::string bottom_filename, std::string sides_filename)
 {
     unsigned char *image;
     int width, height, channels;
     const char *files[] = {top_filename.c_str(), bottom_filename.c_str(), sides_filename.c_str()};
+    std::array<GLuint, 3> face_textures;
 
     for (int i = 0; i < 3; i++)
     {
@@ -128,7 +137,17 @@ void Cube::add_textures(std::string top_filename, std::string bottom_filename, s
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
         glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(image);
+        // add to the map
+        Cube::texture_map[block_type] = face_textures;
     }
+}
+
+void Cube::add_all_block_textures()
+{
+    Cube::add_textures("grass", "../textures/dirt_bottom.png", "../textures/dirt_side.png", "../textures/grass_top.png");
+    Cube::add_textures("dirt", "../textures/dirt_bottom.png", "../textures/dirt_bottom.png", "../textures/dirt_bottom.png");
+    Cube::add_textures("sand", "../textures/sand.png", "../textures/sand.png", "../textures/sand.png");
+    Cube::add_textures("stone", "../textures/stone.png", "../textures/stone.png", "../textures/stone.png");
 }
 
 void Cube::create_model_matrix()
@@ -138,8 +157,12 @@ void Cube::create_model_matrix()
 
 void Cube::draw()
 {
+    if (block_type == "air")
+        return;
+
     for (int face = 0; face < 6; face++)
     {
+        std::array<GLuint, 3> face_textures = Cube::texture_map[this->block_type];
         glActiveTexture(GL_TEXTURE0);
         // Decide which texture to use (top, bottom, sides) based on face index:
         GLuint texToUse = (face == 5) ? face_textures[1] : // Bottom face
@@ -154,4 +177,10 @@ void Cube::draw()
         glBindVertexArray(face_vaos[face]);
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
+}
+
+// temporary override stopping Cube
+// from being an abstract class.
+void Cube::update_state()
+{
 }

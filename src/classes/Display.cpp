@@ -60,16 +60,17 @@ void Display::main_loop()
     glEnable(GL_DEPTH_TEST);
     // glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
-    renderer.create_test_dirt_blocks(4);
+    Cube::add_all_block_textures();
+    Cube::setup_vbo_vao_shaders();
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     while (running)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         this->event_handler.event_handler();
-        renderer.render_blocks();
+        // renderer.render_blocks();
+        renderer.render_chunks();
         SDL_GL_SwapWindow(window);
-        SDL_Delay(5);
+        // SDL_Delay(5);
     }
 
     SDL_DestroyWindow(window);

@@ -102,8 +102,8 @@ void EventHandler::mouse_movement_handler()
     float height_center = (float)HEIGHT / 2.0f;
     float mouse_displacement_x = x - width_center;
     float mouse_displacement_y = y - height_center;
-    camera->yaw -= (mouse_displacement_x * 0.001);
-    camera->pitch -= (mouse_displacement_y * 0.001);
+    camera->yaw -= (mouse_displacement_x * 0.003);
+    camera->pitch -= (mouse_displacement_y * 0.003);
     camera->yaw = glm::clamp(camera->yaw, -90.0f, 90.0f);
 
     if (centered)

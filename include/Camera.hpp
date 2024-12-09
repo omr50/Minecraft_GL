@@ -10,7 +10,7 @@ class Camera
 {
 
 public:
-    glm::vec3 position = {0.0, 0.0, 0.0};
+    glm::vec3 position = {0.0, 26.0, 0.0};
     float rotation_angle = 0.0f;
     float fov = glm::radians(45.0f);
     float yaw = 0;

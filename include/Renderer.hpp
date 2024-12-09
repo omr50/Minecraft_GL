@@ -4,6 +4,7 @@
 #include <vector>
 #include "./Cube.hpp"
 #include "./Camera.hpp"
+#include "./Chunk.hpp"
 
 class Renderer
 {
@@ -15,10 +16,11 @@ public:
     // to this rendererer class.
     std::vector<Cube *> all_blocks;
     Camera *camera;
+    Chunk chunk = Chunk(0, 0);
 
     Renderer(Camera *camera);
     void add_block(Cube *cube);
     void render_blocks();
     void send_matrix_to_shader(glm::mat4 *matrix);
-    void create_test_dirt_blocks(int num);
+    void render_chunks();
 };

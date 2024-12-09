@@ -3,6 +3,9 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
+#include <unordered_map>
+#include <array>
 
 class Cube : public Renderable
 {
@@ -17,20 +20,28 @@ public:
     static float bottom_face_vertices[30];
     static float top_face_vertices[30];
     static float *faces[6];
+    // maps the block type to the
+    static std::unordered_map<std::string, std::array<GLuint, 3>> texture_map;
     int x;
     int y;
     int z;
 
     static void setup_vbo_vao_shaders();
+    static void add_textures(std::string block_type, std::string top_filename, std::string bottom_filename, std::string sides_filename);
+    static void add_all_block_textures();
 
     // non static members
     glm::mat4 model_matrix;
-    GLuint face_textures[3];
+    std::string block_type;
+    // GLuint face_textures[3];
+
     // all 4 sides use same texture
 
-    void add_textures(std::string top_filename, std::string bottom_filename, std::string sides_filename);
+    Cube();
+    Cube(int x, int y, int z, std::string block_type);
     void create_model_matrix();
     void draw() override;
+    void update_state() override;
     // even better than the images have the loaded textures instead (using stb_image)
     // const char* texture_files[6] = {
     // "front.png", "back.png", "left.png", "right.png", "bottom.png", "top.png"
