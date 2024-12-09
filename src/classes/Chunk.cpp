@@ -1,5 +1,7 @@
 #include "../../include/Chunk.hpp"
 
+Chunk::Chunk() {}
+
 Chunk::Chunk(int x, int y)
 {
     chunk_coordinates.first = x;
@@ -47,7 +49,7 @@ void Chunk::generate_terrain()
             // the height, if y < height, stone
             // if greater, air.
             float chunk_x = chunk_coordinates.first * 16 + x, chunk_z = chunk_coordinates.second * 16 + z;
-            float height = generateHeight(chunk_x, chunk_z, 0.1, 5.0);
+            float height = MIN_BLOCK_HEIGHT + generateHeight(chunk_x, chunk_z, 0.1, 5.0);
             printf("height is %f\n", height);
             for (int y = 0; y < Y; y++)
             {

@@ -5,6 +5,7 @@
 #include "./Cube.hpp"
 #include "./Camera.hpp"
 #include "./Chunk.hpp"
+#include "./Terrain.hpp"
 
 class Renderer
 {
@@ -16,7 +17,7 @@ public:
     // to this rendererer class.
     std::vector<Cube *> all_blocks;
     Camera *camera;
-    Chunk chunk = Chunk(0, 0);
+    Terrain terrain = Terrain(&camera->position);
 
     Renderer(Camera *camera);
     void add_block(Cube *cube);
