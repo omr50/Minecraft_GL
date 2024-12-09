@@ -3,14 +3,14 @@
 #include <glm/gtc/noise.hpp>
 
 #define X 16
-#define Y 32
-#define Z 16
+#define Y 16
+#define Z 8
 #define MIN_BLOCK_HEIGHT 0
 
 class Chunk
 {
 public:
-    Cube blocks[X][Y][Z];
+    Cube *blocks;
     std::pair<int, int> chunk_coordinates;
 
     Chunk();
@@ -18,4 +18,7 @@ public:
     float generateHeight(float x, float z, float scale, float heightMultiplier);
     void initialize_cubes();
     void generate_terrain();
+    int get_index(int x, int y, int z);
+    float get_cube_x(int x);
+    float get_cube_z(int z);
 };

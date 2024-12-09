@@ -42,6 +42,7 @@ public:
     void create_model_matrix();
     void draw() override;
     void update_state() override;
+    void update_cube_state(int x, int y, int z, std::string block_type);
     // even better than the images have the loaded textures instead (using stb_image)
     // const char* texture_files[6] = {
     // "front.png", "back.png", "left.png", "right.png", "bottom.png", "top.png"

@@ -10,10 +10,10 @@ public:
 
     Terrain(glm::vec3 *camera_position);
     void shift_chunks();
-    bool find_chunk(int x, int z, std::pair<int, int> positions[]);
+    bool find_out_of_bound_chunk(int x, int z, std::pair<int, int> positions[]);
     bool find_new_positions(std::pair<int, int> val);
     void new_positions(std::pair<int, int> positions[]);
-
+    std::pair<int, int> get_center_chunk_coordinates(float x, float z);
     /*
 
 

@@ -6,9 +6,17 @@ Camera::Camera() {}
 void Camera::update_camera_position(glm::vec3 direction)
 {
     glm::mat4 camera_rotation_matrix = glm::yawPitchRoll(yaw, pitch, roll);
-    float speed = 0.2;
+    float speed = 2;
+
     glm::vec3 translation_amount = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 1.0)) * speed;
-    position += translation_amount;
+    if (direction.x || direction.z)
+    {
+
+        position.x += translation_amount.x;
+        position.z += translation_amount.z;
+    }
+    if (direction.y)
+        position.y += translation_amount.y;
 }
 
 glm::mat4 Camera::create_view_matrix()

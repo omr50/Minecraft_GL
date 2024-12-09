@@ -11,7 +11,7 @@ Terrain::Terrain(glm::vec3 *camera_position) : camera_position(camera_position)
         chunks[i].chunk_coordinates.second = positions[i].second;
         chunks[i].initialize_cubes();
         chunks[i].generate_terrain();
-        }
+    }
 }
 /*
 - The 9 chunks are created in the beginning.
@@ -32,16 +32,12 @@ void Terrain::shift_chunks()
 
     bool bound[9];
     bool new_vals[9];
-    // find which values are not in bounds any more
+    // bound: find which values are not in bounds any more
+    // new_vals: find new values in position array
     for (int i = 0; i < 9; i++)
     {
-        bound[find_chunk(chunks[i].chunk_coordinates.first, chunks[i].chunk_coordinates.second, positions)];
-    }
-
-    // find new values in position array
-    for (int i = 0; i < 9; i++)
-    {
-        new_vals[find_new_positions(positions[i])];
+        bound[i] = find_out_of_bound_chunk(chunks[i].chunk_coordinates.first, chunks[i].chunk_coordinates.second, positions);
+        new_vals[i] = find_new_positions(positions[i]);
     }
 
     // pair up new vals with bounds
@@ -51,16 +47,22 @@ void Terrain::shift_chunks()
     int p1 = 0, p2 = 0;
     while (p1 < 9 && p2 < 9)
     {
-        while (bound[p1])
+        while (p1 < 9 && bound[p1])
             p1++;
-        while (!new_vals[p2])
+        while (p2 < 9 && !new_vals[p2])
             p2++;
-        // chunk that is not bound needs to be replaced with new position value
-        chunks[p1].chunk_coordinates.first = positions[p2].first;
-        chunks[p1].chunk_coordinates.first = positions[p2].second;
-        chunks[p1].generate_terrain();
-        p1++;
-        p2++;
+
+        if (p1 < 9 && p2 < 9)
+        {
+            // Update chunk
+
+            chunks[p1].chunk_coordinates.first = positions[p2].first;
+            chunks[p1].chunk_coordinates.second = positions[p2].second;
+            chunks[p1].initialize_cubes();
+            chunks[p1].generate_terrain();
+            p1++;
+            p2++;
+        }
     }
 }
 
@@ -70,13 +72,17 @@ void Terrain::new_positions(std::pair<int, int> positions[])
     {
         for (int j = -1; j < 2; j++)
         {
-            positions[(i + 1) * 3 + (j + 1)].first = ((int)camera_position->x / 16) + i;
-            positions[(i + 1) * 3 + (j + 1)].second = ((int)camera_position->z / 16) + j;
+            auto center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
+            positions[(i + 1) * 3 + (j + 1)].first = center.first + i;
+            positions[(i + 1) * 3 + (j + 1)].second = center.second + j;
             printf("Terrain: (%d, %d)\n", positions[(i + 1) * 3 + (j + 1)].first, positions[(i + 1) * 3 + (j + 1)].second);
         }
     }
+    std::pair<int, int> center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
+    printf("Center: (%d, %d)\n", center.first, center.second);
 }
-bool Terrain::find_chunk(int x, int z, std::pair<int, int> positions[])
+
+bool Terrain::find_out_of_bound_chunk(int x, int z, std::pair<int, int> positions[])
 {
     for (int i = 0; i < 9; i++)
     {
@@ -85,12 +91,18 @@ bool Terrain::find_chunk(int x, int z, std::pair<int, int> positions[])
     }
     return false;
 }
+
 bool Terrain::find_new_positions(std::pair<int, int> val)
 {
     for (int i = 0; i < 9; i++)
     {
         if (chunks[i].chunk_coordinates.first == val.first && chunks[i].chunk_coordinates.second == val.second)
-            return true;
+            return false;
     }
-    return false;
+    return true;
+}
+
+std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
+{
+    return std::make_pair((int)x / X, (int)z / Z);
 }

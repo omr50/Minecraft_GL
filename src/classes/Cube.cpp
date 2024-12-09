@@ -144,7 +144,7 @@ void Cube::add_textures(std::string block_type, std::string top_filename, std::s
 
 void Cube::add_all_block_textures()
 {
-    Cube::add_textures("grass", "../textures/dirt_bottom.png", "../textures/dirt_side.png", "../textures/grass_top.png");
+    Cube::add_textures("grass", "../textures/dirt_bottom.png", "../textures/grass_top.png", "../textures/dirt_side.png");
     Cube::add_textures("dirt", "../textures/dirt_bottom.png", "../textures/dirt_bottom.png", "../textures/dirt_bottom.png");
     Cube::add_textures("sand", "../textures/sand.png", "../textures/sand.png", "../textures/sand.png");
     Cube::add_textures("stone", "../textures/stone.png", "../textures/stone.png", "../textures/stone.png");
@@ -181,6 +181,14 @@ void Cube::draw()
 
 // temporary override stopping Cube
 // from being an abstract class.
-void Cube::update_state()
+void Cube::update_state() {}
+
+void Cube::update_cube_state(int x, int y, int z, std::string block_type)
 {
+    // change coordinate
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->block_type = block_type;
+    create_model_matrix();
 }

@@ -1,6 +1,9 @@
 #include "../../include/Chunk.hpp"
 
-Chunk::Chunk() {}
+Chunk::Chunk()
+{
+    blocks = new Cube[X * Y * Z];
+}
 
 Chunk::Chunk(int x, int y)
 {
@@ -28,11 +31,7 @@ void Chunk::initialize_cubes()
         {
             for (int y = 0; y < Y; y++)
             {
-                blocks[x][y][z].x = chunk_coordinates.first * 16 + x;
-                blocks[x][y][z].y = y;
-                blocks[x][y][z].z = chunk_coordinates.second * 16 + z;
-                blocks[x][y][z].block_type = "air";
-                blocks[x][y][z].create_model_matrix();
+                blocks[get_index(x, y, z)].update_cube_state(x, y, z, "air");
             }
         }
     }
@@ -48,20 +47,35 @@ void Chunk::generate_terrain()
             // get y value that will be used for
             // the height, if y < height, stone
             // if greater, air.
-            float chunk_x = chunk_coordinates.first * 16 + x, chunk_z = chunk_coordinates.second * 16 + z;
+            float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
             float height = MIN_BLOCK_HEIGHT + generateHeight(chunk_x, chunk_z, 0.1, 5.0);
-            printf("height is %f\n", height);
+            // printf("height is %f\n", height);
             for (int y = 0; y < Y; y++)
             {
                 if (y < height)
                 {
-                    blocks[x][y][z].block_type = "stone";
+                    blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "grass");
                 }
                 else
                 {
-                    blocks[x][y][z].block_type = "air";
+                    blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "air");
                 }
             }
         }
     }
+}
+
+int Chunk::get_index(int x, int y, int z)
+{
+    return x * Y * Z + y * Z + z;
+}
+
+float Chunk::get_cube_x(int x)
+{
+    return chunk_coordinates.first * X + x;
+}
+
+float Chunk::get_cube_z(int z)
+{
+    return chunk_coordinates.second * Z + z;
 }
