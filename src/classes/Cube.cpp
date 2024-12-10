@@ -162,6 +162,9 @@ void Cube::draw()
 
     for (int face = 0; face < 6; face++)
     {
+        // if non-renderable / not in mesh (continue)
+        if (!renderable_face[face])
+            continue;
         std::array<GLuint, 3> face_textures = Cube::texture_map[this->block_type];
         glActiveTexture(GL_TEXTURE0);
         // Decide which texture to use (top, bottom, sides) based on face index:

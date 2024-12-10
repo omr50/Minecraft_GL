@@ -33,6 +33,7 @@ public:
     // non static members
     glm::mat4 model_matrix;
     std::string block_type;
+    bool renderable_face[6];
     // GLuint face_textures[3];
 
     // all 4 sides use same texture

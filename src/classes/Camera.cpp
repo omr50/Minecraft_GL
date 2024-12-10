@@ -16,7 +16,7 @@ void Camera::update_camera_position(glm::vec3 direction)
         position.z += translation_amount.z;
     }
     if (direction.y)
-        position.y += translation_amount.y;
+        position.y += (speed * direction.y);
 }
 
 glm::mat4 Camera::create_view_matrix()

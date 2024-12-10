@@ -75,11 +75,11 @@ void Terrain::new_positions(std::pair<int, int> positions[])
             auto center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
             positions[(i + 1) * 3 + (j + 1)].first = center.first + i;
             positions[(i + 1) * 3 + (j + 1)].second = center.second + j;
-            printf("Terrain: (%d, %d)\n", positions[(i + 1) * 3 + (j + 1)].first, positions[(i + 1) * 3 + (j + 1)].second);
+            // printf("Terrain: (%d, %d)\n", positions[(i + 1) * 3 + (j + 1)].first, positions[(i + 1) * 3 + (j + 1)].second);
         }
     }
     std::pair<int, int> center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
-    printf("Center: (%d, %d)\n", center.first, center.second);
+    // printf("Center: (%d, %d)\n", center.first, center.second);
 }
 
 bool Terrain::find_out_of_bound_chunk(int x, int z, std::pair<int, int> positions[])
@@ -105,4 +105,65 @@ bool Terrain::find_new_positions(std::pair<int, int> val)
 std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 {
     return std::make_pair((int)x / X, (int)z / Z);
+}
+
+void Terrain::create_mesh()
+{
+    for (int i = 0; i < NUM_CHUNKS; i++)
+    {
+        for (int x = 0; x < X; x++)
+            for (int y = 0; y < Y; y++)
+                for (int z = 0; z < Z; z++)
+                {
+                    cube_face_renderability(&(chunks[i].blocks[chunks[i].get_index(x, y, z)]));
+                }
+    }
+}
+
+void Terrain::cube_face_renderability(Cube *cube)
+{
+    int coordinates[3] = {cube->x, cube->y, cube->z};
+    int x = cube->x, y = cube->y, z = cube->z;
+
+    // front
+    cube->renderable_face[0] = determine_renderability(x, y, z + 1);
+    // back
+    cube->renderable_face[1] = determine_renderability(x, y, z - 1);
+    // left face
+    cube->renderable_face[2] = determine_renderability(x - 1, y, z);
+    // right face
+    cube->renderable_face[3] = determine_renderability(x + 1, y, z);
+    // bottom
+    cube->renderable_face[4] = determine_renderability(x, y - 1, z);
+    // top
+    cube->renderable_face[5] = determine_renderability(x, y + 1, z);
+}
+
+bool Terrain::determine_renderability(int x, int y, int z)
+{
+    // determine chunk of the cube
+    std::pair<int, int> chunk_coords = std::make_pair(x / X, z / Z);
+    int chunk_index;
+    if ((chunk_index = get_chunk_index(chunk_coords)) == -1)
+        return true;
+    printf("chunk index is %d\n", chunk_index);
+    Chunk *chunk = &(chunks[chunk_index]);
+    printf("cube block type %s\n", chunk->blocks[chunk->get_index(x, y, z)].block_type.c_str());
+    // find that block in the chunk
+    int block_index = chunk->get_index(x, y, z);
+    Cube *cube = &chunk->blocks[block_index];
+    if (cube->block_type == "air")
+        return true;
+    return false;
+}
+
+int Terrain::get_chunk_index(std::pair<int, int> chunk_coords)
+{
+    for (int i = 0; i < NUM_CHUNKS; i++)
+    {
+        Chunk *chunk = &chunks[i];
+        if (chunk->chunk_coordinates.first == chunk_coords.first && chunk->chunk_coordinates.second == chunk_coords.second)
+            return i;
+    }
+    return -1;
 }

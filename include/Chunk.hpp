@@ -4,7 +4,7 @@
 
 #define X 16
 #define Y 16
-#define Z 8
+#define Z 16
 #define MIN_BLOCK_HEIGHT 0
 
 class Chunk
