@@ -39,9 +39,10 @@ void Renderer::render_chunks()
     glUseProgram(Cube::shader_program);
     // shifting and creating mesh may
     // be optimized with threads later
+
     terrain.shift_chunks();
-    terrain.create_mesh();
-    for (int i = 0; i < 9; i++)
+    // terrain.create_mesh();
+    for (int i = 0; i < NUM_CHUNKS; i++)
         for (int x = 0; x < X; x++)
             for (int y = 0; y < Y; y++)
                 for (int z = 0; z < Z; z++)

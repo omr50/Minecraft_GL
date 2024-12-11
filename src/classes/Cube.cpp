@@ -189,9 +189,14 @@ void Cube::update_state() {}
 void Cube::update_cube_state(int x, int y, int z, std::string block_type)
 {
     // change coordinate
+    // printf("%d %d %d COORDS\n", x, y, z);
     this->x = x;
     this->y = y;
     this->z = z;
     this->block_type = block_type;
     create_model_matrix();
+    for (int i = 0; i < 6; i++)
+    {
+        this->renderable_face[i] = true;
+    }
 }

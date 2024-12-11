@@ -2,7 +2,7 @@
 #include "../include/Chunk.hpp"
 #include <glm/glm.hpp>
 
-#define NUM_CHUNKS 9
+#define NUM_CHUNKS 25
 class Terrain
 {
 public:
@@ -16,7 +16,7 @@ public:
     void new_positions(std::pair<int, int> positions[]);
     std::pair<int, int> get_center_chunk_coordinates(float x, float z);
     void create_mesh();
-    void cube_face_renderability(Cube *cube);
+    void cube_face_renderability(Chunk *chunk, Cube *cube);
     bool determine_renderability(int x, int y, int z);
     int get_chunk_index(std::pair<int, int> chunk_coords);
 

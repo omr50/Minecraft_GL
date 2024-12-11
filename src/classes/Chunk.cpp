@@ -54,7 +54,11 @@ void Chunk::generate_terrain()
             {
                 if (y < height)
                 {
-                    blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "grass");
+                    if (x == X - 1 || z == Z - 1 || x == 0 || z == 0)
+
+                        blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "stone");
+                    else
+                        blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "grass");
                 }
                 else
                 {
