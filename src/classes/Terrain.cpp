@@ -133,25 +133,15 @@ std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 // frustum view range, otherwise don't waste time to calculate.
 void Terrain::create_mesh()
 {
-    static int curr_iteration = 0;
     // use thread pool to run the some range of i per thread
-    for (int i = curr_iteration; i < NUM_CHUNKS; i++)
+    for (int i = 0; i < NUM_CHUNKS; i++)
     {
-        auto time_start = std::chrono::high_resolution_clock::now();
         for (int x = 0; x < X; x++)
             for (int y = 0; y < Y; y++)
                 for (int z = 0; z < Z; z++)
                 {
                     cube_face_renderability(&chunks[i], &(chunks[i].blocks[chunks[i].get_index(x, y, z)]));
                 }
-        auto time_end = std::chrono::high_resolution_clock::now();
-
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count() > 10)
-        {
-            curr_iteration = i + 1;
-            curr_iteration %= NUM_CHUNKS;
-            return;
-        }
     }
 
     // join here? (overhead probably shorter then the task)
