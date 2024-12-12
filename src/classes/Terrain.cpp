@@ -1,4 +1,5 @@
 #include "../../include/Terrain.hpp"
+#include <chrono>
 
 Terrain::Terrain(glm::vec3 *camera_position) : camera_position(camera_position)
 {
@@ -132,50 +133,60 @@ std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 // frustum view range, otherwise don't waste time to calculate.
 void Terrain::create_mesh()
 {
-    for (int i = 0; i < NUM_CHUNKS; i++)
+    static int curr_iteration = 0;
+    // use thread pool to run the some range of i per thread
+    for (int i = curr_iteration; i < NUM_CHUNKS; i++)
     {
+        auto time_start = std::chrono::high_resolution_clock::now();
         for (int x = 0; x < X; x++)
             for (int y = 0; y < Y; y++)
                 for (int z = 0; z < Z; z++)
                 {
                     cube_face_renderability(&chunks[i], &(chunks[i].blocks[chunks[i].get_index(x, y, z)]));
                 }
+        auto time_end = std::chrono::high_resolution_clock::now();
+
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count() > 10)
+        {
+            curr_iteration = i + 1;
+            curr_iteration %= NUM_CHUNKS;
+            return;
+        }
     }
 
-    int total_faces = 0;
-    int culled_faces = 0;
+    // join here? (overhead probably shorter then the task)
 
-    for (int i = 0; i < NUM_CHUNKS; i++)
-    {
-        for (int x = 0; x < X; x++)
-            for (int y = 0; y < Y; y++)
-                for (int z = 0; z < Z; z++)
-                {
-                    Cube *cube = &chunks[i].blocks[chunks[i].get_index(x, y, z)];
-                    if (cube->block_type != "air")
-                    {
-                        total_faces += 6; // 6 faces per solid cube
-                        for (int f = 0; f < 6; f++)
-                        {
-                            if (!cube->renderable_face[f])
-                            {
-                                culled_faces++;
-                            }
-                        }
-                    }
-                }
-    }
-    printf("Total faces: %d, Culled faces: %d, Rendering: %d\n",
-           total_faces, culled_faces, total_faces - culled_faces);
+    // for (int i = 0; i < NUM_CHUNKS; i++)
+    // {
+    //     for (int x = 0; x < X; x++)
+    //         for (int y = 0; y < Y; y++)
+    //             for (int z = 0; z < Z; z++)
+    //             {
+    //                 Cube *cube = &chunks[i].blocks[chunks[i].get_index(x, y, z)];
+    //                 if (cube->block_type != "air")
+    //                 {
+    //                     total_faces += 6; // 6 faces per solid cube
+    //                     for (int f = 0; f < 6; f++)
+    //                     {
+    //                         if (!cube->renderable_face[f])
+    //                         {
+    //                             culled_faces++;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    // }
+    // printf("Total faces: %d, Culled faces: %d, Rendering: %d\n",
+    //        total_faces, culled_faces, total_faces - culled_faces);
 }
 
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
 {
     // world coordinates for x, y, and z
-    int x = chunk->get_cube_x(cube->x);
+    int x = cube->x;
     int y = cube->y;
-    int z = chunk->get_cube_z(cube->z);
-
+    int z = cube->z;
+    // printf("%d %d %d cube face renderability x y z\n", x, y, z);
     if (cube->block_type == "air")
         return;
     // front
@@ -197,28 +208,40 @@ bool Terrain::determine_renderability(int x, int y, int z)
 {
     // determine chunk of the cube
     // a manual floor for negative value cases
-    int cx = (x >= 0) ? x / X : (x / X) - 1; // a manual floor for negative values
-    int cz = (z >= 0) ? z / Z : (z / Z) - 1;
 
+    int cx = x / X;
+    if (x < 0 && x % X != 0)
+        cx--;
+    int cz = z / Z;
+    if (z < 0 && z % Z != 0)
+        cz--;
+    // int cx = (x >= 0) ? x / X : (x / X) - 1; // a manual floor for negative values
+    // int cz = (z >= 0) ? z / Z : (z / Z) - 1;
+
+    // printf("World coord (%d,%d,%d) -> Chunk (%d,%d)\n", x, y, z, cx, cz);
     // Find our center chunk (the middle of our 3x3 grid)
     auto center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
 
+    int half_width = ((int)sqrt(NUM_CHUNKS)) / 2;
     // If the chunk we're trying to check is outside our 3x3 grid
-    if (cx < center.first - 1 || cx > center.first + 1 ||
-        cz < center.second - 1 || cz > center.second + 1)
+    if (cx < center.first - half_width || cx > center.first + half_width ||
+        cz < center.second - half_width || cz > center.second + half_width)
     {
         // Treat blocks outside our loaded chunks as air
         return false;
     }
-
-    static bool first_time = true;
-    if (first_time)
+    // printf("%d %d %d\n", x, y, z);
+    // Calculate the absolute grid boundaries
+    // printf("center - half width = %d", center.first - half_width);
+    int min_x = (center.first - half_width) * X;
+    int max_x = (center.first + half_width) * X + (X - 1);
+    int min_z = (center.second - half_width) * Z;
+    int max_z = (center.second + half_width) * Z + (Z - 1);
+    // printf("min x z : %d %d max x z: %d %d\n", min_x, min_z, max_x, max_z);
+    // If we're checking a face that would be visible from outside the entire grid, don't render it
+    if (x < min_x || x > max_x || z < min_z || z > max_z)
     {
-        // printf("Center chunk: (%d, %d)\n", center.first, center.second);
-        // printf("Checking chunks from (%d, %d) to (%d, %d)\n",
-        //    center.first - 1, center.second - 1,
-        //    center.first + 1, center.second + 1);
-        first_time = false;
+        return false;
     }
 
     std::pair<int, int> chunk_coords = std::make_pair(cx, cz);
@@ -232,15 +255,22 @@ bool Terrain::determine_renderability(int x, int y, int z)
     // our x, y, z coordinates are world coordinates so we get the
     // local_x and local_z by using modulo because all coordinates
     // in the chunks cube array are from 0 to (chunk max x * chunk max y * chunk max z)
-    int local_x = x % X;
-    if (local_x < 0)
-        local_x += X;
-    int local_z = z % Z;
-    if (local_z < 0)
-        local_z += Z;
+    int local_x = x - (cx * X);
+    int local_z = z - (cz * Z);
+
+    // rules to stop sides that are out of bounds from rendering
+    // printf("%d %d %d\n", local_x, y, local_z);
+    if (local_x < 0 || y < 0 || local_z < 0 || local_x >= X || y >= 256 || local_z >= Z)
+        return false;
+
     int block_index = chunk->get_index(local_x, y, local_z);
     Cube *cube = &chunk->blocks[block_index];
     // printf("(local index (%d,%d) block index %d\n", local_x, local_z, block_index);
+    if (cube == nullptr)
+    {
+        printf("WHY THE IS IT NULL\n");
+        return true;
+    }
     return cube->block_type == "air";
 }
 

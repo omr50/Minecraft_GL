@@ -1,7 +1,7 @@
 #include "../../include/Renderer.hpp"
 #include <iostream>
 #include <filesystem>
-
+#include <chrono>
 Renderer::Renderer(Camera *camera) : camera(camera) {}
 
 void Renderer::add_block(Cube *blocks)
@@ -40,16 +40,29 @@ void Renderer::render_chunks()
     // shifting and creating mesh may
     // be optimized with threads later
 
+    static int curr_iteration = 0;
+
+    auto time_start = std::chrono::high_resolution_clock::now();
     terrain.shift_chunks();
-    // terrain.create_mesh();
-    for (int i = 0; i < NUM_CHUNKS; i++)
+    auto time_end = std::chrono::high_resolution_clock::now();
+    printf("ms time for shift %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
+    time_start = std::chrono::high_resolution_clock::now();
+    terrain.create_mesh();
+    time_end = std::chrono::high_resolution_clock::now();
+    printf("ms time for mesh %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
+    time_start = std::chrono::high_resolution_clock::now();
+    for (int i = curr_iteration; i < NUM_CHUNKS; i++)
+    {
         for (int x = 0; x < X; x++)
             for (int y = 0; y < Y; y++)
                 for (int z = 0; z < Z; z++)
                 {
                     glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
-                    glm::mat4 MVP = view_projection_matrix * terrain.chunks[i].blocks[terrain.chunks->get_index(x, y, z)].model_matrix;
+                    glm::mat4 MVP = view_projection_matrix * terrain.chunks[i].blocks[terrain.chunks[i].get_index(x, y, z)].model_matrix;
                     send_matrix_to_shader(&MVP);
                     terrain.chunks[i].blocks[terrain.chunks->get_index(x, y, z)].draw();
                 }
+    }
+    time_end = std::chrono::high_resolution_clock::now();
+    printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
 }

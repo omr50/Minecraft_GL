@@ -3,6 +3,7 @@
 Chunk::Chunk()
 {
     blocks = new Cube[X * Y * Z];
+    // initialize_cubes();
 }
 
 Chunk::Chunk(int x, int y)
@@ -31,7 +32,9 @@ void Chunk::initialize_cubes()
         {
             for (int y = 0; y < Y; y++)
             {
-                blocks[get_index(x, y, z)].update_cube_state(x, y, z, "air");
+                float world_x = get_cube_x(x);
+                float world_z = get_cube_z(z);
+                blocks[get_index(x, y, z)].update_cube_state(world_x, y, world_z, "air");
             }
         }
     }
@@ -48,14 +51,16 @@ void Chunk::generate_terrain()
             // the height, if y < height, stone
             // if greater, air.
             float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
+            // printf("%f, %f\n", chunk_x, chunk_z);
             float height = MIN_BLOCK_HEIGHT + generateHeight(chunk_x, chunk_z, 0.1, 5.0);
+            // printf("Block height %f\n", height);
             // printf("height is %f\n", height);
             for (int y = 0; y < Y; y++)
             {
                 if (y < height)
                 {
+                    // create border around chunks for easier viewing
                     if (x == X - 1 || z == Z - 1 || x == 0 || z == 0)
-
                         blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "stone");
                     else
                         blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "grass");
