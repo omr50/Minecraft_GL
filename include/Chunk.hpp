@@ -1,5 +1,6 @@
 #pragma once
 #include "../include/Cube.hpp"
+#include "../include/Renderable.hpp"
 #include <glm/gtc/noise.hpp>
 
 #define X 16
@@ -21,4 +22,6 @@ public:
     int get_index(int x, int y, int z);
     float get_cube_x(int x);
     float get_cube_z(int z);
+    void get_chunk_data();
+    // void draw() override;
 };

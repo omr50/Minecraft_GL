@@ -1,9 +1,14 @@
 #pragma once
 #include "../include/Chunk.hpp"
+#include "../include/Renderable.hpp"
 #include <glm/glm.hpp>
 
 #define NUM_CHUNKS 25
-class Terrain
+
+// chunk will implement renderable
+// we want to draw on a larger scal
+// not on the cube level
+class Terrain : public Renderable
 {
 public:
     Chunk chunks[NUM_CHUNKS];
@@ -19,6 +24,7 @@ public:
     void cube_face_renderability(Chunk *chunk, Cube *cube);
     bool determine_renderability(int x, int y, int z);
     int get_chunk_index(std::pair<int, int> chunk_coords);
+    void draw() override;
 
     /*
    - can use threads to update each chunk potentially in parallel

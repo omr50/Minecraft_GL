@@ -274,3 +274,9 @@ int Terrain::get_chunk_index(std::pair<int, int> chunk_coords)
     }
     return -1;
 }
+
+void Terrain::draw()
+{
+    // for each chunk get the data and then combine it
+    // send to GPU in batch rather than one at a time
+}

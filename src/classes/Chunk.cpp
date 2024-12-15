@@ -34,12 +34,14 @@ void Chunk::initialize_cubes()
             {
                 float world_x = get_cube_x(x);
                 float world_z = get_cube_z(z);
-                blocks[get_index(x, y, z)].update_cube_state(world_x, y, world_z, "air");
+                blocks[get_index(x, y, z)].update_state(world_x, y, world_z, "air");
             }
         }
     }
 }
 
+// remember to customize this to add other blocks in the mix
+// like dirt, gravel, etc.
 void Chunk::generate_terrain()
 {
     // initialize all cubes
@@ -61,13 +63,13 @@ void Chunk::generate_terrain()
                 {
                     // create border around chunks for easier viewing
                     if (x == X - 1 || z == Z - 1 || x == 0 || z == 0)
-                        blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "stone");
+                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
                     else
-                        blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "grass");
+                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
                 }
                 else
                 {
-                    blocks[get_index(x, y, z)].update_cube_state(chunk_x, y, chunk_z, "air");
+                    blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "air");
                 }
             }
         }

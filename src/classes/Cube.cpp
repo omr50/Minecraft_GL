@@ -9,7 +9,8 @@
 GLuint Cube::face_vaos[6] = {0}, Cube::face_vbos[6] = {0};
 GLuint Cube::cube_vbo = 0, Cube::cube_vao = 0, Cube::texture_id = 0;
 GLuint Cube::shader_program;
-std::unordered_map<std::string, std::array<GLuint, 3>> Cube::texture_map;
+GLuint Cube::texture_atlas;
+std::unordered_map<std::string, std::array<FaceUV, 3>> Cube::texture_map;
 
 float Cube::front_face_vertices[30] = { // Front face
     -0.5f, -0.5f, +0.5f, 0.0f, 1.0f,
@@ -109,45 +110,59 @@ Cube::Cube(int x, int y, int z, std::string block_type) : x((float)x), y((float)
 {
     create_model_matrix();
 }
-
-void Cube::add_textures(std::string block_type, std::string top_filename, std::string bottom_filename, std::string sides_filename)
+static void add_texture(std::string texture_filename)
 {
     unsigned char *image;
     int width, height, channels;
-    const char *files[] = {top_filename.c_str(), bottom_filename.c_str(), sides_filename.c_str()};
-    std::array<GLuint, 3> face_textures;
 
-    for (int i = 0; i < 3; i++)
+    image = stbi_load(texture_filename.c_str(), &width, &height, &channels, 0);
+    if (!image)
     {
-        image = stbi_load(files[i], &width, &height, &channels, 0);
-        if (!image)
-        {
-            std::cerr << "Failed to load texture " << files[i] << std::endl;
-        }
-
-        glGenTextures(1, &face_textures[i]);
-        glBindTexture(GL_TEXTURE_2D, face_textures[i]);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        GLenum format = channels == 4 ? GL_RGBA : GL_RGB;
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        stbi_image_free(image);
-        // add to the map
-        Cube::texture_map[block_type] = face_textures;
+        std::cerr << "Failed to load texture " << texture_filename << std::endl;
     }
-}
 
-void Cube::add_all_block_textures()
+    glGenTextures(1, &Cube::texture_atlas);
+    glBindTexture(GL_TEXTURE_2D, Cube::texture_atlas);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    GLenum format = channels == 4 ? GL_RGBA : GL_RGB;
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    stbi_image_free(image);
+}
+void initialize_texture_map(std::string texture_atlas_filename)
 {
-    Cube::add_textures("grass", "../textures/dirt_bottom.png", "../textures/grass_top.png", "../textures/dirt_side.png");
-    Cube::add_textures("dirt", "../textures/dirt_bottom.png", "../textures/dirt_bottom.png", "../textures/dirt_bottom.png");
-    Cube::add_textures("sand", "../textures/sand.png", "../textures/sand.png", "../textures/sand.png");
-    Cube::add_textures("stone", "../textures/stone.png", "../textures/stone.png", "../textures/stone.png");
+    add_texture(texture_atlas_filename);
+    // bunch of add_block_to_map calls for different blocks that will be done only once
+    float texture_square_size = 1.0f / (float)GRID_WIDTH;
+
+    // cubes with the same texture for all faces
+    FaceUV stone_offset = {{1.0f * texture_square_size, 0.0f}};
+    FaceUV dirt_offset = {{2.0f * texture_square_size, 0.0f}};
+    FaceUV sand_offset = {{2.0f * texture_square_size, 1.0f * texture_square_size}};
+    FaceUV cobble_stone_offset = {{0.0f, 1.0f * texture_square_size}};
+    FaceUV wooden_plank_offset = {{4.0f * texture_square_size, 0.0f}};
+
+    FaceUV grass_top_offset = {{0.0f, 0.0f}};
+    FaceUV grass_bottom_offset = dirt_offset;
+    FaceUV grass_side_offset = {{3.0f * texture_square_size, 0.0f}};
+
+    add_block_to_map("stone", stone_offset, stone_offset, stone_offset);
+    add_block_to_map("dirt", dirt_offset, dirt_offset, dirt_offset);
+    add_block_to_map("sand", sand_offset, sand_offset, sand_offset);
+    add_block_to_map("cobble_stone", cobble_stone_offset, cobble_stone_offset, cobble_stone_offset);
+    add_block_to_map("wooden_plank", wooden_plank_offset, wooden_plank_offset, wooden_plank_offset);
+
+    add_block_to_map("grass", grass_top_offset, grass_side_offset, grass_bottom_offset);
+}
+void add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV offset_side, FaceUV offset_bottom)
+{
+    std::array<FaceUV, 3> face_texture_offsets = std::array<FaceUV, 3>({offset_top, offset_side, offset_bottom});
+    Cube::texture_map[block_type] = face_texture_offsets;
 }
 
 void Cube::create_model_matrix()
@@ -155,41 +170,8 @@ void Cube::create_model_matrix()
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3((float)x, (float)y, (float)z));
 }
 
-void Cube::draw()
+void Cube::update_state(float x, float y, float z, std::string block_type)
 {
-    if (block_type == "air")
-        return;
-
-    for (int face = 0; face < 6; face++)
-    {
-        // if non-renderable / not in mesh (continue)
-        if (!renderable_face[face])
-            continue;
-        std::array<GLuint, 3> face_textures = Cube::texture_map[this->block_type];
-        glActiveTexture(GL_TEXTURE0);
-        // Decide which texture to use (top, bottom, sides) based on face index:
-        GLuint texToUse = (face == 5) ? face_textures[1] : // Bottom face
-                              (face == 4) ? face_textures[0]
-                                          :     // Top face
-                              face_textures[2]; // Other sides
-
-        glBindTexture(GL_TEXTURE_2D, texToUse);
-        GLint textureLoc = glGetUniformLocation(Cube::shader_program, "ourTexture");
-        glUniform1i(textureLoc, 0);
-
-        glBindVertexArray(face_vaos[face]);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-    }
-}
-
-// temporary override stopping Cube
-// from being an abstract class.
-void Cube::update_state() {}
-
-void Cube::update_cube_state(int x, int y, int z, std::string block_type)
-{
-    // change coordinate
-    // printf("%d %d %d COORDS\n", x, y, z);
     this->x = x;
     this->y = y;
     this->z = z;

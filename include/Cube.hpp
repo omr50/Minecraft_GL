@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/Renderable.hpp"
+#include "../include/Updatable.hpp"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -7,7 +7,14 @@
 #include <unordered_map>
 #include <array>
 
-class Cube : public Renderable
+#define GRID_WIDTH 16
+
+struct FaceUV
+{
+    glm::vec2 offset;
+};
+
+class Cube : public Updatable
 {
 public:
     static GLuint face_vaos[6], face_vbos[6];
@@ -20,15 +27,19 @@ public:
     static float bottom_face_vertices[30];
     static float top_face_vertices[30];
     static float *faces[6];
+    static GLuint texture_atlas;
     // maps the block type to the
-    static std::unordered_map<std::string, std::array<GLuint, 3>> texture_map;
-    int x;
-    int y;
-    int z;
+    static std::unordered_map<std::string, std::array<FaceUV, 3>> texture_map;
+    float x;
+    float y;
+    float z;
 
     static void setup_vbo_vao_shaders();
-    static void add_textures(std::string block_type, std::string top_filename, std::string bottom_filename, std::string sides_filename);
-    static void add_all_block_textures();
+    // static void add_textures(std::string block_type, std::string top_filename, std::string bottom_filename, std::string sides_filename);
+    static void add_texture(std::string texture_filename);
+    static void initialize_texture_map(std::string texture_atlas_filename);
+    static void add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV offset_side, FaceUV offset_bottom);
+    // static void add_all_block_textures();
 
     // non static members
     glm::mat4 model_matrix;
@@ -41,9 +52,8 @@ public:
     Cube();
     Cube(int x, int y, int z, std::string block_type);
     void create_model_matrix();
-    void draw() override;
-    void update_state() override;
-    void update_cube_state(int x, int y, int z, std::string block_type);
+    void update_state(float x, float y, float z, std::string block_type) override;
+    // void update_cube_state(int x, int y, int z, std::string block_type);
     // even better than the images have the loaded textures instead (using stb_image)
     // const char* texture_files[6] = {
     // "front.png", "back.png", "left.png", "right.png", "bottom.png", "top.png"
