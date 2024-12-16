@@ -90,3 +90,38 @@ float Chunk::get_cube_z(int z)
 {
     return chunk_coordinates.second * Z + z;
 }
+
+void Chunk::get_mesh_vertices()
+{
+    mesh_vertices.clear();
+    for (int x = 0; x < X; x++)
+        for (int y = 0; y < X; y++)
+            for (int z = 0; z < X; z++)
+            {
+                auto block = blocks[get_index(x, y, z)];
+                if (block.block_type == "air")
+                    return;
+
+                for (int face = 0; face < 6; face++)
+                {
+                    // if non-renderable / not in mesh (continue)
+                    if (!block.renderable_face[face])
+                        continue;
+                    std::array<FaceUV, 3> face_textures = Cube::texture_map[block.block_type];
+                    // glActiveTexture(GL_TEXTURE0);
+                    // Decide which texture to use (top, bottom, sides) based on face index:
+                    auto offsets_to_use = (face == 5) ? face_textures[1] : // Bottom face
+                                              (face == 4) ? face_textures[0]
+                                                          :     // Top face
+                                              face_textures[2]; // Other sides
+
+                    Cube::faces[face][4] = Cube::faces[face][4] * (1.0f / 16.0f) + offsets_to_use.offset.x;
+                    // glBindTexture(GL_TEXTURE_2D, texToUse);
+                    // GLint textureLoc = glGetUniformLocation(Cube::shader_program, "ourTexture");
+                    // glUniform1i(textureLoc, 0);
+
+                    // glBindVertexArray(face_vaos[face]);
+                    // glDrawArrays(GL_TRIANGLES, 0, 6);
+                }
+            }
+}
