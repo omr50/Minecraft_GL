@@ -76,6 +76,8 @@ void Chunk::generate_terrain()
     }
 }
 
+// render chunks individually
+
 int Chunk::get_index(int x, int y, int z)
 {
     return x * Y * Z + y * Z + z;
