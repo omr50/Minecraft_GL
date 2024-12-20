@@ -6,6 +6,8 @@
 
 Display::Display()
 {
+    init_gl_sdl();
+    main_loop();
 }
 void Display::init_window()
 {
@@ -51,6 +53,7 @@ void Display::init_gl_sdl()
 {
     init_window();
     init_context_and_gl_properties();
+    printf("Opengl initialized!\n");
 }
 
 void Display::main_loop()
@@ -60,8 +63,9 @@ void Display::main_loop()
     glEnable(GL_DEPTH_TEST);
     // glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    Cube::add_all_block_textures();
-    Cube::setup_vbo_vao_shaders();
+    // Cube::add_all_block_textures();
+    Cube::initialize_texture_map("../textures/texture_atlas_2.png");
+    Cube::setup_cube_shaders();
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     while (running)
     {

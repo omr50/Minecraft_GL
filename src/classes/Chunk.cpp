@@ -51,6 +51,7 @@ void Chunk::initialize_cubes()
 
 // remember to customize this to add other blocks in the mix
 // like dirt, gravel, etc.
+// should only be done once the chunk needs to be created, not each iteration
 void Chunk::generate_terrain()
 {
     // initialize all cubes
@@ -119,6 +120,9 @@ void Chunk::get_mesh_vertices()
                     // if non-renderable / not in mesh (continue)
                     if (!block.renderable_face[face])
                         continue;
+                    // one matrix per face, not per vertice
+                    instance_vector.push_back(block.model_matrix);
+
                     std::array<FaceUV, 3> face_textures = Cube::texture_map[block.block_type];
                     // glActiveTexture(GL_TEXTURE0);
                     // Decide which texture to use (top, bottom, sides) based on face index:
@@ -138,8 +142,6 @@ void Chunk::get_mesh_vertices()
                         vertex.v = Cube::faces[face][4 + 5 * i] * (1.0f / 16.0f) + offsets_to_use.offset.y;
                         mesh_vertices.push_back(vertex);
                     }
-                    // one matrix per face, not per vertice
-                    instance_vector.push_back(block.model_matrix);
                 }
             }
 }
@@ -156,15 +158,33 @@ void Chunk::update_chunk()
 void Chunk::buffer_data()
 {
     glBindVertexArray(chunk_vao);
+
+    // Geometry VBO
     glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-    glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(float), mesh_vertices.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(Vertex), mesh_vertices.data(), GL_DYNAMIC_DRAW);
 
     // Position attribute (location = 0)
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
 
     // UV attribute (location = 1)
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(3 * sizeof(float)));
+
+    // Instance VBO
+    glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
+    glBufferData(GL_ARRAY_BUFFER, instance_vector.size() * sizeof(glm::mat4), instance_vector.data(), GL_DYNAMIC_DRAW);
+
+    // Model matrix (locations 2, 3, 4, 5)
+    std::size_t vec4Size = sizeof(glm::vec4);
+    for (int i = 0; i < 4; i++)
+    {
+        glEnableVertexAttribArray(2 + i);
+        glVertexAttribPointer(2 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)(i * vec4Size));
+        glVertexAttribDivisor(2 + i, 1); // Advance once per instance
+    }
+
+    // Unbind VAO and VBO
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

@@ -34,8 +34,8 @@ public:
     float y;
     float z;
 
-    static void setup_vbo_vao_shaders();
     // static void add_textures(std::string block_type, std::string top_filename, std::string bottom_filename, std::string sides_filename);
+    static void setup_cube_shaders();
     static void add_texture(std::string texture_filename);
     static void initialize_texture_map(std::string texture_atlas_filename);
     static void add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV offset_side, FaceUV offset_bottom);

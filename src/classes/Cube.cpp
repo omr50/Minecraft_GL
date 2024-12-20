@@ -79,29 +79,10 @@ float *Cube::faces[6] = {
     Cube::bottom_face_vertices,
     Cube::top_face_vertices};
 
-void Cube::setup_vbo_vao_shaders()
+void Cube::setup_cube_shaders()
 {
     Shader shader = Shader("../shaders/basicShader.vs", "../shaders/basicShader.fs");
     Cube::shader_program = shader.shader_program;
-    glGenVertexArrays(6, face_vaos);
-    glGenBuffers(6, face_vbos);
-    for (int i = 0; i < 6; i++)
-    {
-
-        glBindVertexArray(face_vaos[i]);
-        glBindBuffer(GL_ARRAY_BUFFER, face_vbos[i]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 30, faces[i], GL_STATIC_DRAW);
-
-        // Position attribute
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
-
-        // Texture attribute
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
-
-        glBindVertexArray(0);
-    }
 }
 
 Cube::Cube() {}
@@ -110,7 +91,7 @@ Cube::Cube(int x, int y, int z, std::string block_type) : x((float)x), y((float)
 {
     create_model_matrix();
 }
-static void add_texture(std::string texture_filename)
+void Cube::add_texture(std::string texture_filename)
 {
     unsigned char *image;
     int width, height, channels;
@@ -134,7 +115,7 @@ static void add_texture(std::string texture_filename)
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(image);
 }
-void initialize_texture_map(std::string texture_atlas_filename)
+void Cube::initialize_texture_map(std::string texture_atlas_filename)
 {
     add_texture(texture_atlas_filename);
     // bunch of add_block_to_map calls for different blocks that will be done only once
@@ -159,7 +140,7 @@ void initialize_texture_map(std::string texture_atlas_filename)
 
     add_block_to_map("grass", grass_top_offset, grass_side_offset, grass_bottom_offset);
 }
-void add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV offset_side, FaceUV offset_bottom)
+void Cube::add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV offset_side, FaceUV offset_bottom)
 {
     std::array<FaceUV, 3> face_texture_offsets = std::array<FaceUV, 3>({offset_top, offset_side, offset_bottom});
     Cube::texture_map[block_type] = face_texture_offsets;

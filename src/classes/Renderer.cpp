@@ -11,16 +11,16 @@ void Renderer::add_block(Cube *blocks)
 
 void Renderer::render_blocks()
 {
-    // common shader program across all cubes
-    glUseProgram(Cube::shader_program);
+    // // common shader program across all cubes
+    // glUseProgram(Cube::shader_program);
 
-    for (auto &block : all_blocks)
-    {
-        glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
-        glm::mat4 MVP = view_projection_matrix * block->model_matrix;
-        send_matrix_to_shader(&MVP);
-        block->draw();
-    }
+    // for (auto &block : all_blocks)
+    // {
+    //     glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
+    //     glm::mat4 MVP = view_projection_matrix * block->model_matrix;
+    //     send_matrix_to_shader(&MVP);
+    //     block->draw();
+    // }
 }
 
 void Renderer::send_matrix_to_shader(glm::mat4 *matrix)
@@ -51,17 +51,28 @@ void Renderer::render_chunks()
     time_end = std::chrono::high_resolution_clock::now();
     printf("ms time for mesh %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
     time_start = std::chrono::high_resolution_clock::now();
+    glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
+    // view projection matrix is a uniform
+    send_matrix_to_shader(&view_projection_matrix);
     for (int i = curr_iteration; i < NUM_CHUNKS; i++)
     {
-        for (int x = 0; x < X; x++)
-            for (int y = 0; y < Y; y++)
-                for (int z = 0; z < Z; z++)
-                {
-                    glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
-                    glm::mat4 MVP = view_projection_matrix * terrain.chunks[i].blocks[terrain.chunks[i].get_index(x, y, z)].model_matrix;
-                    send_matrix_to_shader(&MVP);
-                    terrain.chunks[i].blocks[terrain.chunks->get_index(x, y, z)].draw();
-                }
+        if (terrain.camera_moved())
+        {
+            terrain.chunks[i].update_chunk();
+            terrain.chunks[i].buffer_data();
+            glBindVertexArray(terrain.chunks[i].chunk_vao);
+            glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
+            glBindVertexArray(0);
+        }
+
+        // for (int x = 0; x < X; x++)
+        //     for (int y = 0; y < Y; y++)
+        //         for (int z = 0; z < Z; z++)
+        //         {
+        //             glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
+        //             glm::mat4 MVP = view_projection_matrix * terrain.chunks[i].blocks[terrain.chunks[i].get_index(x, y, z)].model_matrix;
+        //             send_matrix_to_shader(&MVP);
+        //             terrain.chunks[i].blocks[terrain.chunks->get_index(x, y, z)].draw();
     }
     time_end = std::chrono::high_resolution_clock::now();
     printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());

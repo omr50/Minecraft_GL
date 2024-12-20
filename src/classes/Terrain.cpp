@@ -248,5 +248,9 @@ void Terrain::draw()
 
 bool Terrain::camera_moved()
 {
-    return (prev_camera_position.x == camera_position->x && prev_camera_position.y == camera_position->y && prev_camera_position.z == camera_position->z);
+    bool moved = (prev_camera_position.x == camera_position->x && prev_camera_position.y == camera_position->y && prev_camera_position.z == camera_position->z);
+    prev_camera_position.x = camera_position->x;
+    prev_camera_position.y = camera_position->y;
+    prev_camera_position.z = camera_position->z;
+    return moved;
 }
