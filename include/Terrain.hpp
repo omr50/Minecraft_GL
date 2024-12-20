@@ -13,6 +13,7 @@ class Terrain : public Renderable
 public:
     Chunk chunks[NUM_CHUNKS];
     glm::vec3 *camera_position;
+    glm::vec3 prev_camera_position;
 
     Terrain(glm::vec3 *camera_position);
     void shift_chunks();
@@ -25,6 +26,7 @@ public:
     bool determine_renderability(int x, int y, int z);
     int get_chunk_index(std::pair<int, int> chunk_coords);
     void draw() override;
+    bool camera_moved();
 
     /*
    - can use threads to update each chunk potentially in parallel

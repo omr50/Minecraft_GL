@@ -5,11 +5,17 @@ Terrain::Terrain(glm::vec3 *camera_position) : camera_position(camera_position)
 {
     std::pair<int, int> positions[NUM_CHUNKS];
     new_positions(positions);
+    // set previous position to different value so that
+    // first frame will cause a render.
+    prev_camera_position.x = -1;
+    prev_camera_position.y = -1;
+    prev_camera_position.z = -1;
 
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
         chunks[i].chunk_coordinates.first = positions[i].first;
         chunks[i].chunk_coordinates.second = positions[i].second;
+        chunks[i].initialize_vertex_buffers_and_array();
         chunks[i].initialize_cubes();
         chunks[i].generate_terrain();
     }
@@ -28,6 +34,9 @@ Terrain::Terrain(glm::vec3 *camera_position) : camera_position(camera_position)
 */
 void Terrain::shift_chunks()
 {
+    // if camera didn't move then no point in updating
+    if (!camera_moved())
+        return;
     std::pair<int, int> positions[NUM_CHUNKS];
     new_positions(positions);
 
@@ -74,18 +83,6 @@ void Terrain::new_positions(std::pair<int, int> positions[])
     auto center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
     auto first_coord = std::make_pair<int, int>(center.first - half_way, center.second - half_way);
 
-    // for (int i = half_way - grid_width; i < half_way + is_odd; i++)
-    // {
-    //     for (int j = half_way - grid_width; j < half_way + is_odd; j++)
-    //     {
-    //         // printf("%d, %d)\n", i, j);
-    //         auto center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
-    //         positions[(i + 1) * 3 + (j + 1)].first = center.first + i;
-    //         positions[(i + 1) * 3 + (j + 1)].second = center.second + j;
-    //         // printf("Terrain: (%d, %d)\n", positions[(i + 1) * 3 + (j + 1)].first, positions[(i + 1) * 3 + (j + 1)].second);
-    //     }
-    // }
-
     for (int i = 0; i < grid_width; i++)
         for (int j = 0; j < grid_width; j++)
         {
@@ -93,12 +90,6 @@ void Terrain::new_positions(std::pair<int, int> positions[])
             positions[i * grid_width + j].first = first_coord.first + i;
             positions[i * grid_width + j].second = first_coord.second + j;
         }
-
-    // printf("Center (%d, %d)", center.first, center.second);
-    // for (int i = 0; i < NUM_CHUNKS; i++)
-    // printf("coords (%d, %d)\n", positions[i].first, positions[i].second);
-    // std::pair<int, int> center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
-    // printf("Center: (%d, %d)\n", center.first, center.second);
 }
 
 bool Terrain::find_out_of_bound_chunk(int x, int z, std::pair<int, int> positions[])
@@ -123,7 +114,6 @@ bool Terrain::find_new_positions(std::pair<int, int> val)
 
 std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 {
-    // return std::make_pair((int)x / X, (int)z / Z);
     int chunk_x = std::floor(x / (float)X);
     int chunk_z = std::floor(z / (float)Z);
     return std::make_pair(chunk_x, chunk_z);
@@ -133,7 +123,7 @@ std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 // frustum view range, otherwise don't waste time to calculate.
 void Terrain::create_mesh()
 {
-    // use thread pool to run the some range of i per thread
+    // later try to use thread pool to run the some range of i per thread
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
         for (int x = 0; x < X; x++)
@@ -143,31 +133,6 @@ void Terrain::create_mesh()
                     cube_face_renderability(&chunks[i], &(chunks[i].blocks[chunks[i].get_index(x, y, z)]));
                 }
     }
-
-    // join here? (overhead probably shorter then the task)
-
-    // for (int i = 0; i < NUM_CHUNKS; i++)
-    // {
-    //     for (int x = 0; x < X; x++)
-    //         for (int y = 0; y < Y; y++)
-    //             for (int z = 0; z < Z; z++)
-    //             {
-    //                 Cube *cube = &chunks[i].blocks[chunks[i].get_index(x, y, z)];
-    //                 if (cube->block_type != "air")
-    //                 {
-    //                     total_faces += 6; // 6 faces per solid cube
-    //                     for (int f = 0; f < 6; f++)
-    //                     {
-    //                         if (!cube->renderable_face[f])
-    //                         {
-    //                             culled_faces++;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    // }
-    // printf("Total faces: %d, Culled faces: %d, Rendering: %d\n",
-    //        total_faces, culled_faces, total_faces - culled_faces);
 }
 
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
@@ -279,4 +244,9 @@ void Terrain::draw()
 {
     // for each chunk get the data and then combine it
     // send to GPU in batch rather than one at a time
+}
+
+bool Terrain::camera_moved()
+{
+    return (prev_camera_position.x == camera_position->x && prev_camera_position.y == camera_position->y && prev_camera_position.z == camera_position->z);
 }

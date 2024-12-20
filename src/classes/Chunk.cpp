@@ -22,6 +22,15 @@ float Chunk::generateHeight(float x, float z, float scale, float heightMultiplie
     return noiseValue * heightMultiplier;
 }
 
+void Chunk::initialize_vertex_buffers_and_array()
+{
+    glGenVertexArrays(1, &chunk_vao);
+    glGenBuffers(1, &instance_vbo);
+    glGenBuffers(1, &geometry_vbo);
+    glBindVertexArray(chunk_vao);
+    // glBindVertexArray(0);
+}
+
 // cubes use default constructor
 // so just initializing params
 void Chunk::initialize_cubes()
@@ -96,6 +105,7 @@ float Chunk::get_cube_z(int z)
 void Chunk::get_mesh_vertices()
 {
     mesh_vertices.clear();
+    instance_vector.clear();
     for (int x = 0; x < X; x++)
         for (int y = 0; y < X; y++)
             for (int z = 0; z < X; z++)
@@ -117,13 +127,44 @@ void Chunk::get_mesh_vertices()
                                                           :     // Top face
                                               face_textures[2]; // Other sides
 
-                    Cube::faces[face][4] = Cube::faces[face][4] * (1.0f / 16.0f) + offsets_to_use.offset.x;
-                    // glBindTexture(GL_TEXTURE_2D, texToUse);
-                    // GLint textureLoc = glGetUniformLocation(Cube::shader_program, "ourTexture");
-                    // glUniform1i(textureLoc, 0);
-
-                    // glBindVertexArray(face_vaos[face]);
-                    // glDrawArrays(GL_TRIANGLES, 0, 6);
+                    // set up texture offsets
+                    Vertex vertex;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        vertex.x = Cube::faces[face][0 + 5 * i];
+                        vertex.y = Cube::faces[face][1 + 5 * i];
+                        vertex.z = Cube::faces[face][2 + 5 * i];
+                        vertex.u = Cube::faces[face][3 + 5 * i] * (1.0f / 16.0f) + offsets_to_use.offset.x;
+                        vertex.v = Cube::faces[face][4 + 5 * i] * (1.0f / 16.0f) + offsets_to_use.offset.y;
+                        mesh_vertices.push_back(vertex);
+                    }
+                    // one matrix per face, not per vertice
+                    instance_vector.push_back(block.model_matrix);
                 }
             }
+}
+
+void Chunk::update_chunk()
+{
+
+    // not for updating vao, vbos, because we want this function to be
+    // thread safe. only will be called if camera moved or if block added/destroyed
+    // so that we only update if necessary.
+    get_mesh_vertices();
+}
+
+void Chunk::buffer_data()
+{
+    glBindVertexArray(chunk_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
+    glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(float), mesh_vertices.data(), GL_DYNAMIC_DRAW);
+
+    // Position attribute (location = 0)
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+
+    // UV attribute (location = 1)
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glBindVertexArray(0);
 }
