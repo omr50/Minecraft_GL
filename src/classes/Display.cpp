@@ -6,7 +6,14 @@
 
 Display::Display()
 {
+    // initialize gl and sdl before creating
+    // variables which will use opengl functions.
     init_gl_sdl();
+
+    camera = new Camera();
+    event_handler = new EventHandler(camera, window, &running);
+    renderer = new Renderer(camera);
+
     main_loop();
 }
 void Display::init_window()
@@ -70,9 +77,10 @@ void Display::main_loop()
     while (running)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        this->event_handler.event_handler();
+        this->event_handler->event_handler();
         // renderer.render_blocks();
-        renderer.render_chunks();
+        printf("WORKING?!!!!!!!!!!!!!!!!!!!!!\n");
+        renderer->render_chunks();
         SDL_GL_SwapWindow(window);
         // SDL_Delay(5);
     }

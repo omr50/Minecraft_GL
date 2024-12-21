@@ -105,15 +105,18 @@ float Chunk::get_cube_z(int z)
 
 void Chunk::get_mesh_vertices()
 {
+    printf("mesh vertices func working?\n");
+    printf("vertices size: %d\n", mesh_vertices.size());
+    printf("instance vector size: %d\n", instance_vector.size());
     mesh_vertices.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)
-        for (int y = 0; y < X; y++)
-            for (int z = 0; z < X; z++)
+        for (int y = 0; y < Y; y++)
+            for (int z = 0; z < Z; z++)
             {
                 auto block = blocks[get_index(x, y, z)];
                 if (block.block_type == "air")
-                    return;
+                    continue;
 
                 for (int face = 0; face < 6; face++)
                 {
@@ -144,6 +147,9 @@ void Chunk::get_mesh_vertices()
                     }
                 }
             }
+
+    printf("vertices size: %d\n", mesh_vertices.size());
+    printf("instance vector size: %d\n", instance_vector.size());
 }
 
 void Chunk::update_chunk()

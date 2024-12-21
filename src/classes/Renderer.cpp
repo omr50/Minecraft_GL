@@ -25,13 +25,13 @@ void Renderer::render_blocks()
 
 void Renderer::send_matrix_to_shader(glm::mat4 *matrix)
 {
-    GLuint mvp_location = glGetUniformLocation(Cube::shader_program, "mvp");
-    if (mvp_location == -1)
+    GLuint vp_location = glGetUniformLocation(Cube::shader_program, "vp");
+    if (vp_location == -1)
     {
         std::cerr << "Error: Uniform 'mvp' not found!" << std::endl;
         exit(EXIT_FAILURE);
     }
-    glUniformMatrix4fv(mvp_location, 1, GL_FALSE, glm::value_ptr(*matrix));
+    glUniformMatrix4fv(vp_location, 1, GL_FALSE, glm::value_ptr(*matrix));
 }
 
 void Renderer::render_chunks()
@@ -58,11 +58,16 @@ void Renderer::render_chunks()
     {
         if (terrain.camera_moved())
         {
+            printf("Does move???\n");
             terrain.chunks[i].update_chunk();
             terrain.chunks[i].buffer_data();
             glBindVertexArray(terrain.chunks[i].chunk_vao);
             glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
             glBindVertexArray(0);
+        }
+        else
+        {
+            printf("not moved?\n");
         }
 
         // for (int x = 0; x < X; x++)

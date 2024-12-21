@@ -12,9 +12,12 @@ class Display
 private:
     SDL_Window *window = nullptr;
     bool running = true;
-    Camera camera = Camera();
-    EventHandler event_handler = EventHandler(&camera, window, &this->running);
-    Renderer renderer = Renderer(&camera);
+    // Camera camera = Camera();
+    // EventHandler event_handler = EventHandler(&camera, window, &this->running);
+    // Renderer renderer = Renderer(&camera);
+    Camera *camera;
+    EventHandler *event_handler;
+    Renderer *renderer;
     bool centered = true;
 
 public:
