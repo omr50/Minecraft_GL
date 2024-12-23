@@ -1,9 +1,10 @@
 #pragma once
 #include "../include/Chunk.hpp"
 #include "../include/Renderable.hpp"
+#include "../include/Camera.hpp"
 #include <glm/glm.hpp>
 
-#define NUM_CHUNKS 25
+#define NUM_CHUNKS 49
 
 // chunk will implement renderable
 // we want to draw on a larger scal
@@ -12,10 +13,10 @@ class Terrain : public Renderable
 {
 public:
     Chunk chunks[NUM_CHUNKS];
-    glm::vec3 *camera_position;
+    Camera *camera;
     glm::vec3 prev_camera_position;
 
-    Terrain(glm::vec3 *camera_position);
+    Terrain(Camera *camera);
     void shift_chunks();
     bool find_out_of_bound_chunk(int x, int z, std::pair<int, int> positions[]);
     bool find_new_positions(std::pair<int, int> val);

@@ -1,7 +1,7 @@
 #include "../../include/Terrain.hpp"
 #include <chrono>
 
-Terrain::Terrain(glm::vec3 *camera_position) : camera_position(camera_position)
+Terrain::Terrain(Camera *camera) : camera(camera)
 {
     std::pair<int, int> positions[NUM_CHUNKS];
     new_positions(positions);
@@ -80,7 +80,7 @@ void Terrain::new_positions(std::pair<int, int> positions[])
 {
     int grid_width = sqrt(NUM_CHUNKS);
     int half_way = grid_width / 2;
-    auto center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
+    auto center = get_center_chunk_coordinates(camera->position.x, camera->position.z);
     auto first_coord = std::make_pair<int, int>(center.first - half_way, center.second - half_way);
 
     for (int i = 0; i < grid_width; i++)
@@ -175,7 +175,7 @@ bool Terrain::determine_renderability(int x, int y, int z)
 
     // printf("World coord (%d,%d,%d) -> Chunk (%d,%d)\n", x, y, z, cx, cz);
     // Find our center chunk (the middle of our 3x3 grid)
-    auto center = get_center_chunk_coordinates(camera_position->x, camera_position->z);
+    auto center = get_center_chunk_coordinates(camera->position.x, camera->position.z);
 
     int half_width = ((int)sqrt(NUM_CHUNKS)) / 2;
     // If the chunk we're trying to check is outside our 3x3 grid
@@ -223,7 +223,7 @@ bool Terrain::determine_renderability(int x, int y, int z)
     // printf("(local index (%d,%d) block index %d\n", local_x, local_z, block_index);
     if (cube == nullptr)
     {
-        printf("WHY THE IS IT NULL\n");
+        // printf("WHY THE IS IT NULL\n");
         return true;
     }
     return cube->block_type == "air";
@@ -248,9 +248,5 @@ void Terrain::draw()
 
 bool Terrain::camera_moved()
 {
-    bool moved = (prev_camera_position.x == camera_position->x && prev_camera_position.y == camera_position->y && prev_camera_position.z == camera_position->z);
-    prev_camera_position.x = camera_position->x;
-    prev_camera_position.y = camera_position->y;
-    prev_camera_position.z = camera_position->z;
-    return moved;
+    return camera->moved;
 }

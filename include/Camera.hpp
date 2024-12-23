@@ -19,6 +19,7 @@ public:
     float aspect_ratio = static_cast<float>(WIDTH) / static_cast<float>(HEIGHT);
     float near_plane = 0.1f;
     float far_plane = 100.0f;
+    bool moved = true;
 
     Camera();
     void update_camera_position(glm::vec3 direction);

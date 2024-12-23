@@ -105,9 +105,9 @@ float Chunk::get_cube_z(int z)
 
 void Chunk::get_mesh_vertices()
 {
-    printf("mesh vertices func working?\n");
-    printf("vertices size: %d\n", mesh_vertices.size());
-    printf("instance vector size: %d\n", instance_vector.size());
+    // printf("mesh vertices func working?\n");
+    // printf("vertices size: %d\n", mesh_vertices.size());
+    // printf("instance vector size: %d\n", instance_vector.size());
     mesh_vertices.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)
@@ -129,10 +129,10 @@ void Chunk::get_mesh_vertices()
 
                     // glActiveTexture(GL_TEXTURE0);
                     // Decide which texture to use (top, bottom, sides) based on face index:
-                    auto offsets_to_use = (face == 5) ? face_textures[0] : // Bottom face
+                    auto offsets_to_use = (face == 5) ? face_textures[0] : // top face
                                               (face == 4) ? face_textures[1]
                                                           :     // Top face
-                                              face_textures[2]; // Other sides
+                                              face_textures[1]; // Other sides
 
                     // set up texture offsets
                     std::string side;
@@ -147,19 +147,23 @@ void Chunk::get_mesh_vertices()
                     for (int i = 0; i < 6; i++)
                     {
                         // give world coordinates and
-
-                        vertex.x = block.x;
-                        vertex.y = block.y;
-                        vertex.z = block.z;
-                        vertex.u = offsets_to_use.offset.x + Cube::faces[face][3 + 5 * i] * (1.0f / 16.0f);
-                        vertex.v = offsets_to_use.offset.y + Cube::faces[face][4 + 5 * i] * (1.0f / 16.0f);
+                        float localX = Cube::faces[face][0 + 5 * i]; // e.g. -0.5, +0.5, etc.
+                        float localY = Cube::faces[face][1 + 5 * i];
+                        float localZ = Cube::faces[face][2 + 5 * i];
+                        float localU = Cube::faces[face][3 + 5 * i];
+                        float localV = Cube::faces[face][4 + 5 * i];
+                        vertex.x = block.x + localX;
+                        vertex.y = block.y + localY;
+                        vertex.z = block.z + localZ;
+                        vertex.u = offsets_to_use.offset.x + localU * (1.0f / 16.0f);
+                        vertex.v = offsets_to_use.offset.y + localV * (1.0f / 16.0f);
                         mesh_vertices.push_back(vertex);
                     }
                 }
             }
 
-    printf("vertices size: %d\n", mesh_vertices.size());
-    printf("instance vector size: %d\n", instance_vector.size());
+    // printf("vertices size: %d\n", mesh_vertices.size());
+    // printf("instance vector size: %d\n", instance_vector.size());
 }
 
 void Chunk::update_chunk()

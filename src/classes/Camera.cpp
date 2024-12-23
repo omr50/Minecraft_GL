@@ -5,6 +5,7 @@ Camera::Camera() {}
 
 void Camera::update_camera_position(glm::vec3 direction)
 {
+    moved = true;
     glm::mat4 camera_rotation_matrix = glm::yawPitchRoll(yaw, pitch, roll);
     float speed = 2;
 

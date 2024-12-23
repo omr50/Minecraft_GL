@@ -76,12 +76,10 @@ void Display::main_loop()
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     while (running)
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         this->event_handler->event_handler();
         // renderer.render_blocks();
-        printf("WORKING?!!!!!!!!!!!!!!!!!!!!!\n");
-        renderer->render_chunks();
-        SDL_GL_SwapWindow(window);
+        // printf("WORKING?!!!!!!!!!!!!!!!!!!!!!\n");
+        renderer->render_chunks(window);
         // SDL_Delay(5);
     }
 
