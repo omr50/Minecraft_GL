@@ -18,7 +18,7 @@ public:
     float roll = 0;
     float aspect_ratio = static_cast<float>(WIDTH) / static_cast<float>(HEIGHT);
     float near_plane = 0.1f;
-    float far_plane = 100.0f;
+    float far_plane = 300.0f;
     bool moved = true;
 
     Camera();

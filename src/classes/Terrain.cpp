@@ -68,6 +68,7 @@ void Terrain::shift_chunks()
 
             chunks[p1].chunk_coordinates.first = positions[p2].first;
             chunks[p1].chunk_coordinates.second = positions[p2].second;
+            chunks[p1].clean = false;
             chunks[p1].initialize_cubes();
             chunks[p1].generate_terrain();
             p1++;
@@ -121,17 +122,23 @@ std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 
 // later just do calculations for those that are in the
 // frustum view range, otherwise don't waste time to calculate.
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! I feel like this function better belongs
+// to the chunks themselves. Or the create mesh can call each chunks function.
 void Terrain::create_mesh()
 {
     // later try to use thread pool to run the some range of i per thread
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
-        for (int x = 0; x < X; x++)
-            for (int y = 0; y < Y; y++)
-                for (int z = 0; z < Z; z++)
-                {
-                    cube_face_renderability(&chunks[i], &(chunks[i].blocks[chunks[i].get_index(x, y, z)]));
-                }
+        if (!chunks[i].clean)
+        {
+            for (int x = 0; x < X; x++)
+                for (int y = 0; y < Y; y++)
+                    for (int z = 0; z < Z; z++)
+                    {
+                        cube_face_renderability(&chunks[i], &(chunks[i].blocks[chunks[i].get_index(x, y, z)]));
+                    }
+        }
+        // clean will be set to false after iteration / frame
     }
 }
 

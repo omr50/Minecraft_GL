@@ -4,7 +4,7 @@
 #include "../include/Camera.hpp"
 #include <glm/glm.hpp>
 
-#define NUM_CHUNKS 49
+#define NUM_CHUNKS 169
 
 // chunk will implement renderable
 // we want to draw on a larger scal

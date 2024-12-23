@@ -43,23 +43,17 @@ void Renderer::render_chunks(SDL_Window *window)
 
     static int curr_iteration = 0;
 
-    auto time_start = std::chrono::high_resolution_clock::now();
-    terrain.shift_chunks();
-    auto time_end = std::chrono::high_resolution_clock::now();
-    // printf("ms time for shift %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
-    time_start = std::chrono::high_resolution_clock::now();
-    terrain.create_mesh();
-    time_end = std::chrono::high_resolution_clock::now();
-    // printf("ms time for mesh %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
-    time_start = std::chrono::high_resolution_clock::now();
-    glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
-    // view projection matrix is a uniform
-    send_matrix_to_shader(&view_projection_matrix);
     bool camera_moved = terrain.camera_moved();
     // don't render when camera doesn't move
     // keep screen as is.
     if (camera_moved)
     {
+
+        terrain.shift_chunks();
+        terrain.create_mesh();
+        glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
+        // view projection matrix is a uniform
+        send_matrix_to_shader(&view_projection_matrix);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (int i = curr_iteration; i < NUM_CHUNKS; i++)
@@ -74,6 +68,8 @@ void Renderer::render_chunks(SDL_Window *window)
             glDrawArrays(GL_TRIANGLES, 0, terrain.chunks[i].mesh_vertices.size());
             glBindVertexArray(0);
 
+            terrain.chunks[i].clean = true;
+
             // for (int x = 0; x < X; x++)
             //     for (int y = 0; y < Y; y++)
             //         for (int z = 0; z < Z; z++)
@@ -86,6 +82,6 @@ void Renderer::render_chunks(SDL_Window *window)
         terrain.camera->moved = false;
         SDL_GL_SwapWindow(window);
     }
-    time_end = std::chrono::high_resolution_clock::now();
+    // printf("camera moved: %d\n", terrain.camera->moved);
     // printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
 }

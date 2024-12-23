@@ -1,5 +1,6 @@
 #include "../../include/Display.hpp"
 #include "../../include/Shader.hpp"
+#include <chrono>
 
 #define WIDTH 800.0
 #define HEIGHT 600.0
@@ -74,6 +75,8 @@ void Display::main_loop()
     Cube::initialize_texture_map("../textures/texture_atlas_2.png");
     Cube::setup_cube_shaders();
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
+    auto time_start = std::chrono::high_resolution_clock::now();
+    int fps = 0;
     while (running)
     {
         this->event_handler->event_handler();
@@ -81,6 +84,15 @@ void Display::main_loop()
         // printf("WORKING?!!!!!!!!!!!!!!!!!!!!!\n");
         renderer->render_chunks(window);
         // SDL_Delay(5);
+
+        auto time_end = std::chrono::high_resolution_clock::now();
+        fps++;
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count() > 1000)
+        {
+            printf("FPS: %d\n", fps);
+            fps = 0;
+            time_start = std::chrono::high_resolution_clock::now();
+        }
     }
 
     SDL_DestroyWindow(window);

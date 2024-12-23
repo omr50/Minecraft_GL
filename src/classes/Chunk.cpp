@@ -84,6 +84,7 @@ void Chunk::generate_terrain()
             }
         }
     }
+    // clean = true;
 }
 
 // render chunks individually
@@ -108,6 +109,8 @@ void Chunk::get_mesh_vertices()
     // printf("mesh vertices func working?\n");
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
+    if (clean)
+        return;
     mesh_vertices.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)
