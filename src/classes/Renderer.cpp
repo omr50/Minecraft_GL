@@ -62,7 +62,8 @@ void Renderer::render_chunks()
             terrain.chunks[i].update_chunk();
             terrain.chunks[i].buffer_data();
             glBindVertexArray(terrain.chunks[i].chunk_vao);
-            glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
+            // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
+            glDrawArrays(GL_TRIANGLES, 0, terrain.chunks[i].mesh_vertices.size());
             glBindVertexArray(0);
         }
         else

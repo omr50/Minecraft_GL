@@ -95,7 +95,7 @@ void Cube::add_texture(std::string texture_filename)
 {
     unsigned char *image;
     int width, height, channels;
-
+    stbi_set_flip_vertically_on_load(true);
     image = stbi_load(texture_filename.c_str(), &width, &height, &channels, 0);
     if (!image)
     {
@@ -128,7 +128,7 @@ void Cube::initialize_texture_map(std::string texture_atlas_filename)
     FaceUV cobble_stone_offset = {{0.0f, 1.0f * texture_square_size}};
     FaceUV wooden_plank_offset = {{4.0f * texture_square_size, 0.0f}};
 
-    FaceUV grass_top_offset = {{0.0f, 0.0f}};
+    FaceUV grass_top_offset = {{0.0f, 11.0f}};
     FaceUV grass_bottom_offset = dirt_offset;
     FaceUV grass_side_offset = {{3.0f * texture_square_size, 0.0f}};
 

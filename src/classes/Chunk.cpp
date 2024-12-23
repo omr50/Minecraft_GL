@@ -25,7 +25,7 @@ float Chunk::generateHeight(float x, float z, float scale, float heightMultiplie
 void Chunk::initialize_vertex_buffers_and_array()
 {
     glGenVertexArrays(1, &chunk_vao);
-    glGenBuffers(1, &instance_vbo);
+    // glGenBuffers(1, &instance_vbo);
     glGenBuffers(1, &geometry_vbo);
     glBindVertexArray(chunk_vao);
     // glBindVertexArray(0);
@@ -73,7 +73,7 @@ void Chunk::generate_terrain()
                 {
                     // create border around chunks for easier viewing
                     if (x == X - 1 || z == Z - 1 || x == 0 || z == 0)
-                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
                     else
                         blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
                 }
@@ -118,31 +118,41 @@ void Chunk::get_mesh_vertices()
                 if (block.block_type == "air")
                     continue;
 
+                std::array<FaceUV, 3> face_textures = Cube::texture_map[block.block_type];
                 for (int face = 0; face < 6; face++)
                 {
                     // if non-renderable / not in mesh (continue)
                     if (!block.renderable_face[face])
                         continue;
                     // one matrix per face, not per vertice
-                    instance_vector.push_back(block.model_matrix);
+                    // instance_vector.push_back(block.model_matrix);
 
-                    std::array<FaceUV, 3> face_textures = Cube::texture_map[block.block_type];
                     // glActiveTexture(GL_TEXTURE0);
                     // Decide which texture to use (top, bottom, sides) based on face index:
-                    auto offsets_to_use = (face == 5) ? face_textures[1] : // Bottom face
-                                              (face == 4) ? face_textures[0]
+                    auto offsets_to_use = (face == 5) ? face_textures[0] : // Bottom face
+                                              (face == 4) ? face_textures[1]
                                                           :     // Top face
                                               face_textures[2]; // Other sides
 
                     // set up texture offsets
+                    std::string side;
+                    if (face == 5)
+                        side = "bottom";
+                    else if (face == 4)
+                        side = "top";
+                    else
+                        side = "sides";
+                    // printf("side is: %s\n", side.c_str());
                     Vertex vertex;
                     for (int i = 0; i < 6; i++)
                     {
-                        vertex.x = Cube::faces[face][0 + 5 * i];
-                        vertex.y = Cube::faces[face][1 + 5 * i];
-                        vertex.z = Cube::faces[face][2 + 5 * i];
-                        vertex.u = Cube::faces[face][3 + 5 * i] * (1.0f / 16.0f) + offsets_to_use.offset.x;
-                        vertex.v = Cube::faces[face][4 + 5 * i] * (1.0f / 16.0f) + offsets_to_use.offset.y;
+                        // give world coordinates and
+
+                        vertex.x = block.x;
+                        vertex.y = block.y;
+                        vertex.z = block.z;
+                        vertex.u = offsets_to_use.offset.x + Cube::faces[face][3 + 5 * i] * (1.0f / 16.0f);
+                        vertex.v = offsets_to_use.offset.y + Cube::faces[face][4 + 5 * i] * (1.0f / 16.0f);
                         mesh_vertices.push_back(vertex);
                     }
                 }
@@ -178,17 +188,17 @@ void Chunk::buffer_data()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(3 * sizeof(float)));
 
     // Instance VBO
-    glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-    glBufferData(GL_ARRAY_BUFFER, instance_vector.size() * sizeof(glm::mat4), instance_vector.data(), GL_DYNAMIC_DRAW);
+    // glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
+    // glBufferData(GL_ARRAY_BUFFER, instance_vector.size() * sizeof(glm::mat4), instance_vector.data(), GL_DYNAMIC_DRAW);
 
     // Model matrix (locations 2, 3, 4, 5)
-    std::size_t vec4Size = sizeof(glm::vec4);
-    for (int i = 0; i < 4; i++)
-    {
-        glEnableVertexAttribArray(2 + i);
-        glVertexAttribPointer(2 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)(i * vec4Size));
-        glVertexAttribDivisor(2 + i, 1); // Advance once per instance
-    }
+    // std::size_t vec4Size = sizeof(glm::vec4);
+    // for (int i = 0; i < 4; i++)
+    // {
+    //     glEnableVertexAttribArray(2 + i);
+    //     glVertexAttribPointer(2 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)(i * vec4Size));
+    //     glVertexAttribDivisor(2 + i, 1); // Advance once per instance
+    // }
 
     // Unbind VAO and VBO
     glBindVertexArray(0);
