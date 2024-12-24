@@ -65,10 +65,9 @@ void Terrain::shift_chunks()
         if (p1 < NUM_CHUNKS && p2 < NUM_CHUNKS)
         {
             // Update chunk
-
             chunks[p1].chunk_coordinates.first = positions[p2].first;
             chunks[p1].chunk_coordinates.second = positions[p2].second;
-            chunks[p1].clean = false;
+            chunks[p1].clean_mesh = false;
             chunks[p1].initialize_cubes();
             chunks[p1].generate_terrain();
             p1++;
@@ -129,7 +128,7 @@ void Terrain::create_mesh()
     // later try to use thread pool to run the some range of i per thread
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
-        if (!chunks[i].clean)
+        if (!chunks[i].clean_mesh)
         {
             for (int x = 0; x < X; x++)
                 for (int y = 0; y < Y; y++)
@@ -190,6 +189,9 @@ bool Terrain::determine_renderability(int x, int y, int z)
         cz < center.second - half_width || cz > center.second + half_width)
     {
         // Treat blocks outside our loaded chunks as air
+
+        // allow this to be true so that chunks that go from edge or boundary chunk
+        // to a center or non-edge chunk will not have to have their mesh recompute
         return false;
     }
     // printf("%d %d %d\n", x, y, z);
@@ -203,6 +205,7 @@ bool Terrain::determine_renderability(int x, int y, int z)
     // If we're checking a face that would be visible from outside the entire grid, don't render it
     if (x < min_x || x > max_x || z < min_z || z > max_z)
     {
+
         return false;
     }
 

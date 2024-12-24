@@ -109,7 +109,7 @@ void Chunk::get_mesh_vertices()
     // printf("mesh vertices func working?\n");
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
-    if (clean)
+    if (clean_mesh)
         return;
     mesh_vertices.clear();
     instance_vector.clear();

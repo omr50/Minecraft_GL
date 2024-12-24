@@ -89,7 +89,7 @@ void Display::main_loop()
         fps++;
         if (std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count() > 1000)
         {
-            printf("FPS: %d\n", fps);
+            // printf("FPS: %d\n", fps);
             fps = 0;
             time_start = std::chrono::high_resolution_clock::now();
         }

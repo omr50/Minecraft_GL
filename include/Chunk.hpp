@@ -28,7 +28,7 @@ public:
     GLuint geometry_vbo;
     GLuint instance_vbo;
     GLuint chunk_vao;
-    bool clean = false;
+    bool clean_mesh = false;
 
     Chunk();
     Chunk(int x, int y);
