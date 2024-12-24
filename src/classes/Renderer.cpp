@@ -68,7 +68,7 @@ void Renderer::render_chunks(SDL_Window *window)
             glDrawArrays(GL_TRIANGLES, 0, terrain.chunks[i].mesh_vertices.size());
             glBindVertexArray(0);
 
-            terrain.chunks[i].clean = true;
+            terrain.chunks[i].clean_mesh = true;
 
             // for (int x = 0; x < X; x++)
             //     for (int y = 0; y < Y; y++)
