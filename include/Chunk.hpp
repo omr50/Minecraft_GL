@@ -5,9 +5,9 @@
 #include <vector>
 
 #define X 16
-#define Y 16
+#define Y 256
 #define Z 16
-#define MIN_BLOCK_HEIGHT 10
+#define MIN_BLOCK_HEIGHT 75
 
 struct Vertex
 {

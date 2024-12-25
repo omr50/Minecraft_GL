@@ -180,6 +180,10 @@ void Chunk::update_chunk()
 
 void Chunk::buffer_data()
 {
+    // no need to buffer data if
+    // mesh was already sent and clean.
+    if (clean_mesh)
+        return;
     glBindVertexArray(chunk_vao);
 
     // Geometry VBO

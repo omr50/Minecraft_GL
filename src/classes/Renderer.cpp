@@ -60,6 +60,7 @@ void Renderer::render_chunks(SDL_Window *window)
         {
             // printf("Does move???\n");
             terrain.chunks[i].update_chunk();
+            // if (in_camera_view(terrain.chunks[i]))
             terrain.chunks[i].buffer_data();
             glBindVertexArray(terrain.chunks[i].chunk_vao);
             // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
