@@ -64,6 +64,7 @@ void Chunk::generate_terrain()
             // if greater, air.
             float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
             // printf("%f, %f\n", chunk_x, chunk_z);
+            // min block height added so that total can be from 0 to 255.
             float height = MIN_BLOCK_HEIGHT + generateHeight(chunk_x, chunk_z, 0.1, 5.0);
             // printf("Block height %f\n", height);
             // printf("height is %f\n", height);
