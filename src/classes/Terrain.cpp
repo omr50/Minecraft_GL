@@ -192,7 +192,7 @@ bool Terrain::determine_renderability(int x, int y, int z)
 
         // allow this to be true so that chunks that go from edge or boundary chunk
         // to a center or non-edge chunk will not have to have their mesh recompute
-        return true;
+        return false;
     }
     // printf("%d %d %d\n", x, y, z);
     // Calculate the absolute grid boundaries
