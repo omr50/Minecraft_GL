@@ -31,7 +31,19 @@ Terrain::Terrain(Camera *camera) : camera(camera)
    - when the player moves to a new chunk, we do the shift chunks, within that function we compute all of the new chunks and basically check which chunks we should
      keep and which we shouldn't. Easy loop over all 9 existing ones, the ones where the coordinate is found, we keep, the one where it isn't we re-generate the cubes
      (use change_chunk_position function, give it the new position, and change position then re-render the terrain with the generate_terrain function for the chunk)
+
+
+     change this function later to instead just change state and not actually initialize the
+     cubes or generate terrain. Because we want to do that in the threads. Basically the function
+     would set the boolean state (one variable indicating cubes need re-initialization, and the other
+     indicating that terrain needs re-genetration, or they could be one variable since needing initialization
+     always requires generation. But in the case of edge chunks becoming non-edge chunks, this does not hold
+     because we just need to re-generate the mesh, not actually initialize the cubes nor generate the terrain.
+     And that would be un-necessary load. So yes just have different variables for them. and then place the chunk
+     object on the queue (if it doesn't exist already before, if it does, then don't add it again). Then a thread will
+     pick up the task.
 */
+
 void Terrain::shift_chunks()
 {
     // if camera didn't move then no point in updating
