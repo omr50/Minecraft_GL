@@ -74,7 +74,7 @@ void Chunk::generate_terrain()
                 {
                     // create border around chunks for easier viewing
                     if (x == X - 1 || z == Z - 1 || x == 0 || z == 0)
-                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
+                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
                     else
                         blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
                 }

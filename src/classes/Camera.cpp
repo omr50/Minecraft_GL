@@ -1,7 +1,12 @@
 #include "../../include/Camera.hpp"
 #include <iostream>
+#include "../../include/Chunk.hpp"
 
-Camera::Camera() {}
+Camera::Camera()
+{
+    prev_chunk = get_chunk();
+    curr_chunk = prev_chunk;
+}
 
 void Camera::update_camera_position(glm::vec3 direction)
 {
@@ -18,6 +23,11 @@ void Camera::update_camera_position(glm::vec3 direction)
     }
     if (direction.y)
         position.y += (speed * direction.y);
+
+    // update chunk to be able to find the direction move
+    // to later realize which
+    prev_chunk = curr_chunk;
+    curr_chunk = get_chunk();
 }
 
 glm::mat4 Camera::create_view_matrix()
@@ -37,4 +47,29 @@ glm::mat4 Camera::create_projection_matrix()
 glm::mat4 Camera::get_view_projection_matrix()
 {
     return create_projection_matrix() * create_view_matrix();
+}
+
+std::pair<int, int> Camera::get_chunk()
+{
+    // take x and z world positions and get chunk coords
+    int x = position.x;
+    int z = position.z;
+
+    int cx = x / X;
+    if (x < 0 && x % X != 0)
+        cx--;
+    int cz = z / Z;
+    if (z < 0 && z % Z != 0)
+        cz--;
+
+    return std::make_pair(cx, cz);
+}
+
+std::pair<int, int> Camera::get_direction()
+{
+
+    auto direction = std::make_pair(curr_chunk.first - prev_chunk.first, curr_chunk.second - prev_chunk.second);
+    if (direction.first != 0 && direction.second != 0)
+        printf("WE GOT A EDGE CASE!\n");
+    return direction;
 }

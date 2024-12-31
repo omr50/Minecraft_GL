@@ -67,6 +67,8 @@ void Terrain::shift_chunks()
     // new_vals = true means that new value needs to be substituted into one of the chunks thats out of bounds since this is a new value
     int x, z;
     int p1 = 0, p2 = 0;
+    // get the direction shift
+    auto direction_shift = camera->get_direction();
     while (p1 < NUM_CHUNKS && p2 < NUM_CHUNKS)
     {
         while (p1 < NUM_CHUNKS && bound[p1])
@@ -82,6 +84,18 @@ void Terrain::shift_chunks()
             chunks[p1].clean_mesh = false;
             chunks[p1].initialize_cubes();
             chunks[p1].generate_terrain();
+            int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
+            int z_coord = chunks[p1].chunk_coordinates.second - direction_shift.second;
+            for (auto &chunk : chunks)
+            {
+                if (x_coord == chunk.chunk_coordinates.first && z_coord == chunk.chunk_coordinates.second)
+                {
+                    // chunks[p1].initialize_cubes();
+                    // printf("found!\n");
+                    chunk.clean_mesh = false;
+                    // chunk.update_chunk();
+                }
+            }
             p1++;
             p2++;
         }
