@@ -48,6 +48,11 @@ Terrain::Terrain(Camera *camera) : camera(camera)
 void Terrain::shift_chunks()
 {
     // if camera didn't move then no point in updating
+    {
+        std::unique_lock<std::mutex> lock(thread_pool->task_mutex);
+        if (thread_pool->task_queue.size())
+            return;
+    }
     if (!camera_moved())
         return;
     std::pair<int, int> positions[NUM_CHUNKS];
@@ -173,6 +178,11 @@ std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 // to the chunks themselves. Or the create mesh can call each chunks function.
 void Terrain::create_mesh()
 {
+    {
+        std::unique_lock<std::mutex> lock(thread_pool->task_mutex);
+        if (thread_pool->task_queue.size())
+            return;
+    }
     // later try to use thread pool to run the some range of i per thread
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
