@@ -70,6 +70,6 @@ std::pair<int, int> Camera::get_direction()
 
     auto direction = std::make_pair(curr_chunk.first - prev_chunk.first, curr_chunk.second - prev_chunk.second);
     if (direction.first != 0 && direction.second != 0)
-        printf("WE GOT A EDGE CASE!\n");
+        printf("WE GOT A EDGE CASE (%d, %d)!\n", direction.first, direction.second);
     return direction;
 }

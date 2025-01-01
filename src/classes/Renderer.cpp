@@ -41,7 +41,7 @@ void Renderer::render_chunks(SDL_Window *window)
     // shifting and creating mesh may
     // be optimized with threads later
 
-    static int curr_iteration = 0;
+    // static int curr_iteration = 0;
 
     bool camera_moved = terrain.camera_moved();
     // don't render when camera doesn't move
@@ -56,20 +56,16 @@ void Renderer::render_chunks(SDL_Window *window)
         send_matrix_to_shader(&view_projection_matrix);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        for (int i = curr_iteration; i < NUM_CHUNKS; i++)
+        for (int i = 0; i < NUM_CHUNKS; i++)
         {
-            // printf("Does move???\n");
-            terrain.chunks[i].update_chunk();
+            // terrain.chunks[i].update_chunk();
+
             // if (in_camera_view(terrain.chunks[i]))
-            terrain.chunks[i].buffer_data();
-            glBindVertexArray(terrain.chunks[i].chunk_vao);
-            // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
+            // terrain.chunks[i].clean_mesh = true;
 
-            // always draw, but only draw if
-            glDrawArrays(GL_TRIANGLES, 0, terrain.chunks[i].mesh_vertices.size());
-            glBindVertexArray(0);
-
-            terrain.chunks[i].clean_mesh = true;
+            // DRAW MUST BE IN MAIN. ALL OPENGL
+            // CALLS STAY IN MAIN
+            terrain.chunks[i].draw_chunk();
 
             // for (int x = 0; x < X; x++)
             //     for (int y = 0; y < Y; y++)
@@ -79,6 +75,10 @@ void Renderer::render_chunks(SDL_Window *window)
             //             glm::mat4 MVP = view_projection_matrix * terrain.chunks[i].blocks[terrain.chunks[i].get_index(x, y, z)].model_matrix;
             //             send_matrix_to_shader(&MVP);
             //             terrain.chunks[i].blocks[terrain.chunks->get_index(x, y, z)].draw();
+        }
+        {
+            std::unique_lock<std::mutex> lock(terrain.thread_pool->task_mutex);
+            printf("Queue size %d\n", terrain.thread_pool->task_queue.size());
         }
         terrain.camera->moved = false;
         SDL_GL_SwapWindow(window);

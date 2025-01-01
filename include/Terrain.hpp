@@ -2,6 +2,7 @@
 #include "../include/Chunk.hpp"
 #include "../include/Renderable.hpp"
 #include "../include/Camera.hpp"
+#include "../include/ThreadPool.hpp"
 #include <glm/glm.hpp>
 
 #define NUM_CHUNKS 169
@@ -14,6 +15,7 @@ class Terrain : public Renderable
 public:
     Chunk chunks[NUM_CHUNKS];
     Camera *camera;
+    ThreadPool *thread_pool;
     glm::vec3 prev_camera_position;
 
     Terrain(Camera *camera);
@@ -28,6 +30,7 @@ public:
     int get_chunk_index(std::pair<int, int> chunk_coords);
     void draw() override;
     bool camera_moved();
+    void create_chunk_mesh(Chunk *chunk);
 
     /*
    - can use threads to update each chunk potentially in parallel

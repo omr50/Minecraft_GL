@@ -3,6 +3,7 @@
 
 Terrain::Terrain(Camera *camera) : camera(camera)
 {
+    thread_pool = new ThreadPool(7);
     std::pair<int, int> positions[NUM_CHUNKS];
     new_positions(positions);
     // set previous position to different value so that
@@ -82,17 +83,69 @@ void Terrain::shift_chunks()
             chunks[p1].chunk_coordinates.first = positions[p2].first;
             chunks[p1].chunk_coordinates.second = positions[p2].second;
             chunks[p1].clean_mesh = false;
-            chunks[p1].initialize_cubes();
-            chunks[p1].generate_terrain();
+            // chunks[p1].initialize_cubes();
+            // chunks[p1].generate_terrain();
+            chunks[p1].initialized = false;
+            chunks[p1].clean_terrain = false;
+            // ADD TO THREAD POOL QUEUE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // thread_pool->enqueue_task(&chunks[p1]);
+
+            auto chunk = &chunks[p1];
+            thread_pool->enqueue_task([chunk]
+                                      {
+                {
+            std::lock_guard<std::mutex> chunkLock(chunk->chunk_mutex);
+            if (chunk->enqueued)
+                return;
+
+            chunk->enqueued = true;
+
+            if (!chunk->initialized)
+            {
+                chunk->initialize_cubes();
+            }
+            if (!chunk->clean_terrain)
+            {
+                chunk->generate_terrain();
+            }
+            chunk->clean_mesh = false;
+            chunk->enqueued = false;
+        } });
+
             int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
             int z_coord = chunks[p1].chunk_coordinates.second - direction_shift.second;
             for (auto &chunk : chunks)
             {
-                if (x_coord == chunk.chunk_coordinates.first && z_coord == chunk.chunk_coordinates.second)
+                bool is_adjacent = ((abs(chunk.chunk_coordinates.first - positions[p2].first) <= 1 &&
+                                     abs(chunk.chunk_coordinates.second - positions[p2].second) <= 1));
+
+                // if (x_coord == chunk.chunk_coordinates.first && z_coord == chunk.chunk_coordinates.second)
+                if (is_adjacent)
                 {
                     // chunks[p1].initialize_cubes();
                     // printf("found!\n");
                     chunk.clean_mesh = false;
+                    // thread_pool->enqueue_task(&chunks[p1]);
+                    auto chunk_ptr = &chunk;
+                    thread_pool->enqueue_task([chunk_ptr]
+                                              {
+                {
+            std::lock_guard<std::mutex> chunkLock(chunk_ptr->chunk_mutex);
+            if (chunk_ptr->enqueued)
+                return;
+                
+            chunk_ptr->enqueued = true;
+            if (!chunk_ptr->initialized)
+            {
+                chunk_ptr->initialize_cubes();
+            }
+            if (!chunk_ptr->clean_terrain)
+            {
+                chunk_ptr->generate_terrain();
+            }
+            chunk_ptr->enqueued = false;
+        } });
+
                     // chunk.update_chunk();
                 }
             }
@@ -154,17 +207,25 @@ void Terrain::create_mesh()
     // later try to use thread pool to run the some range of i per thread
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
+        std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
         if (!chunks[i].clean_mesh)
         {
-            for (int x = 0; x < X; x++)
-                for (int y = 0; y < Y; y++)
-                    for (int z = 0; z < Z; z++)
-                    {
-                        cube_face_renderability(&chunks[i], &(chunks[i].blocks[chunks[i].get_index(x, y, z)]));
-                    }
+            thread_pool->enqueue_task([this, i]
+                                      { create_chunk_mesh(&chunks[i]); });
         }
         // clean will be set to false after iteration / frame
     }
+}
+
+void Terrain::create_chunk_mesh(Chunk *chunk)
+{
+
+    for (int x = 0; x < X; x++)
+        for (int y = 0; y < Y; y++)
+            for (int z = 0; z < Z; z++)
+            {
+                cube_face_renderability(chunk, &(chunk->blocks[chunk->get_index(x, y, z)]));
+            }
 }
 
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)

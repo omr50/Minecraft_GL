@@ -3,6 +3,7 @@
 #include "../include/Renderable.hpp"
 #include <glm/gtc/noise.hpp>
 #include <vector>
+#include <mutex>
 
 #define X 16
 #define Y 256
@@ -29,6 +30,10 @@ public:
     GLuint instance_vbo;
     GLuint chunk_vao;
     bool clean_mesh = false;
+    bool clean_terrain = false;
+    bool initialized = false;
+    bool enqueued = false;
+    std::mutex chunk_mutex;
 
     Chunk();
     Chunk(int x, int y);
@@ -42,5 +47,6 @@ public:
     void get_mesh_vertices();
     void update_chunk();
     void buffer_data();
+    void draw_chunk();
     // void draw() override;
 };

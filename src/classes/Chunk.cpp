@@ -12,6 +12,8 @@ Chunk::Chunk(int x, int y)
     chunk_coordinates.second = y;
     initialize_cubes();
     generate_terrain();
+    initialized = true;
+    clean_terrain = true;
 }
 
 float Chunk::generateHeight(float x, float z, float scale, float heightMultiplier)
@@ -47,6 +49,7 @@ void Chunk::initialize_cubes()
             }
         }
     }
+    initialized = true;
 }
 
 // remember to customize this to add other blocks in the mix
@@ -85,6 +88,7 @@ void Chunk::generate_terrain()
             }
         }
     }
+    clean_terrain = true;
     // clean = true;
 }
 
@@ -168,6 +172,7 @@ void Chunk::get_mesh_vertices()
 
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
+    clean_mesh = true;
 }
 
 void Chunk::update_chunk()
@@ -183,6 +188,7 @@ void Chunk::buffer_data()
 {
     // no need to buffer data if
     // mesh was already sent and clean.
+    std::lock_guard<std::mutex> lock(chunk_mutex);
     if (clean_mesh)
         return;
     glBindVertexArray(chunk_vao);
@@ -215,4 +221,20 @@ void Chunk::buffer_data()
     // Unbind VAO and VBO
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Chunk::draw_chunk()
+{
+    buffer_data();
+
+    std::lock_guard<std::mutex> lock(chunk_mutex);
+    if (!clean_mesh)
+        return;
+
+    glBindVertexArray(chunk_vao);
+    // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
+
+    // always draw, but only draw if
+    glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
+    glBindVertexArray(0);
 }
