@@ -99,15 +99,8 @@ void Terrain::shift_chunks()
                 return;
 
             chunk->enqueued = true;
-
-            if (!chunk->initialized)
-            {
-                chunk->initialize_cubes();
-            }
-            if (!chunk->clean_terrain)
-            {
-                chunk->generate_terrain();
-            }
+            chunk->initialize_cubes();
+            chunk->generate_terrain();
             chunk->clean_mesh = false;
             chunk->enqueued = false;
         } });
@@ -122,31 +115,7 @@ void Terrain::shift_chunks()
                 // if (x_coord == chunk.chunk_coordinates.first && z_coord == chunk.chunk_coordinates.second)
                 if (is_adjacent)
                 {
-                    // chunks[p1].initialize_cubes();
-                    // printf("found!\n");
                     chunk.clean_mesh = false;
-                    // thread_pool->enqueue_task(&chunks[p1]);
-                    auto chunk_ptr = &chunk;
-                    thread_pool->enqueue_task([chunk_ptr]
-                                              {
-                {
-            std::lock_guard<std::mutex> chunkLock(chunk_ptr->chunk_mutex);
-            if (chunk_ptr->enqueued)
-                return;
-                
-            chunk_ptr->enqueued = true;
-            if (!chunk_ptr->initialized)
-            {
-                chunk_ptr->initialize_cubes();
-            }
-            if (!chunk_ptr->clean_terrain)
-            {
-                chunk_ptr->generate_terrain();
-            }
-            chunk_ptr->enqueued = false;
-        } });
-
-                    // chunk.update_chunk();
                 }
             }
             p1++;
@@ -226,6 +195,7 @@ void Terrain::create_chunk_mesh(Chunk *chunk)
             {
                 cube_face_renderability(chunk, &(chunk->blocks[chunk->get_index(x, y, z)]));
             }
+    chunk->clean_mesh = true;
 }
 
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
