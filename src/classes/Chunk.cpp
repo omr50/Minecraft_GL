@@ -116,6 +116,8 @@ void Chunk::get_mesh_vertices()
     // printf("instance vector size: %d\n", instance_vector.size());
     if (clean_mesh)
         return;
+    if (!clean_terrain || !initialized)
+        return;
     mesh_vertices.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)
@@ -181,6 +183,7 @@ void Chunk::update_chunk()
     // not for updating vao, vbos, because we want this function to be
     // thread safe. only will be called if camera moved or if block added/destroyed
     // so that we only update if necessary.
+    std::lock_guard<std::mutex> lock(chunk_mutex);
     get_mesh_vertices();
 }
 
@@ -188,15 +191,15 @@ void Chunk::buffer_data()
 {
     // no need to buffer data if
     // mesh was already sent and clean.
-    std::lock_guard<std::mutex> lock(chunk_mutex);
-    if (clean_mesh)
-        return;
-    glBindVertexArray(chunk_vao);
+    {
+        if (clean_mesh)
+            return;
+        glBindVertexArray(chunk_vao);
 
-    // Geometry VBO
-    glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-    glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(Vertex), mesh_vertices.data(), GL_DYNAMIC_DRAW);
-
+        // Geometry VBO
+        glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
+        glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(Vertex), mesh_vertices.data(), GL_DYNAMIC_DRAW);
+    }
     // Position attribute (location = 0)
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
@@ -227,10 +230,11 @@ void Chunk::draw_chunk()
 {
     buffer_data();
 
-    std::lock_guard<std::mutex> lock(chunk_mutex);
+    // std::lock_guard<std::mutex> lock(chunk_mutex);
     if (!clean_mesh)
         return;
-
+    // printf("chunk renderable?\n");
+    // printf("size of mesh vertices = %d\n", mesh_vertices.size());
     glBindVertexArray(chunk_vao);
     // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
 

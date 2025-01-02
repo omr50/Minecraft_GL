@@ -58,14 +58,30 @@ void Renderer::render_chunks(SDL_Window *window)
 
         for (int i = 0; i < NUM_CHUNKS; i++)
         {
-            // terrain.chunks[i].update_chunk();
+            {
+                std::lock_guard<std::mutex> chunk_lock(terrain.chunks[i].chunk_mutex);
+                printf("locked chunk mutex 1\n");
+                if (!terrain.chunks[i].clean_mesh)
+                {
+                    std::lock_guard<std::mutex> lock(terrain.thread_pool->task_mutex);
+                    printf("locked task mutex 1\n");
+                    terrain.thread_pool->enqueue_task([this, i]()
+                                                      { printf("chunk function\n"); terrain.chunks[i].update_chunk(); });
+                    printf("Unlocked task mutex 1\n");
+                }
+                else
+                {
+
+                    terrain.chunks[i].draw_chunk();
+                }
+                printf("Unlocked chunk mutex 1\n");
+            }
 
             // if (in_camera_view(terrain.chunks[i]))
             // terrain.chunks[i].clean_mesh = true;
 
             // DRAW MUST BE IN MAIN. ALL OPENGL
             // CALLS STAY IN MAIN
-            terrain.chunks[i].draw_chunk();
 
             // for (int x = 0; x < X; x++)
             //     for (int y = 0; y < Y; y++)

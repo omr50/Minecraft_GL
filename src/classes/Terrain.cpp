@@ -47,12 +47,6 @@ Terrain::Terrain(Camera *camera) : camera(camera)
 
 void Terrain::shift_chunks()
 {
-    // if camera didn't move then no point in updating
-    {
-        std::unique_lock<std::mutex> lock(thread_pool->task_mutex);
-        if (thread_pool->task_queue.size())
-            return;
-    }
     if (!camera_moved())
         return;
     std::pair<int, int> positions[NUM_CHUNKS];
@@ -99,6 +93,7 @@ void Terrain::shift_chunks()
             thread_pool->enqueue_task([chunk]
                                       {
                 {
+                    printf("shifted chunk\n");
             std::lock_guard<std::mutex> chunkLock(chunk->chunk_mutex);
             if (chunk->enqueued)
                 return;
@@ -178,11 +173,6 @@ std::pair<int, int> Terrain::get_center_chunk_coordinates(float x, float z)
 // to the chunks themselves. Or the create mesh can call each chunks function.
 void Terrain::create_mesh()
 {
-    {
-        std::unique_lock<std::mutex> lock(thread_pool->task_mutex);
-        if (thread_pool->task_queue.size())
-            return;
-    }
     // later try to use thread pool to run the some range of i per thread
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
@@ -190,7 +180,7 @@ void Terrain::create_mesh()
         if (!chunks[i].clean_mesh)
         {
             thread_pool->enqueue_task([this, i]
-                                      { create_chunk_mesh(&chunks[i]); });
+                                      { printf("chunk mesh creation\n"); create_chunk_mesh(&chunks[i]); });
         }
         // clean will be set to false after iteration / frame
     }

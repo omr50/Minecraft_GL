@@ -11,9 +11,11 @@ class ThreadPool
 {
 public:
     std::mutex task_mutex;
+    std::mutex mesh_mutex;
     std::condition_variable conditional;
     std::atomic<bool> stop;
     std::queue<std::function<void()>> task_queue;
+    std::queue<std::function<void()>> mesh_queue;
     std::vector<std::thread> workers;
 
     ThreadPool(int num_threads);

@@ -1,4 +1,5 @@
 #include "../../include/ThreadPool.hpp"
+#include <iostream>
 
 ThreadPool::ThreadPool(int num_threads)
 {
@@ -13,6 +14,10 @@ ThreadPool::ThreadPool(int num_threads)
 void ThreadPool::enqueue_task(std::function<void()> task)
 {
     {
+        printf("COOKED?\n");
+        std::lock_guard<std::mutex>
+            lock(task_mutex);
+        printf("UNCOOKED?\n");
         task_queue.push(std::move(task));
     }
 
@@ -31,13 +36,13 @@ void ThreadPool::worker_loop()
             conditional.wait(lock, [this]
                              { return !task_queue.empty() || stop; });
 
-            if (stop && task_queue.empty())
-                return;
+            // if (stop && task_queue.empty())
+            // return;
 
             task = std::move(task_queue.front());
             task_queue.pop();
         }
-
+        printf("doing unique task!\n");
         task();
     }
 }
