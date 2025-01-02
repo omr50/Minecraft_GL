@@ -14,10 +14,8 @@ ThreadPool::ThreadPool(int num_threads)
 void ThreadPool::enqueue_task(std::function<void()> task)
 {
     {
-        printf("COOKED?\n");
         std::lock_guard<std::mutex>
             lock(task_mutex);
-        printf("UNCOOKED?\n");
         task_queue.push(std::move(task));
     }
 
@@ -31,7 +29,6 @@ void ThreadPool::worker_loop()
     {
         std::function<void()> task;
         {
-
             std::unique_lock<std::mutex> lock(task_mutex);
             conditional.wait(lock, [this]
                              { return !task_queue.empty() || stop; });

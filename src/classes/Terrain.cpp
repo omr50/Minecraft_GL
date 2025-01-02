@@ -49,6 +49,7 @@ void Terrain::shift_chunks()
 {
     if (!camera_moved())
         return;
+
     std::pair<int, int> positions[NUM_CHUNKS];
     new_positions(positions);
 
@@ -58,9 +59,11 @@ void Terrain::shift_chunks()
     // new_vals: find new values in position array
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
+        std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
         bound[i] = find_out_of_bound_chunk(chunks[i].chunk_coordinates.first, chunks[i].chunk_coordinates.second, positions);
         new_vals[i] = find_new_positions(positions[i]);
     }
+    printf("got to point 2.1");
 
     // pair up new vals with bounds
     // bounds = false means chunk not in bounds (needs to be replaced)
@@ -68,7 +71,9 @@ void Terrain::shift_chunks()
     int x, z;
     int p1 = 0, p2 = 0;
     // get the direction shift
+    printf("got to this point 2.2\n");
     auto direction_shift = camera->get_direction();
+    printf("got to this point 2.3\n");
     while (p1 < NUM_CHUNKS && p2 < NUM_CHUNKS)
     {
         while (p1 < NUM_CHUNKS && bound[p1])
@@ -79,6 +84,8 @@ void Terrain::shift_chunks()
         if (p1 < NUM_CHUNKS && p2 < NUM_CHUNKS)
         {
             // Update chunk
+            auto chunk = &chunks[p1];
+            std::lock_guard<std::mutex> chunkLock(chunk->chunk_mutex);
             chunks[p1].chunk_coordinates.first = positions[p2].first;
             chunks[p1].chunk_coordinates.second = positions[p2].second;
             chunks[p1].clean_mesh = false;
@@ -89,19 +96,18 @@ void Terrain::shift_chunks()
             // ADD TO THREAD POOL QUEUE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // thread_pool->enqueue_task(&chunks[p1]);
 
-            auto chunk = &chunks[p1];
-            thread_pool->enqueue_task([chunk]
+            printf("encuqued initialization and generation\n");
+            thread_pool->enqueue_task([chunk, this]
                                       {
                 {
-                    printf("shifted chunk\n");
-            std::lock_guard<std::mutex> chunkLock(chunk->chunk_mutex);
-            if (chunk->enqueued)
-                return;
-
+            // if (chunk->enqueued)
+                // return;
+             printf("valid chunk pointer=%p?\n", (void*)chunk);
+             printf("valid this pointer=%p?\n", (void*)this);
             chunk->enqueued = true;
             chunk->initialize_cubes();
             chunk->generate_terrain();
-            chunk->clean_mesh = false;
+            chunk->clean_mesh = false; 
             chunk->enqueued = false;
         } });
 
@@ -177,10 +183,12 @@ void Terrain::create_mesh()
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
         std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
-        if (!chunks[i].clean_mesh)
+        if (!chunks[i].clean_mesh && chunks[i].initialized && chunks[i].clean_terrain)
         {
+            printf("encuqued mesh creation\n");
             thread_pool->enqueue_task([this, i]
-                                      { printf("chunk mesh creation\n"); create_chunk_mesh(&chunks[i]); });
+                                      { 
+             printf("valid this pointer=%p?\n", (void*)this); create_chunk_mesh(&chunks[i]); });
         }
         // clean will be set to false after iteration / frame
     }
@@ -188,18 +196,24 @@ void Terrain::create_mesh()
 
 void Terrain::create_chunk_mesh(Chunk *chunk)
 {
-
     for (int x = 0; x < X; x++)
         for (int y = 0; y < Y; y++)
             for (int z = 0; z < Z; z++)
             {
-                cube_face_renderability(chunk, &(chunk->blocks[chunk->get_index(x, y, z)]));
+                Cube *cube = nullptr;
+                {
+                    std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+                    cube = &(chunk->blocks[chunk->get_index(x, y, z)]);
+                }
+                cube_face_renderability(chunk, cube);
             }
-    chunk->clean_mesh = true;
+    // chunk->clean_mesh = true;
 }
 
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
 {
+
+    std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
     // world coordinates for x, y, and z
     int x = cube->x;
     int y = cube->y;

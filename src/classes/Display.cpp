@@ -79,6 +79,7 @@ void Display::main_loop()
     int fps = 0;
     while (running)
     {
+        printf("got to this point?\n");
         this->event_handler->event_handler();
         // renderer.render_blocks();
         // printf("WORKING?!!!!!!!!!!!!!!!!!!!!!\n");

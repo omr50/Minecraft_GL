@@ -12,8 +12,6 @@ Chunk::Chunk(int x, int y)
     chunk_coordinates.second = y;
     initialize_cubes();
     generate_terrain();
-    initialized = true;
-    clean_terrain = true;
 }
 
 float Chunk::generateHeight(float x, float z, float scale, float heightMultiplier)
@@ -49,6 +47,7 @@ void Chunk::initialize_cubes()
             }
         }
     }
+    // printf("Chunk (%d, %d) initialized\n", chunk_coordinates.first, chunk_coordinates.second);
     initialized = true;
 }
 
@@ -88,6 +87,7 @@ void Chunk::generate_terrain()
             }
         }
     }
+    // printf("Chunk (%d, %d) terrain generated\n", chunk_coordinates.first, chunk_coordinates.second);
     clean_terrain = true;
     // clean = true;
 }
@@ -174,6 +174,7 @@ void Chunk::get_mesh_vertices()
 
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
+    // printf("Chunk (%d, %d) mesh created\n", chunk_coordinates.first, chunk_coordinates.second);
     clean_mesh = true;
 }
 
@@ -192,8 +193,10 @@ void Chunk::buffer_data()
     // no need to buffer data if
     // mesh was already sent and clean.
     {
-        if (clean_mesh)
-            return;
+        // DO SOMETHING HERE, SO IF CLEAN I DON"T NEED TO KEEP SENDING IT, BUT ONLY SEND
+        // WHEN FIRST BECOMES CLEAN.
+        // if (clean_mesh)
+        // return;
         glBindVertexArray(chunk_vao);
 
         // Geometry VBO
@@ -234,11 +237,12 @@ void Chunk::draw_chunk()
     if (!clean_mesh)
         return;
     // printf("chunk renderable?\n");
-    // printf("size of mesh vertices = %d\n", mesh_vertices.size());
+    // printf("Chunk (%d, %d) DRAWING: size of mesh vertices = %d\n", chunk_coordinates.first, chunk_coordinates.second, mesh_vertices.size());
     glBindVertexArray(chunk_vao);
     // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
 
     // always draw, but only draw if
+    // printf("vertice SIZE: %d\n", mesh_vertices.size());
     glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
     glBindVertexArray(0);
 }
