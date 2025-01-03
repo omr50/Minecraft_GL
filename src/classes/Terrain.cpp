@@ -121,6 +121,7 @@ void Terrain::shift_chunks()
                     chunk.clean_mesh = false;
                     chunk.sent_mesh = false;
                     chunk.generated_vertices = false;
+                    enqueue_update_task(&chunk);
                 }
             }
             p1++;
