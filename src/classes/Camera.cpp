@@ -67,9 +67,8 @@ std::pair<int, int> Camera::get_chunk()
 
 std::pair<int, int> Camera::get_direction()
 {
-
+    // printf("got to this point 2.2.2\n");
     auto direction = std::make_pair(curr_chunk.first - prev_chunk.first, curr_chunk.second - prev_chunk.second);
-    if (direction.first != 0 && direction.second != 0)
-        // printf("WE GOT A EDGE CASE (%d, %d)!\n", direction.first, direction.second);
-        return direction;
+    // printf("got to this point 2.2.3\n");
+    return direction;
 }

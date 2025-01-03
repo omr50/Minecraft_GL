@@ -63,7 +63,7 @@ void Terrain::shift_chunks()
         bound[i] = find_out_of_bound_chunk(chunks[i].chunk_coordinates.first, chunks[i].chunk_coordinates.second, positions);
         new_vals[i] = find_new_positions(positions[i]);
     }
-    printf("got to point 2.1");
+    // printf("got to point 2.1\n");
 
     // pair up new vals with bounds
     // bounds = false means chunk not in bounds (needs to be replaced)
@@ -71,9 +71,10 @@ void Terrain::shift_chunks()
     int x, z;
     int p1 = 0, p2 = 0;
     // get the direction shift
-    printf("got to this point 2.2\n");
+    // printf("got to this point 2.2\n");
+    // printf("camera pointer %p\n", (void *)camera);
     auto direction_shift = camera->get_direction();
-    printf("got to this point 2.3\n");
+    // printf("got to this point 2.3\n");
     while (p1 < NUM_CHUNKS && p2 < NUM_CHUNKS)
     {
         while (p1 < NUM_CHUNKS && bound[p1])
@@ -93,24 +94,30 @@ void Terrain::shift_chunks()
             // chunks[p1].generate_terrain();
             chunks[p1].initialized = false;
             chunks[p1].clean_terrain = false;
+            chunks[p1].sent_mesh = false;
+            chunks[p1].generated_vertices = false;
             // ADD TO THREAD POOL QUEUE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // thread_pool->enqueue_task(&chunks[p1]);
 
             printf("encuqued initialization and generation\n");
-            thread_pool->enqueue_task([chunk, this]
-                                      {
-                {
-            // if (chunk->enqueued)
-                // return;
-             printf("valid chunk pointer=%p?\n", (void*)chunk);
-             printf("valid this pointer=%p?\n", (void*)this);
-            chunk->enqueued = true;
-            chunk->initialize_cubes();
-            chunk->generate_terrain();
-            chunk->clean_mesh = false; 
-            chunk->enqueued = false;
-        } });
-
+            if (!chunk->enqueued)
+            {
+                chunk->enqueued = true;
+                thread_pool->enqueue_task([chunk, this]
+                                          {
+            {
+                // if (chunk->enqueued)
+                    // return;
+                //  printf("valid chunk pointer=%p?\n", (void*)chunk);
+                //  printf("valid this pointer=%p?\n", (void*)this);
+                chunk->initialize_cubes();
+                chunk->generate_terrain();
+                chunk->clean_mesh = false; 
+                chunk->sent_mesh = false;
+                chunk->enqueued = false;
+                chunk->generated_vertices = false;
+                } });
+            }
             int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
             int z_coord = chunks[p1].chunk_coordinates.second - direction_shift.second;
             for (auto &chunk : chunks)
@@ -121,7 +128,11 @@ void Terrain::shift_chunks()
                 // if (x_coord == chunk.chunk_coordinates.first && z_coord == chunk.chunk_coordinates.second)
                 if (is_adjacent)
                 {
+                    chunk.initialized = true;
+                    chunk.clean_terrain = true;
                     chunk.clean_mesh = false;
+                    chunk.sent_mesh = false;
+                    chunk.generated_vertices = false;
                 }
             }
             p1++;
@@ -185,10 +196,13 @@ void Terrain::create_mesh()
         std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
         if (!chunks[i].clean_mesh && chunks[i].initialized && chunks[i].clean_terrain)
         {
-            printf("encuqued mesh creation\n");
-            thread_pool->enqueue_task([this, i]
-                                      { 
-             printf("valid this pointer=%p?\n", (void*)this); create_chunk_mesh(&chunks[i]); });
+            printf("enqueued mesh creation\n");
+            if (!chunks[i].enqueued)
+            {
+                chunks[i].enqueued = true;
+                thread_pool->enqueue_task([this, i]
+                                          { create_chunk_mesh(&chunks[i]); chunks[i].enqueued = false; });
+            }
         }
         // clean will be set to false after iteration / frame
     }
@@ -207,13 +221,14 @@ void Terrain::create_chunk_mesh(Chunk *chunk)
                 }
                 cube_face_renderability(chunk, cube);
             }
-    // chunk->clean_mesh = true;
+    chunk->clean_mesh = true;
 }
 
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
 {
 
     std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+
     // world coordinates for x, y, and z
     int x = cube->x;
     int y = cube->y;

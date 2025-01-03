@@ -29,9 +29,11 @@ public:
     GLuint geometry_vbo;
     GLuint instance_vbo;
     GLuint chunk_vao;
-    bool clean_mesh = false;
-    bool clean_terrain = false;
     bool initialized = false;
+    bool clean_terrain = false;
+    bool clean_mesh = false;
+    bool generated_vertices = false;
+    bool sent_mesh = false;
     bool enqueued = false;
     std::mutex chunk_mutex;
 

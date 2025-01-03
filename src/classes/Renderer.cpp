@@ -3,7 +3,10 @@
 #include <filesystem>
 #include <chrono>
 
-Renderer::Renderer(Camera *camera) : camera(camera) {}
+Renderer::Renderer(Camera *camera) : camera(camera)
+{
+    terrain = new Terrain(camera);
+}
 
 void Renderer::add_block(Cube *blocks)
 {
@@ -43,16 +46,18 @@ void Renderer::render_chunks(SDL_Window *window)
 
     // static int curr_iteration = 0;
 
-    bool camera_moved = terrain.camera_moved();
+    bool camera_moved = terrain->camera_moved();
     // don't render when camera doesn't move
     // keep screen as is.
-    printf("got to this point 2\n");
+    // printf("got to this point 2\n");
     if (camera_moved)
     {
-        terrain.shift_chunks();
-        printf("got to this point 3\n");
-        terrain.create_mesh();
-        printf("got to this point 4\n");
+
+        terrain->shift_chunks();
+        // printf("got to this point 3\n");
+        terrain->create_mesh();
+        // printf("got to this point 4\n");
+        // view projection matrix is a uniform
         glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
         // view projection matrix is a uniform
         send_matrix_to_shader(&view_projection_matrix);
@@ -61,26 +66,30 @@ void Renderer::render_chunks(SDL_Window *window)
         for (int i = 0; i < NUM_CHUNKS; i++)
         {
             {
-                std::lock_guard<std::mutex> chunk_lock(terrain.chunks[i].chunk_mutex);
+                std::lock_guard<std::mutex> chunk_lock(terrain->chunks[i].chunk_mutex);
                 // printf("locked chunk mutex 1\n");
-                if (terrain.chunks[i].initialized && terrain.chunks[i].clean_terrain && !terrain.chunks[i].clean_mesh)
+                if (terrain->chunks[i].initialized && terrain->chunks[i].clean_terrain && terrain->chunks[i].clean_mesh && !terrain->chunks[i].generated_vertices && !terrain->chunks[i].sent_mesh)
                 {
-                    // std::lock_guard<std::mutex> lock(terrain.thread_pool->task_mutex);
+                    // std::lock_guard<std::mutex> lock(terrain->thread_pool->task_mutex);
                     // printf("locked task mutex 1\n");
                     printf("Enqueued update chunk\n");
-                    terrain.thread_pool->enqueue_task([this, i]()
-                                                      { printf("enqueue update!\n"); terrain.chunks[i].update_chunk(); });
+                    if (!terrain->chunks[i].enqueued)
+                    {
+                        terrain->chunks[i].enqueued = true;
+                        terrain->thread_pool->enqueue_task([this, i]()
+                                                           { terrain->chunks[i].update_chunk(); terrain->chunks[i].enqueued = false; });
+                    }
                 }
                 else
                 {
 
-                    terrain.chunks[i].draw_chunk();
+                    terrain->chunks[i].draw_chunk();
                 }
                 // printf("Unlocked chunk mutex 1\n");
             }
 
-            // if (in_camera_view(terrain.chunks[i]))
-            // terrain.chunks[i].clean_mesh = true;
+            // if (in_camera_view(terrain->chunks[i]))
+            // terrain->chunks[i].clean_mesh = true;
 
             // DRAW MUST BE IN MAIN. ALL OPENGL
             // CALLS STAY IN MAIN
@@ -90,17 +99,17 @@ void Renderer::render_chunks(SDL_Window *window)
             //         for (int z = 0; z < Z; z++)
             //         {
             //             glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
-            //             glm::mat4 MVP = view_projection_matrix * terrain.chunks[i].blocks[terrain.chunks[i].get_index(x, y, z)].model_matrix;
+            //             glm::mat4 MVP = view_projection_matrix * terrain->chunks[i].blocks[terrain->chunks[i].get_index(x, y, z)].model_matrix;
             //             send_matrix_to_shader(&MVP);
-            //             terrain.chunks[i].blocks[terrain.chunks->get_index(x, y, z)].draw();
+            //             terrain->chunks[i].blocks[terrain->chunks->get_index(x, y, z)].draw();
         }
-        {
-            std::unique_lock<std::mutex> lock(terrain.thread_pool->task_mutex);
-            printf("Queue size %d\n", terrain.thread_pool->task_queue.size());
-        }
-        terrain.camera->moved = false;
+        terrain->camera->moved = false;
         SDL_GL_SwapWindow(window);
     }
-    // printf("camera moved: %d\n", terrain.camera->moved);
+    {
+        std::unique_lock<std::mutex> lock(terrain->thread_pool->task_mutex);
+        printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
+    }
+    // printf("camera moved: %d\n", terrain->camera->moved);
     // printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
 }

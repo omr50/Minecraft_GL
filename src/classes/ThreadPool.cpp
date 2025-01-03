@@ -39,7 +39,7 @@ void ThreadPool::worker_loop()
             task = std::move(task_queue.front());
             task_queue.pop();
         }
-        printf("doing unique task!\n");
+        // printf("doing unique task!\n");
         task();
     }
 }

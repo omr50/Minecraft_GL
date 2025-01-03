@@ -18,7 +18,7 @@ public:
     // to this rendererer class.
     std::vector<Cube *> all_blocks;
     Camera *camera;
-    Terrain terrain = Terrain(camera);
+    Terrain *terrain;
 
     Renderer(Camera *camera);
     void add_block(Cube *cube);

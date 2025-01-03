@@ -114,9 +114,9 @@ void Chunk::get_mesh_vertices()
     // printf("mesh vertices func working?\n");
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
-    if (clean_mesh)
+    if (generated_vertices)
         return;
-    if (!clean_terrain || !initialized)
+    if (!clean_mesh || !clean_terrain || !initialized)
         return;
     mesh_vertices.clear();
     instance_vector.clear();
@@ -175,7 +175,7 @@ void Chunk::get_mesh_vertices()
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
     // printf("Chunk (%d, %d) mesh created\n", chunk_coordinates.first, chunk_coordinates.second);
-    clean_mesh = true;
+    generated_vertices = true;
 }
 
 void Chunk::update_chunk()
@@ -192,6 +192,8 @@ void Chunk::buffer_data()
 {
     // no need to buffer data if
     // mesh was already sent and clean.
+    if (sent_mesh)
+        return;
     {
         // DO SOMETHING HERE, SO IF CLEAN I DON"T NEED TO KEEP SENDING IT, BUT ONLY SEND
         // WHEN FIRST BECOMES CLEAN.
@@ -227,6 +229,8 @@ void Chunk::buffer_data()
     // Unbind VAO and VBO
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    sent_mesh = true;
 }
 
 void Chunk::draw_chunk()
