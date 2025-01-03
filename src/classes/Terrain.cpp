@@ -101,11 +101,8 @@ void Terrain::shift_chunks()
             // thread_pool->enqueue_task(&chunks[p1]);
 
             printf("encuqued initialization and generation\n");
-            if (!chunk->enqueued)
-            {
-                chunk->enqueued = true;
-                enqueue_initial_task(chunk);
-            }
+            enqueue_initial_task(chunk);
+
             int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
             int z_coord = chunks[p1].chunk_coordinates.second - direction_shift.second;
             for (auto &chunk : chunks)
