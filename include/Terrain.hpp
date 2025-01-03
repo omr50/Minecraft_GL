@@ -31,6 +31,8 @@ public:
     void draw() override;
     bool camera_moved();
     void create_chunk_mesh(Chunk *chunk);
+    void enqueue_update_task(Chunk *chunk);
+    void enqueue_initial_task(Chunk *chunk);
 
     /*
    - can use threads to update each chunk potentially in parallel

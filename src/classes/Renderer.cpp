@@ -72,13 +72,13 @@ void Renderer::render_chunks(SDL_Window *window)
                 {
                     // std::lock_guard<std::mutex> lock(terrain->thread_pool->task_mutex);
                     // printf("locked task mutex 1\n");
-                    printf("Enqueued update chunk\n");
-                    if (!terrain->chunks[i].enqueued)
-                    {
-                        terrain->chunks[i].enqueued = true;
-                        terrain->thread_pool->enqueue_task([this, i]()
-                                                           { terrain->chunks[i].update_chunk(); terrain->chunks[i].enqueued = false; });
-                    }
+                    // printf("Enqueued update chunk\n");
+                    // if (!terrain->chunks[i].enqueued)
+                    // {
+                    //     terrain->chunks[i].enqueued = true;
+                    //     terrain->thread_pool->enqueue_task([this, i]()
+                    //                                        { terrain->chunks[i].update_chunk(); terrain->chunks[i].enqueued = false; });
+                    // }
                 }
                 else
                 {

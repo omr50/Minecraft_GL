@@ -19,6 +19,7 @@ Terrain::Terrain(Camera *camera) : camera(camera)
         chunks[i].initialize_vertex_buffers_and_array();
         chunks[i].initialize_cubes();
         chunks[i].generate_terrain();
+        enqueue_update_task(&chunks[i]);
     }
 }
 /*
@@ -103,20 +104,7 @@ void Terrain::shift_chunks()
             if (!chunk->enqueued)
             {
                 chunk->enqueued = true;
-                thread_pool->enqueue_task([chunk, this]
-                                          {
-            {
-                // if (chunk->enqueued)
-                    // return;
-                //  printf("valid chunk pointer=%p?\n", (void*)chunk);
-                //  printf("valid this pointer=%p?\n", (void*)this);
-                chunk->initialize_cubes();
-                chunk->generate_terrain();
-                chunk->clean_mesh = false; 
-                chunk->sent_mesh = false;
-                chunk->enqueued = false;
-                chunk->generated_vertices = false;
-                } });
+                enqueue_initial_task(chunk);
             }
             int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
             int z_coord = chunks[p1].chunk_coordinates.second - direction_shift.second;
@@ -222,6 +210,8 @@ void Terrain::create_chunk_mesh(Chunk *chunk)
                 cube_face_renderability(chunk, cube);
             }
     chunk->clean_mesh = true;
+    chunk->sent_mesh = false;
+    chunk->generated_vertices = false;
 }
 
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
@@ -345,4 +335,30 @@ void Terrain::draw()
 bool Terrain::camera_moved()
 {
     return camera->moved;
+}
+
+void Terrain::enqueue_update_task(Chunk *chunk)
+{
+    thread_pool->enqueue_task([this, chunk]()
+                              {
+        if (!chunk->clean_mesh) {
+            this->enqueue_update_task(chunk);
+        }
+        else {
+            chunk->update_chunk();
+            chunk->enqueued = false;
+        } });
+}
+
+void Terrain::enqueue_initial_task(Chunk *chunk)
+{
+    thread_pool->enqueue_task([this, chunk]()
+                              {
+        chunk->initialize_cubes();
+        chunk->generate_terrain();
+        create_mesh();
+
+        // after terrain creation, enqueue chunk update
+        enqueue_update_task(chunk);
+        chunk->enqueued = false; });
 }
