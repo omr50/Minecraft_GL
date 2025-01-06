@@ -100,7 +100,7 @@ void Terrain::shift_chunks()
             // ADD TO THREAD POOL QUEUE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // thread_pool->enqueue_task(&chunks[p1]);
 
-            printf("encuqued initialization and generation\n");
+            // printf("encuqued initialization and generation\n");
             enqueue_initial_task(chunk);
 
             int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
@@ -113,8 +113,6 @@ void Terrain::shift_chunks()
                 // if (x_coord == chunk.chunk_coordinates.first && z_coord == chunk.chunk_coordinates.second)
                 if (is_adjacent)
                 {
-                    chunk.initialized = true;
-                    chunk.clean_terrain = true;
                     chunk.clean_mesh = false;
                     chunk.sent_mesh = false;
                     chunk.generated_vertices = false;
@@ -182,7 +180,7 @@ void Terrain::create_mesh()
         std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
         if (!chunks[i].clean_mesh && chunks[i].initialized && chunks[i].clean_terrain)
         {
-            printf("enqueued mesh creation\n");
+            // printf("enqueued mesh creation\n");
             if (!chunks[i].enqueued)
             {
                 chunks[i].enqueued = true;
@@ -334,6 +332,10 @@ bool Terrain::camera_moved()
 {
     return camera->moved;
 }
+
+// make sure the thread pool only processes
+// update tasks after all terrain tasks (initial)
+// have been finished
 
 void Terrain::enqueue_update_task(Chunk *chunk)
 {
