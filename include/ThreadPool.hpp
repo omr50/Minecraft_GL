@@ -18,6 +18,7 @@ public:
     std::queue<std::function<void()>> mesh_queue;
     std::vector<std::thread> workers;
     int num_generation_tasks = 0;
+    std::mutex num_task_mutex;
 
     ThreadPool(int num_threads);
     void enqueue_task(std::function<void()> task);

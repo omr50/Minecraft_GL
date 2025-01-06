@@ -50,5 +50,7 @@ public:
     void update_chunk();
     void buffer_data();
     void draw_chunk();
+    void needs_remesh();
+    void new_chunk_state();
     // void draw() override;
 };

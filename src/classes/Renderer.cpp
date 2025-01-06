@@ -66,25 +66,7 @@ void Renderer::render_chunks(SDL_Window *window)
         {
             {
                 std::lock_guard<std::mutex> chunk_lock(terrain->chunks[i].chunk_mutex);
-                // printf("locked chunk mutex 1\n");
-                if (terrain->chunks[i].initialized && terrain->chunks[i].clean_terrain && terrain->chunks[i].clean_mesh && !terrain->chunks[i].generated_vertices && !terrain->chunks[i].sent_mesh)
-                {
-                    // std::lock_guard<std::mutex> lock(terrain->thread_pool->task_mutex);
-                    // printf("locked task mutex 1\n");
-                    // printf("Enqueued update chunk\n");
-                    // if (!terrain->chunks[i].enqueued)
-                    // {
-                    //     terrain->chunks[i].enqueued = true;
-                    //     terrain->thread_pool->enqueue_task([this, i]()
-                    //                                        { terrain->chunks[i].update_chunk(); terrain->chunks[i].enqueued = false; });
-                    // }
-                }
-                else
-                {
-
-                    terrain->chunks[i].draw_chunk();
-                }
-                // printf("Unlocked chunk mutex 1\n");
+                terrain->chunks[i].draw_chunk();
             }
 
             // if (in_camera_view(terrain->chunks[i]))
@@ -107,7 +89,7 @@ void Renderer::render_chunks(SDL_Window *window)
     }
     {
         std::unique_lock<std::mutex> lock(terrain->thread_pool->task_mutex);
-        // printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
+        printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
     }
     // printf("camera moved: %d\n", terrain->camera->moved);
     // printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());

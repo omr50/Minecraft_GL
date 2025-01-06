@@ -250,3 +250,19 @@ void Chunk::draw_chunk()
     glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
     glBindVertexArray(0);
 }
+
+void Chunk::needs_remesh()
+{
+    clean_mesh = false;
+    sent_mesh = false;
+    generated_vertices = false;
+}
+
+void Chunk::new_chunk_state()
+{
+    initialized = false;
+    clean_terrain = false;
+    clean_mesh = false;
+    generated_vertices = false;
+    sent_mesh = false;
+}

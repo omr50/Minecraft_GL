@@ -19,7 +19,10 @@ Terrain::Terrain(Camera *camera) : camera(camera)
         chunks[i].initialize_vertex_buffers_and_array();
         chunks[i].initialize_cubes();
         chunks[i].generate_terrain();
-        enqueue_update_task(&chunks[i]);
+        create_chunk_mesh(&chunks[i]);
+        chunks[i].update_chunk();
+        // chunks[i].update_chunk();
+        // enqueue_update_task(&chunks[i]);
     }
 }
 /*
@@ -90,17 +93,9 @@ void Terrain::shift_chunks()
             std::lock_guard<std::mutex> chunkLock(chunk->chunk_mutex);
             chunks[p1].chunk_coordinates.first = positions[p2].first;
             chunks[p1].chunk_coordinates.second = positions[p2].second;
-            chunks[p1].clean_mesh = false;
-            // chunks[p1].initialize_cubes();
-            // chunks[p1].generate_terrain();
-            chunks[p1].initialized = false;
-            chunks[p1].clean_terrain = false;
-            chunks[p1].sent_mesh = false;
-            chunks[p1].generated_vertices = false;
-            // ADD TO THREAD POOL QUEUE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // thread_pool->enqueue_task(&chunks[p1]);
 
-            // printf("encuqued initialization and generation\n");
+            chunks[p1].new_chunk_state();
+
             enqueue_initial_task(chunk);
 
             int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
@@ -113,9 +108,7 @@ void Terrain::shift_chunks()
                 // if (x_coord == chunk.chunk_coordinates.first && z_coord == chunk.chunk_coordinates.second)
                 if (is_adjacent)
                 {
-                    chunk.clean_mesh = false;
-                    chunk.sent_mesh = false;
-                    chunk.generated_vertices = false;
+                    chunk.needs_remesh();
                     enqueue_update_task(&chunk);
                 }
             }
@@ -341,24 +334,38 @@ void Terrain::enqueue_update_task(Chunk *chunk)
 {
     thread_pool->enqueue_task([this, chunk]()
                               {
-        if (!chunk->clean_mesh) {
-            this->enqueue_update_task(chunk);
+        {
+            std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+            if (thread_pool->num_generation_tasks != 0) {
+                this->enqueue_update_task(chunk);
+                return;
+            }
         }
-        else {
+            { 
+                std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+                create_chunk_mesh(chunk);
+            }
             chunk->update_chunk();
-            chunk->enqueued = false;
-        } });
+            chunk->enqueued = false; });
 }
 
 void Terrain::enqueue_initial_task(Chunk *chunk)
 {
+    {
+        std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+        thread_pool->num_generation_tasks++;
+    }
+
     thread_pool->enqueue_task([this, chunk]()
-                              {
+                              { 
         chunk->initialize_cubes();
         chunk->generate_terrain();
-        create_mesh();
 
         // after terrain creation, enqueue chunk update
         enqueue_update_task(chunk);
-        chunk->enqueued = false; });
+        chunk->enqueued = false;
+        {
+        std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+        thread_pool->num_generation_tasks--;
+        } });
 }
