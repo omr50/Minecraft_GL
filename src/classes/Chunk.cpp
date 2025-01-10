@@ -118,6 +118,7 @@ void Chunk::get_mesh_vertices()
         return;
     if (!clean_mesh || !clean_terrain || !initialized)
         return;
+    printf("update working?\n");
     mesh_vertices.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)

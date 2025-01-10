@@ -19,10 +19,14 @@ Terrain::Terrain(Camera *camera) : camera(camera)
         chunks[i].initialize_vertex_buffers_and_array();
         chunks[i].initialize_cubes();
         chunks[i].generate_terrain();
-        create_chunk_mesh(&chunks[i]);
-        chunks[i].update_chunk();
         // chunks[i].update_chunk();
         // enqueue_update_task(&chunks[i]);
+    }
+
+    for (int i = 0; i < NUM_CHUNKS; i++)
+    {
+        create_chunk_mesh(&chunks[i]);
+        chunks[i].update_chunk();
     }
 }
 /*
@@ -109,6 +113,9 @@ void Terrain::shift_chunks()
                 if (is_adjacent)
                 {
                     chunk.needs_remesh();
+                    // Not sure if this is what causes
+                    // the issue. But there is an issue with
+                    // queue not properly clearing everything.
                     enqueue_update_task(&chunk);
                 }
             }
