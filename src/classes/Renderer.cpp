@@ -54,7 +54,7 @@ void Renderer::render_chunks(SDL_Window *window)
 
         terrain->shift_chunks();
         // printf("got to this point 3\n");
-        terrain->create_mesh();
+        // terrain->create_mesh();
         // printf("got to this point 4\n");
         // view projection matrix is a uniform
         glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
@@ -65,7 +65,6 @@ void Renderer::render_chunks(SDL_Window *window)
         for (int i = 0; i < NUM_CHUNKS; i++)
         {
             {
-                std::lock_guard<std::mutex> chunk_lock(terrain->chunks[i].chunk_mutex);
                 terrain->chunks[i].draw_chunk();
             }
 

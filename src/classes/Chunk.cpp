@@ -195,17 +195,18 @@ void Chunk::buffer_data()
     // mesh was already sent and clean.
     if (sent_mesh)
         return;
-    {
-        // DO SOMETHING HERE, SO IF CLEAN I DON"T NEED TO KEEP SENDING IT, BUT ONLY SEND
-        // WHEN FIRST BECOMES CLEAN.
-        // if (clean_mesh)
-        // return;
-        glBindVertexArray(chunk_vao);
 
-        // Geometry VBO
-        glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-        glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(Vertex), mesh_vertices.data(), GL_DYNAMIC_DRAW);
-    }
+    printf("buffering data\n");
+    // DO SOMETHING HERE, SO IF CLEAN I DON"T NEED TO KEEP SENDING IT, BUT ONLY SEND
+    // WHEN FIRST BECOMES CLEAN.
+    // if (clean_mesh)
+    // return;
+    glBindVertexArray(chunk_vao);
+
+    // Geometry VBO
+    glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
+    glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(Vertex), mesh_vertices.data(), GL_DYNAMIC_DRAW);
+
     // Position attribute (location = 0)
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
@@ -236,12 +237,16 @@ void Chunk::buffer_data()
 
 void Chunk::draw_chunk()
 {
+
+    std::lock_guard<std::mutex> chunk_lock(chunk_mutex);
+    if (!ready_to_buffer())
+        return;
     buffer_data();
 
     // std::lock_guard<std::mutex> lock(chunk_mutex);
     if (!clean_mesh)
         return;
-    // printf("chunk renderable?\n");
+    printf("drawing chunk\n");
     // printf("Chunk (%d, %d) DRAWING: size of mesh vertices = %d\n", chunk_coordinates.first, chunk_coordinates.second, mesh_vertices.size());
     glBindVertexArray(chunk_vao);
     // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
@@ -266,4 +271,9 @@ void Chunk::new_chunk_state()
     clean_mesh = false;
     generated_vertices = false;
     sent_mesh = false;
+}
+
+bool Chunk::ready_to_buffer()
+{
+    return initialized && clean_terrain && clean_mesh && generated_vertices;
 }

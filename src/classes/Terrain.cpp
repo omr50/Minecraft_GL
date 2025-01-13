@@ -178,15 +178,15 @@ void Terrain::create_mesh()
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
         std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
-        if (!chunks[i].clean_mesh && chunks[i].initialized && chunks[i].clean_terrain)
+        if (!chunks[i].clean_mesh && chunks[i].initialized && chunks[i].clean_terrain && !chunks[i].enqueued_mesh_creation)
         {
             // printf("enqueued mesh creation\n");
-            if (!chunks[i].enqueued)
-            {
-                chunks[i].enqueued = true;
-                thread_pool->enqueue_task([this, i]
-                                          { create_chunk_mesh(&chunks[i]); chunks[i].enqueued = false; });
-            }
+            // if (!chunks[i].enqueued)
+            // {
+            chunks[i].enqueued_mesh_creation = true;
+            thread_pool->enqueue_task([this, i]
+                                      { create_chunk_mesh(&chunks[i]); chunks[i].enqueued_mesh_creation = false; });
+            // }
         }
         // clean will be set to false after iteration / frame
     }
@@ -200,7 +200,7 @@ void Terrain::create_chunk_mesh(Chunk *chunk)
             {
                 Cube *cube = nullptr;
                 {
-                    std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+                    // std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
                     cube = &(chunk->blocks[chunk->get_index(x, y, z)]);
                 }
                 cube_face_renderability(chunk, cube);
@@ -339,12 +339,21 @@ bool Terrain::camera_moved()
 
 void Terrain::enqueue_update_task(Chunk *chunk)
 {
+    if (chunk->enqueued)
+        return;
     thread_pool->enqueue_task([this, chunk]()
                               {
+        if (chunk->enqueued)
+            return;
         {
+        chunk->enqueued = true;
             std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+            printf("Update task checking num_generation_tasks: %d\n", thread_pool->num_generation_tasks);
+
             if (thread_pool->num_generation_tasks != 0) {
+                 printf("Re-enqueueing update task. Queue size before: %d\n", thread_pool->task_queue.size());
                 this->enqueue_update_task(chunk);
+                printf("Queue size after re-enqueue: %d\n", thread_pool->task_queue.size());
                 return;
             }
         }
@@ -364,15 +373,15 @@ void Terrain::enqueue_initial_task(Chunk *chunk)
     }
 
     thread_pool->enqueue_task([this, chunk]()
-                              { 
-        chunk->initialize_cubes();
-        chunk->generate_terrain();
+                              {
+                                  chunk->initialize_cubes();
+                                  chunk->generate_terrain();
 
-        // after terrain creation, enqueue chunk update
-        enqueue_update_task(chunk);
-        chunk->enqueued = false;
-        {
-        std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
-        thread_pool->num_generation_tasks--;
-        } });
+                                  // after terrain creation, enqueue chunk update
+                                //   chunk->enqueued = false;
+                                  {
+                                      std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+                                      thread_pool->num_generation_tasks--;
+                                  }
+                                  enqueue_update_task(chunk); });
 }
