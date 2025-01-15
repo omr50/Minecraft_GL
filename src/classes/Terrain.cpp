@@ -371,7 +371,7 @@ void Terrain::enqueue_initial_task(Chunk *chunk)
         std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
         thread_pool->num_generation_tasks++;
     }
-
+    // issue with queueing too much
     thread_pool->enqueue_task([this, chunk]()
                               {
                                   chunk->initialize_cubes();
