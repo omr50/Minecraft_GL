@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include "./Camera.hpp"
+#include "./Renderer.hpp"
 
 class EventHandler
 {
@@ -14,9 +15,10 @@ private:
     bool software_mouse_move_event;
     Camera *camera;
     SDL_Window *window;
+    Renderer *renderer = nullptr;
 
 public:
-    EventHandler(Camera *camera, SDL_Window *window, bool *running);
+    EventHandler(Camera *camera, SDL_Window *window, bool *running, Renderer *renderer);
     void event_handler();
     void keyboard_handler();
     void mouse_movement_handler();

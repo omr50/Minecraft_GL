@@ -13,13 +13,16 @@ ThreadPool::ThreadPool(int num_threads)
 
 void ThreadPool::enqueue_task(std::function<void()> task)
 {
+    // printf("inside the threadpool enqeueu function\n");
     {
         std::lock_guard<std::mutex>
             lock(task_mutex);
         task_queue.push(std::move(task));
+        // printf("actually moved the task into the queue\n");
     }
 
     conditional.notify_one();
+    // printf("NOTIFIED\n");
 }
 
 void ThreadPool::worker_loop()

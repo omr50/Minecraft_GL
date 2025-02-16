@@ -49,6 +49,7 @@ void Chunk::initialize_cubes()
     }
     // printf("Chunk (%d, %d) initialized\n", chunk_coordinates.first, chunk_coordinates.second);
     initialized = true;
+    // printf("initialized the cubes\n");
 }
 
 // remember to customize this to add other blocks in the mix
@@ -87,6 +88,7 @@ void Chunk::generate_terrain()
             }
         }
     }
+
     // printf("Chunk (%d, %d) terrain generated\n", chunk_coordinates.first, chunk_coordinates.second);
     clean_terrain = true;
     // clean = true;
@@ -118,7 +120,7 @@ void Chunk::get_mesh_vertices()
         return;
     if (!clean_mesh || !clean_terrain || !initialized)
         return;
-    printf("update working?\n");
+    // printf("update working?\n");
     mesh_vertices.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)
@@ -196,7 +198,7 @@ void Chunk::buffer_data()
     if (sent_mesh)
         return;
 
-    printf("buffering data\n");
+    // printf("buffering data\n");
     // DO SOMETHING HERE, SO IF CLEAN I DON"T NEED TO KEEP SENDING IT, BUT ONLY SEND
     // WHEN FIRST BECOMES CLEAN.
     // if (clean_mesh)
@@ -241,12 +243,13 @@ void Chunk::draw_chunk()
     std::lock_guard<std::mutex> chunk_lock(chunk_mutex);
     if (!ready_to_buffer())
         return;
+    // printf("ready to buffer!\n");
     buffer_data();
 
     // std::lock_guard<std::mutex> lock(chunk_mutex);
     if (!clean_mesh)
         return;
-    printf("drawing chunk\n");
+    // printf("drawing chunk\n");
     // printf("Chunk (%d, %d) DRAWING: size of mesh vertices = %d\n", chunk_coordinates.first, chunk_coordinates.second, mesh_vertices.size());
     glBindVertexArray(chunk_vao);
     // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
@@ -255,6 +258,8 @@ void Chunk::draw_chunk()
     // printf("vertice SIZE: %d\n", mesh_vertices.size());
     glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
     glBindVertexArray(0);
+
+    // printf("Fully DRAWN THE CHUNK!!!!!!\n");
 }
 
 void Chunk::needs_remesh()
@@ -275,5 +280,15 @@ void Chunk::new_chunk_state()
 
 bool Chunk::ready_to_buffer()
 {
+    // printf("is initialized = %d\nclean terrain = %d\nclean_mesh = %d\ngenerated vertices = %d\n", initialized, clean_terrain, clean_mesh, generated_vertices);
     return initialized && clean_terrain && clean_mesh && generated_vertices;
 }
+
+/*
+
+is initialized = 1
+clean terrain = 1
+clean_mesh = 0
+generated vertices = 0
+
+*/

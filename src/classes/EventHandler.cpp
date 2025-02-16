@@ -1,10 +1,10 @@
 #include "../../include/EventHandler.hpp"
 #include <iostream>
-
+#include <fcntl.h>
 #define WIDTH 800.0
 #define HEIGHT 600.0
 
-EventHandler::EventHandler(Camera *camera, SDL_Window *window, bool *running) : running(running), window(window), camera(camera) {}
+EventHandler::EventHandler(Camera *camera, SDL_Window *window, bool *running, Renderer *renderer) : running(running), window(window), camera(camera), renderer(renderer) {}
 
 void EventHandler::event_handler()
 {
@@ -117,6 +117,15 @@ void EventHandler::window_event_handler()
 {
     if (e.window.event == SDL_WINDOWEVENT_CLOSE)
     {
+        // first log the different chunks and their state
+        int stdout_copy = dup(STDOUT_FILENO);
+        int fd = open("log.txt", O_WRONLY | O_CREAT, 0644);
+        dup2(fd, 1);
+        for (int i = 0; i < NUM_CHUNKS; i++)
+            printf("chunk %d: is initialized = %d\nclean terrain = %d\nclean_mesh = %d\ngenerated vertices = %d\nis enqueued = %d\n\n\n\n\n", i + 1, renderer->terrain->chunks[i].initialized, renderer->terrain->chunks[i].clean_terrain, renderer->terrain->chunks[i].clean_mesh, renderer->terrain->chunks[i].generated_vertices, renderer->terrain->chunks[i].enqueued);
+        fflush(stdout);
+        dup2(stdout_copy, STDOUT_FILENO); // Restore original stdout
+        close(fd);
         std::cout << "Exiting screen!" << std::endl;
         *running = false;
     }

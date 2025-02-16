@@ -88,7 +88,7 @@ void Renderer::render_chunks(SDL_Window *window)
     }
     {
         std::unique_lock<std::mutex> lock(terrain->thread_pool->task_mutex);
-        printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
+        // printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
     }
     // printf("camera moved: %d\n", terrain->camera->moved);
     // printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());

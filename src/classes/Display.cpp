@@ -12,8 +12,8 @@ Display::Display()
     init_gl_sdl();
 
     camera = new Camera();
-    event_handler = new EventHandler(camera, window, &running);
     renderer = new Renderer(camera);
+    event_handler = new EventHandler(camera, window, &running, renderer);
 
     main_loop();
 }

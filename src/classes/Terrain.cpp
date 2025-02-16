@@ -99,7 +99,7 @@ void Terrain::shift_chunks()
             chunks[p1].chunk_coordinates.second = positions[p2].second;
 
             chunks[p1].new_chunk_state();
-
+            // printf("enqeueuing initial task!\n");
             enqueue_initial_task(chunk);
 
             int x_coord = chunks[p1].chunk_coordinates.first - direction_shift.first;
@@ -213,7 +213,7 @@ void Terrain::create_chunk_mesh(Chunk *chunk)
 void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
 {
 
-    std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+    // std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
 
     // world coordinates for x, y, and z
     int x = cube->x;
@@ -337,32 +337,132 @@ bool Terrain::camera_moved()
 // update tasks after all terrain tasks (initial)
 // have been finished
 
+// void Terrain::enqueue_update_task(Chunk *chunk)
+// {
+//     if (chunk->enqueued)
+//         return;
+//     thread_pool->enqueue_task([this, chunk]()
+//                               {
+//         // if (chunk->enqueued)
+//             // return;
+//         {
+//             std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+//             printf("Update task checking num_generation_tasks: %d\n", thread_pool->num_generation_tasks);
+
+//             if (thread_pool->num_generation_tasks != 0) {
+//                 chunk->enqueued = false;
+//                 printf("Re-enqueueing update task. Queue size before: %d\n", thread_pool->task_queue.size());
+//                 this->enqueue_update_task(chunk);
+//                 return;
+//             }
+//         }
+//             {
+//                 std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+//                 create_chunk_mesh(chunk);
+//             }
+//             chunk->update_chunk();
+//             chunk->enqueued = false; });
+
+//     chunk->enqueued = true;
+// }
+
+// void Terrain::enqueue_update_task(Chunk *chunk)
+// {
+//     if (chunk->enqueued)
+//         return;
+//     chunk->enqueued = true;
+//     thread_pool->enqueue_task([this, chunk]()
+//                               {
+//         // Wait until there are no generation tasks.
+//         while (true)
+//         {
+//             {
+//                 std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+//                 if (thread_pool->num_generation_tasks == 0)
+//                     break;
+//             }
+//             // Sleep a little to avoid busy waiting.
+//             std::this_thread::sleep_for(std::chrono::milliseconds(5));
+//             printf("is sleeping?\n");
+//         }
+
+//         {
+//             std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+//             create_chunk_mesh(chunk);
+//         }
+//         chunk->update_chunk();
+//         chunk->enqueued = false; printf("finished update task\n"); });
+// }
+
+// void Terrain::enqueue_update_task(Chunk *chunk)
+// {
+//     printf("update!\n");
+//     if (chunk->enqueued)
+//         return;
+//     chunk->enqueued = true;
+//     thread_pool->enqueue_task([this, chunk]()
+//                               {
+//         {
+//             // Check if generation tasks are complete.
+//             printf("before lock!\n");
+//             std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
+//             printf("after lock!\n");
+//             if (thread_pool->num_generation_tasks != 0)
+//             {
+//                 // Generation tasks are still running. Clear the flag and return.
+//                 chunk->enqueued = false;
+//                 // Optionally, you can schedule a delayed re-enqueue here.
+//                 return;
+//             }
+//         }
+
+//         {
+//             printf("before chunk lock!\n");
+//             std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+//             printf("first after chunk lock!\n");
+//             create_chunk_mesh(chunk);
+//             printf("after chunk lock!\n");
+//         }
+//         chunk->update_chunk();
+//         chunk->enqueued = false;
+//         printf("finished update task\n"); });
+// }
+
 void Terrain::enqueue_update_task(Chunk *chunk)
 {
+    // printf("update!\n");
     if (chunk->enqueued)
         return;
+    chunk->enqueued = true;
     thread_pool->enqueue_task([this, chunk]()
                               {
-        if (chunk->enqueued)
-            return;
         {
-        chunk->enqueued = true;
+            // Check if generation tasks are complete.
+            // printf("before lock!\n");
             std::unique_lock<std::mutex> lock(thread_pool->num_task_mutex);
-            printf("Update task checking num_generation_tasks: %d\n", thread_pool->num_generation_tasks);
-
-            if (thread_pool->num_generation_tasks != 0) {
-                 printf("Re-enqueueing update task. Queue size before: %d\n", thread_pool->task_queue.size());
-                this->enqueue_update_task(chunk);
-                printf("Queue size after re-enqueue: %d\n", thread_pool->task_queue.size());
+            // printf("after lock!\n");
+            if (thread_pool->num_generation_tasks != 0)
+            {
+                // Generation tasks are still running. Clear the flag.
+                chunk->enqueued = false;
+                // Schedule a delayed re-enqueue without blocking this worker thread.
+                std::thread([this, chunk]() {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                    enqueue_update_task(chunk);
+                }).detach();
                 return;
             }
         }
-            { 
-                std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
-                create_chunk_mesh(chunk);
-            }
-            chunk->update_chunk();
-            chunk->enqueued = false; });
+        
+        {
+            // printf("before chunk lock!\n");
+            std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+            // printf("first after chunk lock!\n");
+            create_chunk_mesh(chunk);
+            // printf("after chunk lock!\n");
+        }
+        chunk->update_chunk();
+        chunk->enqueued = false; });
 }
 
 void Terrain::enqueue_initial_task(Chunk *chunk)
