@@ -239,16 +239,25 @@ void Chunk::buffer_data()
 
 void Chunk::draw_chunk()
 {
-
-    std::lock_guard<std::mutex> chunk_lock(chunk_mutex);
-    if (!ready_to_buffer())
+    // try lock instead of holding up main thread
+    // for some fucking reason, try lock doesn't unlock out of scope!!!!
+    if (!chunk_mutex.try_lock())
         return;
+    // std::lock_guard<std::mutex> chunk_lock(chunk_mutex);
+    if (!ready_to_buffer())
+    {
+        chunk_mutex.unlock();
+        return;
+    }
     // printf("ready to buffer!\n");
     buffer_data();
 
     // std::lock_guard<std::mutex> lock(chunk_mutex);
     if (!clean_mesh)
+    {
+        chunk_mutex.unlock();
         return;
+    }
     // printf("drawing chunk\n");
     // printf("Chunk (%d, %d) DRAWING: size of mesh vertices = %d\n", chunk_coordinates.first, chunk_coordinates.second, mesh_vertices.size());
     glBindVertexArray(chunk_vao);
@@ -258,7 +267,7 @@ void Chunk::draw_chunk()
     // printf("vertice SIZE: %d\n", mesh_vertices.size());
     glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
     glBindVertexArray(0);
-
+    chunk_mutex.unlock();
     // printf("Fully DRAWN THE CHUNK!!!!!!\n");
 }
 

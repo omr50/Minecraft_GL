@@ -67,9 +67,12 @@ void Terrain::shift_chunks()
     // new_vals: find new values in position array
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
-        std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
+        // std::lock_guard<std::mutex> lock(chunks[i].chunk_mutex);
+        if (!chunks[i].chunk_mutex.try_lock())
+            return;
         bound[i] = find_out_of_bound_chunk(chunks[i].chunk_coordinates.first, chunks[i].chunk_coordinates.second, positions);
         new_vals[i] = find_new_positions(positions[i]);
+        chunks[i].chunk_mutex.unlock();
     }
     // printf("got to point 2.1\n");
 
@@ -94,7 +97,11 @@ void Terrain::shift_chunks()
         {
             // Update chunk
             auto chunk = &chunks[p1];
-            std::lock_guard<std::mutex> chunkLock(chunk->chunk_mutex);
+            // std::lock_guard<std::mutex> chunkLock(chunk->chunk_mutex);
+            if (!chunk->chunk_mutex.try_lock())
+            {
+                continue;
+            }
             chunks[p1].chunk_coordinates.first = positions[p2].first;
             chunks[p1].chunk_coordinates.second = positions[p2].second;
 
@@ -121,6 +128,7 @@ void Terrain::shift_chunks()
             }
             p1++;
             p2++;
+            chunk->chunk_mutex.unlock();
         }
     }
 }
