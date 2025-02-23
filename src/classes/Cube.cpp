@@ -148,7 +148,9 @@ void Cube::add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV of
 
 void Cube::create_model_matrix()
 {
-    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3((float)x, (float)y, (float)z));
+    float scale_factor = 2.0f;
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z)) *
+                   glm::scale(glm::mat4(1.0f), glm::vec3(scale_factor));
 }
 
 void Cube::update_state(float x, float y, float z, std::string block_type)

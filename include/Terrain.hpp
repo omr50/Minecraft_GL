@@ -17,6 +17,10 @@ public:
     Camera *camera;
     ThreadPool *thread_pool;
     glm::vec3 prev_camera_position;
+    // only access this integer through main thread, won't need any threads
+    int num_chunks_rendered = 0;
+    // only access this array through main thread, won't need any threads
+    bool rendered_chunks[NUM_CHUNKS] = {0};
 
     Terrain(Camera *camera);
     void shift_chunks();

@@ -52,7 +52,20 @@ void Renderer::render_chunks(SDL_Window *window)
     static time_t start = clock();
     static time_t end = clock();
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-    if (camera_moved || time_spent > 0.02)
+    if (camera_moved)
+    {
+        terrain->num_chunks_rendered = 0;
+        std::fill(std::begin(terrain->rendered_chunks), std::end(terrain->rendered_chunks), false);
+    }
+
+    printf("%d chunks rendered\n", terrain->num_chunks_rendered);
+
+    int num_chunks_rendered = 0;
+    for (int i = 0; i < NUM_CHUNKS; i++)
+    {
+        num_chunks_rendered += (terrain->rendered_chunks[i] ? 1 : 0);
+    }
+    if (camera_moved || num_chunks_rendered < NUM_CHUNKS)
     {
         start = end;
         terrain->shift_chunks();
@@ -68,7 +81,7 @@ void Renderer::render_chunks(SDL_Window *window)
         for (int i = 0; i < NUM_CHUNKS; i++)
         {
             {
-                terrain->chunks[i].draw_chunk();
+                terrain->chunks[i].draw_chunk(terrain->rendered_chunks, &terrain->num_chunks_rendered);
             }
 
             // if (in_camera_view(terrain->chunks[i]))
@@ -89,22 +102,4 @@ void Renderer::render_chunks(SDL_Window *window)
         terrain->camera->moved = false;
         SDL_GL_SwapWindow(window);
     }
-    end = clock();
-    // for (int i = 0; i < NUM_CHUNKS; i++)
-    // {
-    //     if (terrain->chunks[i].chunk_mutex.try_lock())
-    //     {
-    //         if (!terrain->chunks[i].rendered && terrain->chunks[i].is_renderable())
-    //         {
-    //             terrain->chunks[i].chunk_mutex.unlock();
-    //             terrain->chunks[i].draw_chunk();
-    //         }
-    //     }
-    // }
-    // // {
-    //     std::unique_lock<std::mutex> lock(terrain->thread_pool->task_mutex);
-    //     // printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
-    // }
-    // printf("camera moved: %d\n", terrain->camera->moved);
-    // printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
 }

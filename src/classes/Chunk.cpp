@@ -237,7 +237,7 @@ void Chunk::buffer_data()
     sent_mesh = true;
 }
 
-void Chunk::draw_chunk()
+void Chunk::draw_chunk(bool rendered_chunks[], int *num_chunks_rendered)
 {
     // try lock instead of holding up main thread
     // for some fucking reason, try lock doesn't unlock out of scope!!!!
@@ -245,11 +245,11 @@ void Chunk::draw_chunk()
         return;
     // std::lock_guard<std::mutex> chunk_lock(chunk_mutex);
 
-    if (is_renderable())
-    {
-        chunk_mutex.unlock();
-        return;
-    }
+    // if (is_renderable())
+    // {
+    //     chunk_mutex.unlock();
+    //     return;
+    // }
     // printf("ready to buffer!\n");
     buffer_data();
 
@@ -271,6 +271,8 @@ void Chunk::draw_chunk()
     chunk_mutex.unlock();
     // printf("Fully DRAWN THE CHUNK!!!!!!\n");
     rendered = true;
+    ++(*num_chunks_rendered);
+    rendered_chunks[chunk_num] = true;
 }
 
 void Chunk::needs_remesh()

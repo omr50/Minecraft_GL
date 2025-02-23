@@ -14,6 +14,7 @@ Terrain::Terrain(Camera *camera) : camera(camera)
 
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
+        chunks[i].chunk_num = i;
         chunks[i].chunk_coordinates.first = positions[i].first;
         chunks[i].chunk_coordinates.second = positions[i].second;
         chunks[i].initialize_vertex_buffers_and_array();
