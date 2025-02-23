@@ -1519,3 +1519,4107 @@ is enqueued = 0
 
 
 
+chunk 170: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 171: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 172: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 173: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 174: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 175: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 176: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 177: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 178: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 179: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 180: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 181: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 182: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 183: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 184: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 185: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 186: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 187: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 188: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 189: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 190: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 191: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 192: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 193: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 194: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 195: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 196: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 197: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 198: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 199: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 200: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 201: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 202: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 203: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 204: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 205: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 206: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 207: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 208: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 209: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 210: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 211: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 212: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 213: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 214: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 215: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 216: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 217: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 218: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 219: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 220: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 221: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 222: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 223: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 224: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 225: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 226: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 227: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 228: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 229: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 230: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 231: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 232: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 233: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 234: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 235: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 236: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 237: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 238: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 239: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 240: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 241: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 242: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 243: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 244: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 245: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 246: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 247: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 248: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 249: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 250: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 251: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 252: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 253: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 254: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 255: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 256: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 257: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 258: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 259: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 260: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 261: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 262: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 263: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 264: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 265: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 266: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 267: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 268: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 269: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 270: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 271: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 272: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 273: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 274: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 275: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 276: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 277: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 278: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 279: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 280: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 281: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 282: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 283: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 284: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 285: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 286: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 287: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 288: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 289: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 290: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 291: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 292: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 293: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 294: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 295: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 296: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 297: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 298: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 299: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 300: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 301: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 302: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 303: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 304: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 305: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 306: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 307: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 308: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 309: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 310: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 311: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 312: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 313: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 314: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 315: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 316: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 317: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 318: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 319: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 320: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 321: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 322: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 323: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 324: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 325: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 326: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 327: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 328: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 329: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 330: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 331: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 332: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 333: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 334: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 335: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 336: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 337: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 338: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 339: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 340: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 341: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 342: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 343: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 344: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 345: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 346: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 347: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 348: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 349: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 350: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 351: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 352: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 353: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 354: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 355: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 356: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 357: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 358: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 359: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 360: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 361: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 362: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 363: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 364: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 365: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 366: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 367: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 368: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 369: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 370: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 371: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 372: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 373: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 374: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 375: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 376: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 377: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 378: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 379: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 380: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 381: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 382: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 383: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 384: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 385: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 386: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 387: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 388: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 389: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 390: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 391: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 392: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 393: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 394: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 395: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 396: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 397: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 398: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 399: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 400: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 401: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 402: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 403: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 404: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 405: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 406: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 407: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 408: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 409: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 410: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 411: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 412: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 413: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 414: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 415: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 416: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 417: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 418: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 419: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 420: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 421: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 422: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 423: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 424: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 425: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 426: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 427: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 428: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 429: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 430: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 431: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 432: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 433: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 434: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 435: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 436: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 437: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 438: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 439: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 440: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 441: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 442: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 443: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 444: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 445: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 446: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 447: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 448: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 449: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 450: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 451: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 452: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 453: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 454: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 455: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 456: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 457: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 458: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 459: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 460: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 461: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 462: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 463: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 464: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 465: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 466: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 467: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 468: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 469: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 470: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 471: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 472: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 473: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 474: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 475: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 476: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 477: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 478: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 479: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 480: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 481: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 482: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 483: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 484: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 485: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 486: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 487: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 488: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 489: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 490: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 491: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 492: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 493: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 494: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 495: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 496: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 497: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 498: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 499: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 500: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 501: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 502: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 503: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 504: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 505: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 506: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 507: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 508: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 509: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 510: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 511: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 512: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 513: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 514: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 515: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 516: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 517: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 518: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 519: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 520: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 521: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 522: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 523: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 524: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 525: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 526: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 527: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 528: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 529: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 530: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 531: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 532: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 533: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 534: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 535: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 536: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 537: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 538: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 539: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 540: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 541: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 542: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 543: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 544: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 545: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 546: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 547: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 548: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 549: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 550: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 551: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 552: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 553: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 554: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 555: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 556: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 557: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 558: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 559: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 560: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 561: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 562: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 563: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 564: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 565: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 566: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 567: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 568: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 569: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 570: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 571: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 572: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 573: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 574: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 575: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 576: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 577: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 578: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 579: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 580: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 581: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 582: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 583: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 584: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 585: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 586: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 587: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 588: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 589: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 590: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 591: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 592: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 593: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 594: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 595: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 596: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 597: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 598: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 599: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 600: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 601: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 602: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 603: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 604: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 605: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 606: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 607: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 608: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 609: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 610: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 611: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 612: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 613: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 614: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 615: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 616: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 617: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 618: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 619: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 620: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 621: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 622: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 623: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 624: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+
+chunk 625: is initialized = 1
+clean terrain = 1
+clean_mesh = 1
+generated vertices = 1
+is enqueued = 0
+
+
+
+

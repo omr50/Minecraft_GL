@@ -36,6 +36,7 @@ public:
     bool sent_mesh = false;
     bool enqueued = false;
     bool enqueued_mesh_creation = true;
+    bool rendered = false;
     std::mutex chunk_mutex;
 
     Chunk();
@@ -54,5 +55,6 @@ public:
     void needs_remesh();
     void new_chunk_state();
     bool ready_to_buffer();
+    bool is_renderable();
     // void draw() override;
 };

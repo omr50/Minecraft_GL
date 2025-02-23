@@ -49,9 +49,12 @@ void Renderer::render_chunks(SDL_Window *window)
     // don't render when camera doesn't move
     // keep screen as is.
     // printf("got to this point 2\n");
-    if (camera_moved)
+    static time_t start = clock();
+    static time_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    if (camera_moved || time_spent > 0.02)
     {
-
+        start = end;
         terrain->shift_chunks();
         // printf("got to this point 3\n");
         // terrain->create_mesh();
@@ -86,10 +89,22 @@ void Renderer::render_chunks(SDL_Window *window)
         terrain->camera->moved = false;
         SDL_GL_SwapWindow(window);
     }
-    {
-        std::unique_lock<std::mutex> lock(terrain->thread_pool->task_mutex);
-        // printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
-    }
+    end = clock();
+    // for (int i = 0; i < NUM_CHUNKS; i++)
+    // {
+    //     if (terrain->chunks[i].chunk_mutex.try_lock())
+    //     {
+    //         if (!terrain->chunks[i].rendered && terrain->chunks[i].is_renderable())
+    //         {
+    //             terrain->chunks[i].chunk_mutex.unlock();
+    //             terrain->chunks[i].draw_chunk();
+    //         }
+    //     }
+    // }
+    // // {
+    //     std::unique_lock<std::mutex> lock(terrain->thread_pool->task_mutex);
+    //     // printf("Queue size %d\n", terrain->thread_pool->task_queue.size());
+    // }
     // printf("camera moved: %d\n", terrain->camera->moved);
     // printf("ms time for rendering %d\n", std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count());
 }

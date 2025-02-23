@@ -244,7 +244,8 @@ void Chunk::draw_chunk()
     if (!chunk_mutex.try_lock())
         return;
     // std::lock_guard<std::mutex> chunk_lock(chunk_mutex);
-    if (!ready_to_buffer())
+
+    if (is_renderable())
     {
         chunk_mutex.unlock();
         return;
@@ -269,6 +270,7 @@ void Chunk::draw_chunk()
     glBindVertexArray(0);
     chunk_mutex.unlock();
     // printf("Fully DRAWN THE CHUNK!!!!!!\n");
+    rendered = true;
 }
 
 void Chunk::needs_remesh()
@@ -276,6 +278,7 @@ void Chunk::needs_remesh()
     clean_mesh = false;
     sent_mesh = false;
     generated_vertices = false;
+    rendered = false;
 }
 
 void Chunk::new_chunk_state()
@@ -285,6 +288,7 @@ void Chunk::new_chunk_state()
     clean_mesh = false;
     generated_vertices = false;
     sent_mesh = false;
+    rendered = false;
 }
 
 bool Chunk::ready_to_buffer()
@@ -293,6 +297,10 @@ bool Chunk::ready_to_buffer()
     return initialized && clean_terrain && clean_mesh && generated_vertices;
 }
 
+bool Chunk::is_renderable()
+{
+    return (initialized && clean_terrain && clean_mesh && generated_vertices && sent_mesh && enqueued && enqueued_mesh_creation);
+}
 /*
 
 is initialized = 1
