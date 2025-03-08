@@ -54,11 +54,8 @@ void Renderer::render_chunks(SDL_Window *window)
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
     if (camera_moved)
     {
-        terrain->num_chunks_rendered = 0;
         std::fill(std::begin(terrain->rendered_chunks), std::end(terrain->rendered_chunks), false);
     }
-
-    printf("%d chunks rendered\n", terrain->num_chunks_rendered);
 
     int num_chunks_rendered = 0;
     for (int i = 0; i < NUM_CHUNKS; i++)
@@ -73,7 +70,8 @@ void Renderer::render_chunks(SDL_Window *window)
         // terrain->create_mesh();
         // printf("got to this point 4\n");
         // view projection matrix is a uniform
-        glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
+        glm::mat4 view_projection_matrix = camera->get_view_projection_matrix() * Cube::create_model_matrix();
+        // glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
         // view projection matrix is a uniform
         send_matrix_to_shader(&view_projection_matrix);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -81,7 +79,7 @@ void Renderer::render_chunks(SDL_Window *window)
         for (int i = 0; i < NUM_CHUNKS; i++)
         {
             {
-                terrain->chunks[i].draw_chunk(terrain->rendered_chunks, &terrain->num_chunks_rendered);
+                terrain->chunks[i].draw_chunk(terrain->rendered_chunks);
             }
 
             // if (in_camera_view(terrain->chunks[i]))

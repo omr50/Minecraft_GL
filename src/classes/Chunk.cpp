@@ -1,4 +1,7 @@
 #include "../../include/Chunk.hpp"
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 
 Chunk::Chunk()
 {
@@ -14,12 +17,182 @@ Chunk::Chunk(int x, int y)
     generate_terrain();
 }
 
+CHUNK_ZONE Chunk::get_chunk_zone()
+{
+    // 0 = desert
+    // 1 = forest
+    // 2 = plains
+    // 3 = mountains
+    int groupX = this->chunk_coordinates.first / 8;
+    int groupZ = this->chunk_coordinates.second / 8;
+    size_t hashValue = std::hash<int>()(groupX) ^ (std::hash<int>()(groupZ) << 1);
+
+    return (CHUNK_ZONE)(hashValue % 4);
+}
+
+// Function to get a deterministic pseudo-random number from coordinates
+int deterministic_biased_random(int x, int y, int min, int max, double power)
+{
+    // Combine coordinates into a unique hashable value
+    size_t seed = std::hash<int>()(x) ^ (std::hash<int>()(y) << 1);
+
+    // Convert hash to a pseudo-random number in [0, 1]
+    double u = (double)(seed % 100000) / 100000.0;
+
+    // Apply power-law transformation to bias towards lower numbers
+    int result = min + (int)((max - min) * pow(u, power));
+
+    return result;
+}
+
+void Chunk::generate_biome_terrain(int x, int z)
+{
+    CHUNK_ZONE zone = get_chunk_zone();
+    // printf("got chunk zone!\n");
+    // get y value that will be used for
+    // the height, if y < height, stone
+    // if greater, air.
+    float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
+    // printf("%f, %f\n", chunk_x, chunk_z);
+    // min block height added so that total can be from 0 to 255.
+    auto zone_bias = get_zone_bias();
+    float height = MIN_BLOCK_HEIGHT + generateHeight(chunk_x, chunk_z, 0.1, zone_bias);
+    // printf("Block height %f\n", height);
+    // printf("height is %f\n", height);
+
+    for (int y = 0; y < Y; y++)
+    {
+        if (zone == FOREST)
+        {
+            generate_forest(x, y, z, chunk_x, chunk_z, height);
+            // printf("generated a forest!\n");
+        }
+        else if (zone == PLAINS)
+        {
+            generate_plains(x, y, z, chunk_x, chunk_z, height);
+            // printf("generated a plains!\n");
+        }
+        if (zone == DESERT)
+        {
+            generate_desert(x, y, z, chunk_x, chunk_z, height);
+            // printf("generated a desert!\n");
+        }
+        if (zone == MOUNTAINS)
+        {
+            generate_mountains(x, y, z, chunk_x, chunk_z, height);
+            // printf("generated a mountain!\n");
+        }
+    }
+}
+
+void Chunk::generate_desert(int x, int y, int z, float chunk_x, float chunk_z, int height)
+{
+    // printf("desert generation!\n");
+    if (y < height - 3)
+    {
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+    }
+    else if (y > height - 3 && y < height)
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "sand");
+    }
+    else
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "air");
+    }
+}
+
+void Chunk::generate_plains(int x, int y, int z, float chunk_x, float chunk_z, int height)
+{
+    // printf("plains generation!\n");
+    if (y < height - 3)
+    {
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+    }
+    else if (y > height - 3 && y < height)
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
+    }
+    else
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "air");
+    }
+}
+
+void Chunk::generate_forest(int x, int y, int z, float chunk_x, float chunk_z, int height)
+{
+    // printf("forest generation!\n");
+    if (y < height - 3)
+    {
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+    }
+    else if (y > height - 3 && y < height)
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "wooden_plank");
+    }
+    else
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "air");
+    }
+}
+
+void Chunk::generate_mountains(int x, int y, int z, float chunk_x, float chunk_z, int height)
+{
+    // printf("mountain generation!\n");
+    if (y < height - 3)
+    {
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+    }
+    else if (y > height - 3 && y < height)
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+    }
+    else
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "air");
+    }
+}
+
+int Chunk::get_zone_bias()
+{
+    CHUNK_ZONE zone = get_chunk_zone();
+    int bias;
+    if (zone == DESERT)
+    {
+        bias = 2;
+    }
+    else if (zone == PLAINS)
+    {
+        bias = 1;
+    }
+    else if (zone == FOREST)
+    {
+        bias = 3;
+    }
+    else if (zone == MOUNTAINS)
+    {
+        bias = 4;
+    }
+    return bias;
+}
+
 float Chunk::generateHeight(float x, float z, float scale, float heightMultiplier)
 {
+    // CHUNK_ZONE zone = get_chunk_zone();
     float noiseValue = glm::perlin(glm::vec2(x * scale, z * scale));
     // Normalize to [0, 1]
     noiseValue = (noiseValue + 1.0f) / 2.0f;
-    return noiseValue * heightMultiplier;
+    // int zone_bias = get_zone_bias();
+    // return noiseValue * (heightMultiplier + zone_bias);
+    return noiseValue * (heightMultiplier);
 }
 
 void Chunk::initialize_vertex_buffers_and_array()
@@ -57,38 +230,17 @@ void Chunk::initialize_cubes()
 // should only be done once the chunk needs to be created, not each iteration
 void Chunk::generate_terrain()
 {
+    // printf("Generating terrain!\n");
+    CHUNK_ZONE zone = get_chunk_zone();
     // initialize all cubes
     for (int x = 0; x < X; x++)
     {
         for (int z = 0; z < Z; z++)
         {
-            // get y value that will be used for
-            // the height, if y < height, stone
-            // if greater, air.
-            float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
-            // printf("%f, %f\n", chunk_x, chunk_z);
-            // min block height added so that total can be from 0 to 255.
-            float height = MIN_BLOCK_HEIGHT + generateHeight(chunk_x, chunk_z, 0.1, 5.0);
-            // printf("Block height %f\n", height);
-            // printf("height is %f\n", height);
-            for (int y = 0; y < Y; y++)
-            {
-                if (y < height)
-                {
-                    // create border around chunks for easier viewing
-                    if (x == X - 1 || z == Z - 1 || x == 0 || z == 0)
-                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
-                    else
-                        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
-                }
-                else
-                {
-                    blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "air");
-                }
-            }
+            generate_biome_terrain(x, z);
         }
     }
-
+    // printf("finished biome generation!\n");
     // printf("Chunk (%d, %d) terrain generated\n", chunk_coordinates.first, chunk_coordinates.second);
     clean_terrain = true;
     // clean = true;
@@ -237,7 +389,7 @@ void Chunk::buffer_data()
     sent_mesh = true;
 }
 
-void Chunk::draw_chunk(bool rendered_chunks[], int *num_chunks_rendered)
+void Chunk::draw_chunk(bool rendered_chunks[])
 {
     // try lock instead of holding up main thread
     // for some fucking reason, try lock doesn't unlock out of scope!!!!
@@ -271,7 +423,6 @@ void Chunk::draw_chunk(bool rendered_chunks[], int *num_chunks_rendered)
     chunk_mutex.unlock();
     // printf("Fully DRAWN THE CHUNK!!!!!!\n");
     rendered = true;
-    ++(*num_chunks_rendered);
     rendered_chunks[chunk_num] = true;
 }
 

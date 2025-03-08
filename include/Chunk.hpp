@@ -20,6 +20,14 @@ struct Vertex
     float v;
 };
 
+enum CHUNK_ZONE
+{
+    DESERT = 0,
+    FOREST = 1,
+    PLAINS = 2,
+    MOUNTAINS = 3
+};
+
 class Chunk
 {
 public:
@@ -44,6 +52,13 @@ public:
     Chunk();
     Chunk(int x, int y);
     float generateHeight(float x, float z, float scale, float heightMultiplier);
+    CHUNK_ZONE get_chunk_zone();
+    int get_zone_bias();
+    void generate_biome_terrain(int x, int z);
+    void generate_desert(int x, int y, int z, float chunk_x, float chunk_z, int height);
+    void generate_plains(int x, int y, int z, float chunk_x, float chunk_z, int height);
+    void generate_forest(int x, int y, int z, float chunk_x, float chunk_z, int height);
+    void generate_mountains(int x, int y, int z, float chunk_x, float chunk_z, int height);
     void initialize_vertex_buffers_and_array();
     void initialize_cubes();
     void generate_terrain();
@@ -53,7 +68,7 @@ public:
     void get_mesh_vertices();
     void update_chunk();
     void buffer_data();
-    void draw_chunk(bool rendered_chunks[], int *chunk_render_counter);
+    void draw_chunk(bool rendered_chunks[]);
     void needs_remesh();
     void new_chunk_state();
     bool ready_to_buffer();

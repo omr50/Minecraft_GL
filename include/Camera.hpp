@@ -12,13 +12,13 @@ class Camera
 public:
     glm::vec3 position = {0.0, 76.0, 0.0};
     float rotation_angle = 0.0f;
-    float fov = glm::radians(45.0f);
+    float fov = glm::radians(60.0f);
     float yaw = 0;
     float pitch = 0;
     float roll = 0;
     float aspect_ratio = static_cast<float>(WIDTH) / static_cast<float>(HEIGHT);
     float near_plane = 0.1f;
-    float far_plane = 300.0f;
+    float far_plane = 3000.0f;
     bool moved = true;
     std::pair<int, int> prev_chunk;
     std::pair<int, int> curr_chunk;

@@ -146,11 +146,11 @@ void Cube::add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV of
     Cube::texture_map[block_type] = face_texture_offsets;
 }
 
-void Cube::create_model_matrix()
+glm::mat4 Cube::create_model_matrix()
 {
-    float scale_factor = 2.0f;
-    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z)) *
-                   glm::scale(glm::mat4(1.0f), glm::vec3(scale_factor));
+    // float scale_factor = 3.0f;
+    glm::mat4 model_matrix = glm::scale(glm::mat4(1.0f), glm::vec3((float)SCALE));
+    return model_matrix;
 }
 
 void Cube::update_state(float x, float y, float z, std::string block_type)

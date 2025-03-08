@@ -8,6 +8,7 @@
 #include <array>
 
 #define GRID_WIDTH 16
+#define SCALE 1
 
 struct FaceUV
 {
@@ -51,7 +52,7 @@ public:
 
     Cube();
     Cube(int x, int y, int z, std::string block_type);
-    void create_model_matrix();
+    static glm::mat4 create_model_matrix();
     void update_state(float x, float y, float z, std::string block_type) override;
     // void update_cube_state(int x, int y, int z, std::string block_type);
     // even better than the images have the loaded textures instead (using stb_image)
