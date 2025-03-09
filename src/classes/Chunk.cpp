@@ -23,13 +23,30 @@ CHUNK_ZONE Chunk::get_chunk_zone()
     // 1 = forest
     // 2 = plains
     // 3 = mountains
-    int groupX = this->chunk_coordinates.first / 8;
-    int groupZ = this->chunk_coordinates.second / 8;
-    size_t hashValue = std::hash<int>()(groupX) ^ (std::hash<int>()(groupZ) << 1);
+    float global_x = chunk_coordinates.first * X;
+    float global_z = chunk_coordinates.second * Z;
+    float biomeFrequency = 0.002f;
+    float noise = glm::perlin(glm::vec2(global_x, global_z) * biomeFrequency);
+    // Normalize from [-1, 1] to [0, 1]:
+    float biomeFactor = (noise + 1.0f) / 2.0f;
 
-    return (CHUNK_ZONE)(hashValue % 4);
+    if (biomeFactor >= 0 && biomeFactor <= 0.25)
+    {
+        return DESERT;
+    }
+    else if (biomeFactor > 0.25 && biomeFactor <= 0.5)
+    {
+        return PLAINS;
+    }
+    else if (biomeFactor > 0.5 && biomeFactor <= 0.75)
+    {
+        return FOREST;
+    }
+    else
+    {
+        return MOUNTAINS;
+    }
 }
-
 // Function to get a deterministic pseudo-random number from coordinates
 int deterministic_biased_random(int x, int y, int min, int max, double power)
 {
@@ -188,9 +205,10 @@ float Chunk::generateHeight(float x, float z, float scale, float heightMultiplie
 {
     CHUNK_ZONE zone = get_chunk_zone();
     float frequency = 1;
+    float amplitude = 1;
     if (zone == MOUNTAINS)
     {
-        frequency = 0.05f;
+        frequency = 0.02f;
     }
     else
     {
