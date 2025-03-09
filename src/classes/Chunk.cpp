@@ -147,7 +147,7 @@ void Chunk::generate_mountains(int x, int y, int z, float chunk_x, float chunk_z
     // printf("mountain generation!\n");
     if (y < height - 3)
     {
-        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "dirt");
     }
     else if (y > height - 3 && y < height)
     {
@@ -179,17 +179,30 @@ int Chunk::get_zone_bias()
     }
     else if (zone == MOUNTAINS)
     {
-        bias = 4;
+        bias = 84;
     }
     return bias;
 }
 
 float Chunk::generateHeight(float x, float z, float scale, float heightMultiplier)
 {
-    // CHUNK_ZONE zone = get_chunk_zone();
-    float noiseValue = glm::perlin(glm::vec2(x * scale, z * scale));
+    CHUNK_ZONE zone = get_chunk_zone();
+    float frequency = 1;
+    if (zone == MOUNTAINS)
+    {
+        frequency = 0.05f;
+    }
+    else
+    {
+        frequency = 0.05f;
+    }
+
+    float global_x = chunk_coordinates.first * X + x;
+    float global_z = chunk_coordinates.second * Z + z;
+    // float noiseValue = glm::perlin(glm::vec2((chunk_coordinates.first + x) * scale, (chunk_coordinates.second + z) * scale));
+    float noiseValue = glm::perlin(glm::vec2(global_x, global_z) * frequency);
     // Normalize to [0, 1]
-    noiseValue = (noiseValue + 1.0f) / 2.0f;
+    // noiseValue = (noiseValue + 1.0f) / 2.0f;
     // int zone_bias = get_zone_bias();
     // return noiseValue * (heightMultiplier + zone_bias);
     return noiseValue * (heightMultiplier);
