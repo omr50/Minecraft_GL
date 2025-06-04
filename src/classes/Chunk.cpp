@@ -105,11 +105,11 @@ void Chunk::generate_biome_terrain(int x, int z)
 void Chunk::generate_desert(int x, int y, int z, float chunk_x, float chunk_z, int height)
 {
     // printf("desert generation!\n");
-    if (y < height - 3)
+    if (y < height - 5)
     {
         blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
     }
-    else if (y > height - 3 && y < height)
+    else if (y > height - 5 && y < height)
     {
 
         blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "sand");

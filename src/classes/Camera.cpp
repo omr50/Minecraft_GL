@@ -74,3 +74,15 @@ std::pair<int, int> Camera::get_direction()
     // printf("got to this point 2.2.3\n");
     return direction;
 }
+
+glm::vec3 Camera::get_look_direction()
+{
+    // Yaw: rotation around Y axis (left/right)
+    // Pitch: rotation around X axis (up/down)
+    // Both in radians
+    glm::vec3 direction;
+    direction.x = cos(pitch) * sin(yaw);
+    direction.y = sin(pitch);
+    direction.z = cos(pitch) * cos(yaw);
+    return glm::normalize(direction);
+}
