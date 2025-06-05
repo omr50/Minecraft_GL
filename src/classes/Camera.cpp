@@ -99,11 +99,12 @@ glm::vec3 Camera::get_look_direction()
 void Camera::raycast_block(Terrain *terrain)
 {
     auto look_direction = -get_look_direction();
-    printf("Look dir (%f, %f, %f)\n", look_direction.x, look_direction.y, look_direction.z);
+    int eye_height = 1.6;
+    auto ray_pos = position + glm::vec3(0, 0.2, 0);
 
-    for (float i = 0.5; i < 100; i += 0.05)
+    for (float i = 0.5; i < 100; i += 0.01)
     {
-        auto ray_coord = position + look_direction * i;
+        auto ray_coord = ray_pos + look_direction * i;
         int wx = (int)std::floor(ray_coord.x);
         int wy = (int)std::floor(ray_coord.y);
         int wz = (int)std::floor(ray_coord.z);
@@ -118,17 +119,22 @@ void Camera::raycast_block(Terrain *terrain)
             {
                 if (wy >= Y || wy < 0)
                 {
-                    printf("OUT of bounds!\n");
                     continue;
                 }
                 int index = terrain->chunks[j].get_index(block_x, wy, block_z);
                 if (terrain->chunks[j].blocks[index].block_type != "air")
                 {
-                    printf("ISN't AN AIR BLOCK LETS GOOOOO!\n");
                     // get previous block (for now just testing on the current block)
                     terrain->chunks[j].blocks[index].block_type = "stone";
                     terrain->chunks[j].needs_remesh();
-                    terrain->enqueue_update_task(&terrain->chunks[j]);
+                    // terrain->enqueue_update_task(&terrain->chunks[j]);
+                    {
+                        std::lock_guard<std::mutex> lock(terrain->chunks[j].chunk_mutex);
+                        terrain->create_chunk_mesh(&terrain->chunks[j]);
+                        // printf("after chunk lock!\n");
+                    }
+                    terrain->chunks[j].update_chunk();
+                    moved = true;
                     return;
                 }
             }

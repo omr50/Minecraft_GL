@@ -25,4 +25,5 @@ public:
     void render_blocks();
     void send_matrix_to_shader(glm::mat4 *matrix);
     void render_chunks(SDL_Window *window);
+    void draw_crosshair(SDL_Window *window);
 };

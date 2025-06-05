@@ -84,7 +84,16 @@ void Display::main_loop()
         this->event_handler->event_handler();
         // renderer.render_blocks();
         // printf("WORKING?!!!!!!!!!!!!!!!!!!!!!\n");
-        renderer->render_chunks(window);
+
+        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // renderer->render_chunks(window);
+        // glDisable(GL_DEPTH_TEST);
+        // renderer->draw_crosshair(window);
+        // glEnable(GL_DEPTH_TEST);
+        // SDL_GL_SwapWindow(window);
+
+        renderer->render_chunks(window); // 3D world
+
         // SDL_Delay(5);
 
         auto time_end = std::chrono::high_resolution_clock::now();
