@@ -2,9 +2,13 @@
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/euler_angles.hpp>
+#include "./Cube.hpp"
+#include "./Terrain.hpp"
 
 #define WIDTH 800.0f
 #define HEIGHT 600.0f
+
+class Terrain;
 
 class Camera
 {
@@ -30,4 +34,7 @@ public:
     glm::mat4 get_view_projection_matrix();
     std::pair<int, int> get_chunk();
     std::pair<int, int> get_direction();
+    glm::vec3 get_look_direction();
+    void raycast_block(Terrain *terrain);
+    std::pair<int, int> get_ray_chunk(int x, int z);
 };

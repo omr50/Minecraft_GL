@@ -73,5 +73,6 @@ public:
     void new_chunk_state();
     bool ready_to_buffer();
     bool is_renderable();
+    bool in_chunk_coords(int x, int z);
     // void draw() override;
 };

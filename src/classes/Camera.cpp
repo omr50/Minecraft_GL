@@ -66,7 +66,16 @@ std::pair<int, int> Camera::get_chunk()
 
     return std::make_pair(cx, cz);
 }
-
+inline int floorDiv(int a, int b)
+{
+    return (a >= 0) ? (a / b) : ((a - b + 1) / b);
+}
+std::pair<int, int> Camera::get_ray_chunk(int x, int z)
+{
+    int cx = floorDiv(x, X); // X is chunk width
+    int cz = floorDiv(z, Z); // Z is chunk depth
+    return {cx, cz};
+}
 std::pair<int, int> Camera::get_direction()
 {
     // printf("got to this point 2.2.2\n");
@@ -82,7 +91,47 @@ glm::vec3 Camera::get_look_direction()
     // Both in radians
     glm::vec3 direction;
     direction.x = cos(pitch) * sin(yaw);
-    direction.y = sin(pitch);
+    direction.y = -sin(pitch);
     direction.z = cos(pitch) * cos(yaw);
     return glm::normalize(direction);
+}
+
+void Camera::raycast_block(Terrain *terrain)
+{
+    auto look_direction = -get_look_direction();
+    printf("Look dir (%f, %f, %f)\n", look_direction.x, look_direction.y, look_direction.z);
+
+    for (float i = 0.5; i < 100; i += 0.05)
+    {
+        auto ray_coord = position + look_direction * i;
+        int wx = (int)std::floor(ray_coord.x);
+        int wy = (int)std::floor(ray_coord.y);
+        int wz = (int)std::floor(ray_coord.z);
+        auto ray_chunk = get_ray_chunk(wx, wz);
+
+        int block_x = ((wx % X) + X) % X;
+        int block_z = ((wz % Z) + Z) % Z;
+
+        for (int j = 0; j < NUM_CHUNKS; j++)
+        {
+            if (terrain->chunks[j].chunk_coordinates == ray_chunk)
+            {
+                if (wy >= Y || wy < 0)
+                {
+                    printf("OUT of bounds!\n");
+                    continue;
+                }
+                int index = terrain->chunks[j].get_index(block_x, wy, block_z);
+                if (terrain->chunks[j].blocks[index].block_type != "air")
+                {
+                    printf("ISN't AN AIR BLOCK LETS GOOOOO!\n");
+                    // get previous block (for now just testing on the current block)
+                    terrain->chunks[j].blocks[index].block_type = "stone";
+                    terrain->chunks[j].needs_remesh();
+                    terrain->enqueue_update_task(&terrain->chunks[j]);
+                    return;
+                }
+            }
+        }
+    }
 }

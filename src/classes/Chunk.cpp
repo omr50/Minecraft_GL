@@ -485,6 +485,13 @@ bool Chunk::is_renderable()
 {
     return (initialized && clean_terrain && clean_mesh && generated_vertices && sent_mesh && enqueued && enqueued_mesh_creation);
 }
+
+// INCORRECT FUNCTION, REPLACE
+bool Chunk::in_chunk_coords(int x, int z)
+{
+    return false;
+    return (x / X == chunk_coordinates.first && z / Z == chunk_coordinates.second);
+}
 /*
 
 is initialized = 1

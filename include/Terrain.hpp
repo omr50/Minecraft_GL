@@ -10,6 +10,9 @@
 // chunk will implement renderable
 // we want to draw on a larger scal
 // not on the cube level
+
+class Camera;
+
 class Terrain : public Renderable
 {
 public:
