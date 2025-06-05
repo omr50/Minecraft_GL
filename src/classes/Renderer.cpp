@@ -101,34 +101,3 @@ void Renderer::render_chunks(SDL_Window *window)
         SDL_GL_SwapWindow(window);
     }
 }
-
-void Renderer::draw_crosshair(SDL_Window *window)
-{
-
-    glUseProgram(0);
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-
-    // Draw crosshair
-    glColor3f(1, 1, 1); // white color
-
-    glBegin(GL_LINES);
-    // Horizontal line
-    glVertex2f(WIDTH / 2 - 10, HEIGHT / 2);
-    glVertex2f(WIDTH / 2 + 10, HEIGHT / 2);
-    // Vertical line
-    glVertex2f(WIDTH / 2, HEIGHT / 2 - 10);
-    glVertex2f(WIDTH / 2, HEIGHT / 2 + 10);
-    glEnd();
-
-    // Restore projection
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-}

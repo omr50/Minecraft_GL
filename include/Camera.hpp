@@ -37,4 +37,5 @@ public:
     glm::vec3 get_look_direction();
     void raycast_block(Terrain *terrain);
     std::pair<int, int> get_ray_chunk(int x, int z);
+    void draw_ray();
 };

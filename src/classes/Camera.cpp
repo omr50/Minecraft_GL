@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../../include/Chunk.hpp"
 #include "../../include/Cube.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 Camera::Camera()
 {
@@ -140,4 +141,12 @@ void Camera::raycast_block(Terrain *terrain)
             }
         }
     }
+}
+
+void Camera::draw_ray()
+{
+    // prepare ray enpoints (start, end)
+    // create and bind vao/vbo
+    // write shaders (before this) (vertex / fragment)
+    // per frame -> update VBO and draw
 }
