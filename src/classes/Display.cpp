@@ -94,6 +94,7 @@ void Display::main_loop()
         // SDL_GL_SwapWindow(window);
 
         renderer->render_chunks(window); // 3D world
+        // render the ray here to see what the offset issue is.
 
         // SDL_Delay(5);
 
