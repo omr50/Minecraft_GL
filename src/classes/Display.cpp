@@ -103,6 +103,7 @@ void Display::main_loop()
         if (std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count() > 1000)
         {
             // printf("FPS: %d\n", fps);
+            // find a way to control fps limits
             fps = 0;
             time_start = std::chrono::high_resolution_clock::now();
         }
