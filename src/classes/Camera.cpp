@@ -149,4 +149,10 @@ void Camera::draw_ray()
     // create and bind vao/vbo
     // write shaders (before this) (vertex / fragment)
     // per frame -> update VBO and draw
+
+    // ray should show the line from the center of the
+    // screen to maybe a couple 100 units away.
+
+    auto start = position;
+    auto end = position - 100.0f * get_look_direction();
 }
