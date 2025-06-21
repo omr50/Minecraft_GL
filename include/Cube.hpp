@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <array>
 
+// label variables, move defines to one file?
 #define GRID_WIDTH 16
 #define SCALE 1
 
