@@ -8,6 +8,9 @@
 #include <array>
 
 // label variables, move defines to one file?
+
+// add ray class and make functions to switch between
+// ray and cube vbo / vao
 #define GRID_WIDTH 16
 #define SCALE 1
 
