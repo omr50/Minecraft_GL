@@ -43,12 +43,9 @@ void Renderer::render_chunks(SDL_Window *window)
     // shifting and creating mesh may
     // be optimized with threads later
 
-    // static int curr_iteration = 0;
-
     bool camera_moved = terrain->camera_moved();
     // don't render when camera doesn't move
     // keep screen as is.
-    // printf("got to this point 2\n");
     static time_t start = clock();
     static time_t end = clock();
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
@@ -66,7 +63,6 @@ void Renderer::render_chunks(SDL_Window *window)
     {
         start = end;
         terrain->shift_chunks();
-        // printf("got to this point 3\n");
         // terrain->create_mesh();
         // printf("got to this point 4\n");
         // view projection matrix is a uniform
