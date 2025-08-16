@@ -6,6 +6,7 @@
 #include "./Camera.hpp"
 #include "./Chunk.hpp"
 #include "./Terrain.hpp"
+#include "./Crosshair.hpp"
 #include <SDL2/SDL.h>
 
 class Renderer
@@ -19,10 +20,13 @@ public:
     std::vector<Cube *> all_blocks;
     Camera *camera;
     Terrain *terrain;
+    Crosshair *crosshair;
 
     Renderer(Camera *camera);
     void add_block(Cube *cube);
     void render_blocks();
     void send_matrix_to_shader(glm::mat4 *matrix);
     void render_chunks(SDL_Window *window);
+    static void set3DState();
+    static void setUIState();
 };

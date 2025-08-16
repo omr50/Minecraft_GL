@@ -101,9 +101,10 @@ void Camera::raycast_block(Terrain *terrain)
 {
     auto look_direction = -get_look_direction();
     int eye_height = 1.6;
-    auto ray_pos = position + glm::vec3(0, 0.2, 0);
+    // auto ray_pos = position + glm::vec3(0, 0.2, 0);
+    auto ray_pos = position;
 
-    for (float i = 0.5; i < 100; i += 0.01)
+    for (float i = 0; i < 1000; i += 0.001)
     {
         auto ray_coord = ray_pos + look_direction * i;
         int wx = (int)std::floor(ray_coord.x);

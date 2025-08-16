@@ -10,6 +10,7 @@ public:
     std::string fragment_shader_filename;
     std::string vertex_shader_src_string;
     std::string fragment_shader_src_string;
+
     GLuint vertex_shader;
     GLuint fragment_shader;
     GLuint shader_program;

@@ -14,7 +14,8 @@ Display::Display()
     camera = new Camera();
     renderer = new Renderer(camera);
     event_handler = new EventHandler(camera, window, &running, renderer);
-
+    SDL_ShowCursor(SDL_DISABLE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
     main_loop();
 }
 void Display::init_window()
@@ -77,6 +78,7 @@ void Display::main_loop()
     Cube::setup_cube_shaders();
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     glUseProgram(Cube::shader_program);
+
     auto time_start = std::chrono::high_resolution_clock::now();
     int fps = 0;
     while (running)

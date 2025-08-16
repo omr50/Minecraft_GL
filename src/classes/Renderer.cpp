@@ -6,6 +6,7 @@
 Renderer::Renderer(Camera *camera) : camera(camera)
 {
     terrain = new Terrain(camera);
+    crosshair = new Crosshair();
 }
 
 void Renderer::add_block(Cube *blocks)
@@ -29,6 +30,7 @@ void Renderer::render_blocks()
 
 void Renderer::send_matrix_to_shader(glm::mat4 *matrix)
 {
+
     GLuint vp_location = glGetUniformLocation(Cube::shader_program, "vp");
     if (vp_location == -1)
     {
@@ -40,8 +42,11 @@ void Renderer::send_matrix_to_shader(glm::mat4 *matrix)
 
 void Renderer::render_chunks(SDL_Window *window)
 {
+
     // shifting and creating mesh may
     // be optimized with threads later
+    Renderer::set3DState();
+    glUseProgram(Cube::shader_program);
 
     bool camera_moved = terrain->camera_moved();
     // don't render when camera doesn't move
@@ -75,6 +80,7 @@ void Renderer::render_chunks(SDL_Window *window)
         for (int i = 0; i < NUM_CHUNKS; i++)
         {
             {
+                // glBindVertexArray(terrain->chunks[i].chunk_vao);
                 terrain->chunks[i].draw_chunk(terrain->rendered_chunks);
             }
 
@@ -94,6 +100,24 @@ void Renderer::render_chunks(SDL_Window *window)
             //             terrain->chunks[i].blocks[terrain->chunks->get_index(x, y, z)].draw();
         }
         terrain->camera->moved = false;
+        crosshair->draw_crosshair();
         SDL_GL_SwapWindow(window);
     }
+}
+
+void Renderer::set3DState()
+{
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    // glEnable(GL_CULL_FACE);
+}
+
+void Renderer::setUIState()
+{
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    // glDisable(GL_CULL_FACE);
+
+    // glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
