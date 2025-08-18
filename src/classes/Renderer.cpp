@@ -7,6 +7,7 @@ Renderer::Renderer(Camera *camera) : camera(camera)
 {
     terrain = new Terrain(camera);
     crosshair = new Crosshair();
+    lineRenderer = new LineRenderer();
 }
 
 void Renderer::add_block(Cube *blocks)
@@ -99,25 +100,42 @@ void Renderer::render_chunks(SDL_Window *window)
             //             send_matrix_to_shader(&MVP);
             //             terrain->chunks[i].blocks[terrain->chunks->get_index(x, y, z)].draw();
         }
-        terrain->camera->moved = false;
-        crosshair->draw_crosshair();
-        SDL_GL_SwapWindow(window);
     }
+    terrain->camera->moved = false;
+    glm::mat4 VP_only = camera->get_view_projection_matrix();
+    auto toNDC = [&](const glm::vec3 &p)
+    {
+        glm::vec4 c = VP_only * glm::vec4(p, 1.0);
+        c /= c.w;
+        printf("NDC: (%.3f, %.3f, %.3f)\n", c.x, c.y, c.z);
+    };
+    toNDC(camera->position);
+    toNDC(camera->get_ray_end(terrain, 500));
+
+    printf("camera pos: (%.3f, %.3f, %.3f)\n", camera->position.x, camera->position.y, camera->position.z);
+    // auto ray_end = camera->get_ray_end(terrain);
+    // printf("ray_end: (%.3f, %.3f, %.3f)\n", ray_end.x, ray_end.y, ray_end.z);
+    auto projection = camera->create_projection_matrix();
+    glm::vec3 test_start = camera->position + glm::vec3{1.0, 0.0, 0.0}; // 1 unit to the right
+    glm::vec3 test_end = camera->position + glm::vec3{10.0, 0.0, 0.0};  // 10 units to the right
+    // lineRenderer->drawRayLine(test_start, test_end, &VP_only);
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    lineRenderer->drawRayLine(camera->position + (glm::vec3){0.0, 0.0, 0.1}, camera->get_ray_end(terrain, 500), &VP_only);
+    glDepthMask(GL_TRUE);
+    glEnable(GL_DEPTH_TEST);
+    crosshair->draw_crosshair();
+    SDL_GL_SwapWindow(window);
 }
 
 void Renderer::set3DState()
 {
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
-    // glEnable(GL_CULL_FACE);
 }
 
 void Renderer::setUIState()
 {
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
-    // glDisable(GL_CULL_FACE);
-
-    // glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

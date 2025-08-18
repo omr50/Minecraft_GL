@@ -7,6 +7,7 @@
 #include "./Chunk.hpp"
 #include "./Terrain.hpp"
 #include "./Crosshair.hpp"
+#include "./LineRenderer.hpp"
 #include <SDL2/SDL.h>
 
 class Renderer
@@ -21,6 +22,7 @@ public:
     Camera *camera;
     Terrain *terrain;
     Crosshair *crosshair;
+    LineRenderer *lineRenderer;
 
     Renderer(Camera *camera);
     void add_block(Cube *cube);

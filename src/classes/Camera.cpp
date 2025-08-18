@@ -90,16 +90,21 @@ glm::vec3 Camera::get_look_direction()
     // Yaw: rotation around Y axis (left/right)
     // Pitch: rotation around X axis (up/down)
     // Both in radians
-    glm::vec3 direction;
-    direction.x = cos(pitch) * sin(yaw);
-    direction.y = -sin(pitch);
-    direction.z = cos(pitch) * cos(yaw);
-    return glm::normalize(direction);
+
+    // glm::vec3 direction;
+    // direction.x = cos(pitch) * sin(yaw);
+    // direction.y = -sin(pitch);
+    // direction.z = cos(pitch) * cos(yaw);
+    // return glm::normalize(direction);
+
+    glm::mat4 R = glm::yawPitchRoll(yaw, pitch, roll);
+    // w=0 => pure direction
+    return glm::normalize(glm::vec3(R * glm::vec4(0, 0, -1, 0)));
 }
 
 void Camera::raycast_block(Terrain *terrain)
 {
-    auto look_direction = -get_look_direction();
+    auto look_direction = get_look_direction();
     int eye_height = 1.6;
     // auto ray_pos = position + glm::vec3(0, 0.2, 0);
     auto ray_pos = position;
@@ -142,6 +147,21 @@ void Camera::raycast_block(Terrain *terrain)
             }
         }
     }
+}
+
+glm::vec3 Camera::get_ray_end(Terrain *terrain, int iterations)
+{
+    auto look_direction = get_look_direction();
+    int eye_height = 1.6;
+    // auto ray_pos = position + glm::vec3(0, 0.2, 0);
+    auto ray_pos = position;
+    glm::vec3 ray_coord;
+
+    for (float i = 0; i < iterations; i += 0.01)
+    {
+        ray_coord = ray_pos + look_direction * i;
+    }
+    return ray_coord;
 }
 
 void Camera::draw_ray()

@@ -22,7 +22,7 @@ public:
     float roll = 0;
     float aspect_ratio = static_cast<float>(WIDTH) / static_cast<float>(HEIGHT);
     float near_plane = 0.1f;
-    float far_plane = 3000.0f;
+    float far_plane = 50000.0f;
     bool moved = true;
     std::pair<int, int> prev_chunk;
     std::pair<int, int> curr_chunk;
@@ -37,5 +37,6 @@ public:
     glm::vec3 get_look_direction();
     void raycast_block(Terrain *terrain);
     std::pair<int, int> get_ray_chunk(int x, int z);
+    glm::vec3 get_ray_end(Terrain *terrain, int iterations);
     void draw_ray();
 };
