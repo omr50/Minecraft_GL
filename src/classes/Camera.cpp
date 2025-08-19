@@ -106,7 +106,9 @@ void Camera::raycast_block(Terrain *terrain)
 {
     auto look_direction = get_look_direction();
     int eye_height = 1.6;
-    // auto ray_pos = position + glm::vec3(0, 0.2, 0);
+
+    // auto ray_pos = position + screen_space_correction;
+    // auto ray_pos = position + correction_offset;
     auto ray_pos = position;
 
     for (float i = 0; i < 1000; i += 0.001)
@@ -155,13 +157,48 @@ glm::vec3 Camera::get_ray_end(Terrain *terrain, int iterations)
     int eye_height = 1.6;
     // auto ray_pos = position + glm::vec3(0, 0.2, 0);
     auto ray_pos = position;
-    glm::vec3 ray_coord;
 
-    for (float i = 0; i < iterations; i += 0.01)
+    for (float i = 0; i < 1000; i += 0.001)
     {
-        ray_coord = ray_pos + look_direction * i;
+        auto ray_coord = ray_pos + look_direction * i;
+        int wx = (int)std::floor(ray_coord.x);
+        int wy = (int)std::floor(ray_coord.y);
+        int wz = (int)std::floor(ray_coord.z);
+        auto ray_chunk = get_ray_chunk(wx, wz);
+
+        int block_x = ((wx % X) + X) % X;
+        int block_z = ((wz % Z) + Z) % Z;
+
+        for (int j = 0; j < NUM_CHUNKS; j++)
+        {
+            if (terrain->chunks[j].chunk_coordinates == ray_chunk)
+            {
+                if (wy >= Y || wy < 0)
+                {
+                    continue;
+                }
+                int index = terrain->chunks[j].get_index(block_x, wy, block_z);
+                if (terrain->chunks[j].blocks[index].block_type != "air")
+                {
+                    // get previous block (for now just testing on the current block)
+                    if (terrain->chunks[j].blocks[index].block_type != "stone")
+                    {
+                        terrain->chunks[j].blocks[index].block_type = "stone";
+                        terrain->chunks[j].needs_remesh();
+                        // terrain->enqueue_update_task(&terrain->chunks[j]);
+                        {
+                            std::lock_guard<std::mutex> lock(terrain->chunks[j].chunk_mutex);
+                            terrain->create_chunk_mesh(&terrain->chunks[j]);
+                            // printf("after chunk lock!\n");
+                        }
+                        terrain->chunks[j].update_chunk();
+                        moved = true;
+                        return ray_coord;
+                    }
+                }
+            }
+        }
     }
-    return ray_coord;
 }
 
 void Camera::draw_ray()
