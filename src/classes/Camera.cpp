@@ -107,8 +107,6 @@ void Camera::raycast_block(Terrain *terrain)
     auto look_direction = get_look_direction();
     int eye_height = 1.6;
 
-    // auto ray_pos = position + screen_space_correction;
-    // auto ray_pos = position + correction_offset;
     auto ray_pos = position;
 
     for (float i = 0; i < 1000; i += 0.001)
