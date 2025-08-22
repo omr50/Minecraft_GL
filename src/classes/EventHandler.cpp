@@ -1,4 +1,5 @@
 #include "../../include/EventHandler.hpp"
+#include "../../include/LineRenderer.hpp"
 #include <iostream>
 #include <fcntl.h>
 #define WIDTH 800.0
@@ -85,7 +86,7 @@ void EventHandler::mouse_click_handler()
     else if (e.button.button == SDL_BUTTON_RIGHT)
     {
         // roll -= (0.01);
-        camera->raycast_block(renderer->terrain);
+        camera->raycast_block(renderer->terrain, &LineRenderer::points);
     }
 }
 

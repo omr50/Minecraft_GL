@@ -102,7 +102,14 @@ glm::vec3 Camera::get_look_direction()
     return glm::normalize(glm::vec3(R * glm::vec4(0, 0, -1, 0)));
 }
 
-void Camera::raycast_block(Terrain *terrain)
+inline int floor_div(int a, int b)
+{
+    int q = a / b;
+    int r = a % b;
+    return (r != 0 && ((r > 0) != (b > 0))) ? (q - 1) : q;
+}
+
+void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points)
 {
     auto look_direction = get_look_direction();
     int eye_height = 1.6;
@@ -117,8 +124,14 @@ void Camera::raycast_block(Terrain *terrain)
         int wz = (int)std::floor(ray_coord.z);
         auto ray_chunk = get_ray_chunk(wx, wz);
 
-        int block_x = ((wx % X) + X) % X;
-        int block_z = ((wz % Z) + Z) % Z;
+        // world cell -> chunk coord + local index
+        int chunk_x = floor_div(wx, X);
+        int chunk_z = floor_div(wz, Z);
+        int block_x = wx - chunk_x * X; // safe, 0..X-1 even for negatives
+        int block_z = wz - chunk_z * Z;
+
+        // int block_x = ((wx % X) + X) % X;
+        // int block_z = ((wz % Z) + Z) % Z;
 
         for (int j = 0; j < NUM_CHUNKS; j++)
         {
@@ -132,6 +145,7 @@ void Camera::raycast_block(Terrain *terrain)
                 if (terrain->chunks[j].blocks[index].block_type != "air")
                 {
                     // get previous block (for now just testing on the current block)
+                    points->push_back(std::make_pair(ray_pos, ray_coord));
                     terrain->chunks[j].blocks[index].block_type = "stone";
                     terrain->chunks[j].needs_remesh();
                     // terrain->enqueue_update_task(&terrain->chunks[j]);
@@ -164,8 +178,11 @@ glm::vec3 Camera::get_ray_end(Terrain *terrain, int iterations)
         int wz = (int)std::floor(ray_coord.z);
         auto ray_chunk = get_ray_chunk(wx, wz);
 
-        int block_x = ((wx % X) + X) % X;
-        int block_z = ((wz % Z) + Z) % Z;
+        // world cell -> chunk coord + local index
+        int chunk_x = floor_div(wx, X);
+        int chunk_z = floor_div(wz, Z);
+        int block_x = wx - chunk_x * X; // safe, 0..X-1 even for negatives
+        int block_z = wz - chunk_z * Z;
 
         for (int j = 0; j < NUM_CHUNKS; j++)
         {

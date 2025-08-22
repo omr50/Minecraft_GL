@@ -1,6 +1,7 @@
 #include "../../include/LineRenderer.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+std::vector<std::pair<glm::vec3, glm::vec3>> LineRenderer::points{};
 
 LineRenderer::LineRenderer()
 {
@@ -39,4 +40,12 @@ void LineRenderer::drawRayLine(glm::vec3 vert1, glm::vec3 vert2, glm::mat4 *VP)
     glLineWidth(1.0f); // >1.0 may not work cross-platform
     glDrawArrays(GL_LINES, 0, 2);
     glBindVertexArray(0);
+}
+
+void LineRenderer::drawAllRays(glm::mat4 *VP)
+{
+    for (int i = 0; i < points.size(); i++)
+    {
+        drawRayLine(points[i].first, points[i].second, VP);
+    }
 }

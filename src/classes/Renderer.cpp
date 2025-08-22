@@ -102,7 +102,6 @@ void Renderer::render_chunks(SDL_Window *window)
         }
     }
     terrain->camera->moved = false;
-    // glm::mat4 VP_only = camera->get_view_projection_matrix();
     // auto toNDC = [&](const glm::vec3 &p)
     // {
     //     glm::vec4 c = VP_only * glm::vec4(p, 1.0);
@@ -127,6 +126,8 @@ void Renderer::render_chunks(SDL_Window *window)
     // glDepthMask(GL_TRUE);
     // glEnable(GL_DEPTH_TEST);
     // camera->get_ray_end(terrain, 500);
+    glm::mat4 VP_only = camera->get_view_projection_matrix();
+    lineRenderer->drawAllRays(&VP_only);
     crosshair->draw_crosshair();
     SDL_GL_SwapWindow(window);
 }
