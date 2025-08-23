@@ -141,6 +141,8 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
                 {
                     continue;
                 }
+                // assuming up to this point basically the chunk math is correct
+                // but one off errors do exist. Not sure what causes them yet.
                 int index = terrain->chunks[j].get_index(block_x, wy, block_z);
                 if (terrain->chunks[j].blocks[index].block_type != "air")
                 {
