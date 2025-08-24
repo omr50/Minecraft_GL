@@ -145,12 +145,84 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
                 int index = terrain->chunks[j].get_index(block_x, wy, block_z);
                 if (terrain->chunks[j].blocks[index].block_type != "air")
                 {
-                    printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
-                    printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
-                    printf("Index: %d\n", index);
+                    // printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
+                    // printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
+                    // printf("Index: %d\n", index);
                     // get previous block (for now just testing on the current block)
                     points->push_back(std::make_pair(ray_pos, ray_coord));
-                    terrain->chunks[j].blocks[index].block_type = "stone";
+                    terrain->chunks[j].blocks[index].block_type = "air";
+                    terrain->chunks[j].needs_remesh();
+                    // terrain->enqueue_update_task(&terrain->chunks[j]);
+                    {
+                        std::lock_guard<std::mutex> lock(terrain->chunks[j].chunk_mutex);
+                        terrain->create_chunk_mesh(&terrain->chunks[j]);
+                        // printf("after chunk lock!\n");
+                    }
+                    terrain->chunks[j].update_chunk();
+                    moved = true;
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points)
+{
+    auto look_direction = get_look_direction();
+    int eye_height = 1.6;
+
+    auto ray_pos = position;
+
+    for (float i = 0; i < 10000; i += 0.0001)
+    {
+        auto ray_coord = ray_pos + look_direction * i;
+        // (0.5 added because blocks are centered)
+        int wx = (int)std::floor(ray_coord.x + 0.5);
+        int wy = (int)std::floor(ray_coord.y + 0.5);
+        int wz = (int)std::floor(ray_coord.z + 0.5);
+        auto ray_chunk = get_ray_chunk(wx, wz);
+
+        int chunk_x = floor_div(wx, X);
+        int chunk_z = floor_div(wz, Z);
+        int block_x = wx - chunk_x * X;
+        int block_z = wz - chunk_z * Z;
+
+        for (int j = 0; j < NUM_CHUNKS; j++)
+        {
+            if (terrain->chunks[j].chunk_coordinates == ray_chunk)
+            {
+                if (wy >= Y || wy < 0)
+                {
+                    continue;
+                }
+                int index = terrain->chunks[j].get_index(block_x, wy, block_z);
+                if (terrain->chunks[j].blocks[index].block_type != "air")
+                {
+                    auto prev_coord = ray_pos + look_direction * static_cast<float>(i - 0.0001);
+
+                    wx = (int)std::floor(prev_coord.x + 0.5);
+                    wy = (int)std::floor(prev_coord.y + 0.5);
+                    wz = (int)std::floor(prev_coord.z + 0.5);
+                    ray_chunk = get_ray_chunk(wx, wz);
+
+                    chunk_x = floor_div(wx, X);
+                    chunk_z = floor_div(wz, Z);
+                    block_x = wx - chunk_x * X;
+                    block_z = wz - chunk_z * Z;
+
+                    if (wy >= Y || wy < 0)
+                    {
+                        return;
+                    }
+                    printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
+                    printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
+                    printf("Prev Ray found (%f, %f, %f)\n", prev_coord.x, prev_coord.y, ray_coord.z);
+                    printf("pwx: %d, pwy: %d, pwz: %d)\n", wx, wy, wz);
+                    index = terrain->chunks[j].get_index(block_x, wy, block_z);
+                    // get previous block (for now just testing on the current block)
+                    points->push_back(std::make_pair(ray_pos, ray_coord));
+                    terrain->chunks[j].blocks[index].block_type = "wooden_plank";
                     terrain->chunks[j].needs_remesh();
                     // terrain->enqueue_update_task(&terrain->chunks[j]);
                     {

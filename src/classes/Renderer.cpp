@@ -127,7 +127,7 @@ void Renderer::render_chunks(SDL_Window *window)
     // glEnable(GL_DEPTH_TEST);
     // camera->get_ray_end(terrain, 500);
     glm::mat4 VP_only = camera->get_view_projection_matrix();
-    lineRenderer->drawAllRays(&VP_only);
+    // lineRenderer->drawAllRays(&VP_only);
     crosshair->draw_crosshair();
     SDL_GL_SwapWindow(window);
 }
