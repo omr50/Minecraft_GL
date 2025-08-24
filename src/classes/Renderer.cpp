@@ -67,6 +67,7 @@ void Renderer::render_chunks(SDL_Window *window)
     }
     if (camera_moved || num_chunks_rendered < NUM_CHUNKS)
     {
+        printf("moved?\n");
         start = end;
         terrain->shift_chunks();
         // terrain->create_mesh();
@@ -100,6 +101,8 @@ void Renderer::render_chunks(SDL_Window *window)
             //             send_matrix_to_shader(&MVP);
             //             terrain->chunks[i].blocks[terrain->chunks->get_index(x, y, z)].draw();
         }
+        crosshair->draw_crosshair();
+        SDL_GL_SwapWindow(window);
     }
     terrain->camera->moved = false;
     // auto toNDC = [&](const glm::vec3 &p)
@@ -126,10 +129,7 @@ void Renderer::render_chunks(SDL_Window *window)
     // glDepthMask(GL_TRUE);
     // glEnable(GL_DEPTH_TEST);
     // camera->get_ray_end(terrain, 500);
-    glm::mat4 VP_only = camera->get_view_projection_matrix();
     // lineRenderer->drawAllRays(&VP_only);
-    crosshair->draw_crosshair();
-    SDL_GL_SwapWindow(window);
 }
 
 void Renderer::set3DState()
