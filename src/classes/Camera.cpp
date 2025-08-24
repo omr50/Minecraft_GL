@@ -109,6 +109,10 @@ inline int floor_div(int a, int b)
     return (r != 0 && ((r > 0) != (b > 0))) ? (q - 1) : q;
 }
 
+inline int half_round(float a)
+{
+}
+
 void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points)
 {
     auto look_direction = get_look_direction();
@@ -119,19 +123,16 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
     for (float i = 0; i < 1000; i += 0.001)
     {
         auto ray_coord = ray_pos + look_direction * i;
-        int wx = (int)std::floor(ray_coord.x);
-        int wy = (int)std::floor(ray_coord.y);
-        int wz = (int)std::floor(ray_coord.z);
+        // (0.5 added because blocks are centered)
+        int wx = (int)std::floor(ray_coord.x + 0.5);
+        int wy = (int)std::floor(ray_coord.y + 0.5);
+        int wz = (int)std::floor(ray_coord.z + 0.5);
         auto ray_chunk = get_ray_chunk(wx, wz);
 
-        // world cell -> chunk coord + local index
         int chunk_x = floor_div(wx, X);
         int chunk_z = floor_div(wz, Z);
-        int block_x = wx - chunk_x * X; // safe, 0..X-1 even for negatives
+        int block_x = wx - chunk_x * X;
         int block_z = wz - chunk_z * Z;
-
-        // int block_x = ((wx % X) + X) % X;
-        // int block_z = ((wz % Z) + Z) % Z;
 
         for (int j = 0; j < NUM_CHUNKS; j++)
         {
@@ -141,11 +142,12 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
                 {
                     continue;
                 }
-                // assuming up to this point basically the chunk math is correct
-                // but one off errors do exist. Not sure what causes them yet.
                 int index = terrain->chunks[j].get_index(block_x, wy, block_z);
                 if (terrain->chunks[j].blocks[index].block_type != "air")
                 {
+                    printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
+                    printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
+                    printf("Index: %d\n", index);
                     // get previous block (for now just testing on the current block)
                     points->push_back(std::make_pair(ray_pos, ray_coord));
                     terrain->chunks[j].blocks[index].block_type = "stone";

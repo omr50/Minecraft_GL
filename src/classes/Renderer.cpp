@@ -72,7 +72,7 @@ void Renderer::render_chunks(SDL_Window *window)
         // terrain->create_mesh();
         // printf("got to this point 4\n");
         // view projection matrix is a uniform
-        glm::mat4 view_projection_matrix = camera->get_view_projection_matrix() * Cube::create_model_matrix();
+        glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
         // glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
         // view projection matrix is a uniform
         send_matrix_to_shader(&view_projection_matrix);
