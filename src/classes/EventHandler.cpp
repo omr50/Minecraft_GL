@@ -81,13 +81,11 @@ void EventHandler::mouse_click_handler()
 {
     if (e.button.button == SDL_BUTTON_LEFT)
     {
-        // roll += (0.01);
-        camera->place_block(renderer->terrain, &LineRenderer::points);
+        camera->raycast_block(renderer->terrain, &LineRenderer::points);
     }
     else if (e.button.button == SDL_BUTTON_RIGHT)
     {
-        // roll -= (0.01);
-        camera->raycast_block(renderer->terrain, &LineRenderer::points);
+        camera->place_block(renderer->terrain, &LineRenderer::points);
     }
 }
 

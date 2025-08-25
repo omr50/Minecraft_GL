@@ -12,24 +12,55 @@ Camera::Camera()
 
 void Camera::update_camera_position(glm::vec3 direction)
 {
-    moved = true;
     glm::mat4 camera_rotation_matrix = glm::yawPitchRoll(yaw, pitch, roll);
     float speed = 2;
 
-    glm::vec3 translation_amount = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 1.0)) * speed;
-    if (direction.x || direction.z)
+    if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
     {
-
-        position.x += translation_amount.x;
-        position.z += translation_amount.z;
+        start_move_time = Clock::now();
+        last_move_time = start_move_time;
     }
-    if (direction.y)
-        position.y += (speed * direction.y);
+    velocity = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 0.0)) * speed;
+    // if (direction.x || direction.z)
+    // {
+
+    //     position.x += translation_amount.x;
+    //     position.z += translation_amount.z;
+    // }
+    // if (direction.y)
+    //     position.y += (speed * direction.y);
 
     // update chunk to be able to find the direction move
     // to later realize which
     prev_chunk = curr_chunk;
     curr_chunk = get_chunk();
+}
+
+void Camera::camera_move()
+{
+    if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
+    {
+        return;
+    }
+
+    moved = true;
+    auto now = Clock::now();
+    std::chrono::duration<float, std::milli> delta_ms = now - last_move_time;
+    last_move_time = now;
+    float delta_time_seconds = delta_ms.count() / 1000.0f;
+    float speed = 10.0f;
+    if (velocity.x)
+        position.x += velocity.x * delta_time_seconds * speed;
+    if (velocity.y)
+        position.y += velocity.y * delta_time_seconds * speed;
+    if (velocity.z)
+        position.z += velocity.z * delta_time_seconds * speed;
+
+    std::chrono::duration<float, std::milli> since_start_time_ms = now - start_move_time;
+    if (since_start_time_ms.count() > 150)
+    {
+        velocity = (glm::vec3){0, 0, 0};
+    }
 }
 
 glm::mat4 Camera::create_view_matrix()
@@ -206,33 +237,37 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
                     wz = (int)std::floor(prev_coord.z + 0.5);
                     ray_chunk = get_ray_chunk(wx, wz);
 
-                    chunk_x = floor_div(wx, X);
-                    chunk_z = floor_div(wz, Z);
-                    block_x = wx - chunk_x * X;
-                    block_z = wz - chunk_z * Z;
+                    for (int k = 0; k < NUM_CHUNKS; k++)
+                        if (terrain->chunks[k].chunk_coordinates == ray_chunk)
+                        {
+                            chunk_x = floor_div(wx, X);
+                            chunk_z = floor_div(wz, Z);
+                            block_x = wx - chunk_x * X;
+                            block_z = wz - chunk_z * Z;
 
-                    if (wy >= Y || wy < 0)
-                    {
-                        return;
-                    }
-                    // printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
-                    // printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
-                    // printf("Prev Ray found (%f, %f, %f)\n", prev_coord.x, prev_coord.y, ray_coord.z);
-                    // printf("pwx: %d, pwy: %d, pwz: %d)\n", wx, wy, wz);
-                    index = terrain->chunks[j].get_index(block_x, wy, block_z);
-                    // get previous block (for now just testing on the current block)
-                    points->push_back(std::make_pair(ray_pos, ray_coord));
-                    terrain->chunks[j].blocks[index].block_type = "wooden_plank";
-                    terrain->chunks[j].needs_remesh();
-                    // terrain->enqueue_update_task(&terrain->chunks[j]);
-                    {
-                        std::lock_guard<std::mutex> lock(terrain->chunks[j].chunk_mutex);
-                        terrain->create_chunk_mesh(&terrain->chunks[j]);
-                        // printf("after chunk lock!\n");
-                    }
-                    terrain->chunks[j].update_chunk();
-                    moved = true;
-                    return;
+                            if (wy >= Y || wy < 0)
+                            {
+                                return;
+                            }
+                            // printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
+                            // printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
+                            // printf("Prev Ray found (%f, %f, %f)\n", prev_coord.x, prev_coord.y, ray_coord.z);
+                            // printf("pwx: %d, pwy: %d, pwz: %d)\n", wx, wy, wz);
+                            index = terrain->chunks[k].get_index(block_x, wy, block_z);
+                            // get previous block (for now just testing on the current block)
+                            points->push_back(std::make_pair(ray_pos, ray_coord));
+                            terrain->chunks[k].blocks[index].block_type = "wooden_plank";
+                            terrain->chunks[k].needs_remesh();
+                            // terrain->enqueue_update_task(&terrain->chunks[j]);
+                            {
+                                std::lock_guard<std::mutex> lock(terrain->chunks[k].chunk_mutex);
+                                terrain->create_chunk_mesh(&terrain->chunks[k]);
+                                // printf("after chunk lock!\n");
+                            }
+                            terrain->chunks[k].update_chunk();
+                            moved = true;
+                            return;
+                        }
                 }
             }
         }

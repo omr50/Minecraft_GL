@@ -4,6 +4,8 @@
 #include <glm/gtx/euler_angles.hpp>
 #include "./Cube.hpp"
 #include "./Terrain.hpp"
+#include <chrono>
+using Clock = std::chrono::high_resolution_clock;
 
 #define WIDTH 800.0f
 #define HEIGHT 600.0f
@@ -23,12 +25,17 @@ public:
     float aspect_ratio = static_cast<float>(WIDTH) / static_cast<float>(HEIGHT);
     float near_plane = 0.1f;
     float far_plane = 50000.0f;
+    glm::vec3 velocity = {0.0, 0.0, 0.0};
     bool moved = true;
+    bool keyboard_move;
     std::pair<int, int> prev_chunk;
     std::pair<int, int> curr_chunk;
+    std::chrono::_V2::system_clock::time_point start_move_time = Clock::now();
+    std::chrono::_V2::system_clock::time_point last_move_time = Clock::now();
 
     Camera();
     void update_camera_position(glm::vec3 direction);
+    void camera_move();
     glm::mat4 create_view_matrix();
     glm::mat4 create_projection_matrix();
     glm::mat4 get_view_projection_matrix();

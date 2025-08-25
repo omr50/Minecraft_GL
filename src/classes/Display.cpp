@@ -85,6 +85,7 @@ void Display::main_loop()
     {
         // printf("got to this point?\n");
         this->event_handler->event_handler();
+        camera->camera_move();
         // renderer.render_blocks();
         // printf("WORKING?!!!!!!!!!!!!!!!!!!!!!\n");
 
