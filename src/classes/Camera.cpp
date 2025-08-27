@@ -17,6 +17,7 @@ void Camera::update_camera_position(glm::vec3 direction)
 
     if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
     {
+        printf("Start move!\n");
         start_move_time = Clock::now();
         last_move_time = start_move_time;
     }
@@ -38,8 +39,10 @@ void Camera::update_camera_position(glm::vec3 direction)
 
 void Camera::camera_move()
 {
+    printf("Velocity: (%f, %f, %f)\n", velocity.x, velocity.y, velocity.z);
     if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
     {
+        printf("cancel?\n");
         return;
     }
 
@@ -48,7 +51,7 @@ void Camera::camera_move()
     std::chrono::duration<float, std::milli> delta_ms = now - last_move_time;
     last_move_time = now;
     float delta_time_seconds = delta_ms.count() / 1000.0f;
-    float speed = 10.0f;
+    float speed = 5.0f;
     if (velocity.x)
         position.x += velocity.x * delta_time_seconds * speed;
     if (velocity.y)
@@ -57,9 +60,9 @@ void Camera::camera_move()
         position.z += velocity.z * delta_time_seconds * speed;
 
     std::chrono::duration<float, std::milli> since_start_time_ms = now - start_move_time;
-    if (since_start_time_ms.count() > 150)
+    if (since_start_time_ms.count() > 1000)
     {
-        velocity = (glm::vec3){0, 0, 0};
+        velocity = (glm::vec3){0.0f, 0.0f, 0.0f};
     }
 }
 
