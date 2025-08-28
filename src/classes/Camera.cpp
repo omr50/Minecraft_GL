@@ -15,11 +15,23 @@ void Camera::update_camera_position(glm::vec3 direction)
     glm::mat4 camera_rotation_matrix = glm::yawPitchRoll(yaw, pitch, roll);
     float speed = 2;
 
-    if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
+    if (direction.x == 0.0f && direction.y == 0.0f && direction.z == 0.0f)
+    {
+        velocity = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 0.0)) * speed;
+    }
+    else if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
     {
         printf("Start move!\n");
         start_move_time = Clock::now();
         last_move_time = start_move_time;
+    }
+
+    std::chrono::duration<float, std::milli> delta_ms = Clock::now() - last_move_time;
+    float delta_time_seconds = delta_ms.count() / 1000.0f;
+    if (delta_time_seconds > 1)
+    {
+        printf("Set to 0\n");
+        velocity = (glm::vec3){0.0f, 0.0f, 0.0f};
     }
     velocity = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 0.0)) * speed;
     // if (direction.x || direction.z)
@@ -59,11 +71,7 @@ void Camera::camera_move()
     if (velocity.z)
         position.z += velocity.z * delta_time_seconds * speed;
 
-    std::chrono::duration<float, std::milli> since_start_time_ms = now - start_move_time;
-    if (since_start_time_ms.count() > 1000)
-    {
-        velocity = (glm::vec3){0.0f, 0.0f, 0.0f};
-    }
+    // std::chrono::duration<float, std::milli> since_last_time_ms = now - start_move_time;
 }
 
 glm::mat4 Camera::create_view_matrix()

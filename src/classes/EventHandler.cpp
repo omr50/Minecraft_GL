@@ -112,6 +112,8 @@ void EventHandler::mouse_movement_handler()
         SDL_WarpMouseInWindow(window, width_center, height_center);
         software_mouse_move_event = true;
     }
+
+    camera->update_camera_position((glm::vec3){0, 0, 0});
 }
 
 void EventHandler::window_event_handler()
