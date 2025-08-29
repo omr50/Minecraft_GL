@@ -18,11 +18,13 @@ void Camera::update_camera_position(glm::vec3 direction)
     if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
     {
         printf("Start move!\n");
-        start_move_time = Clock::now();
+        stop_move_time = Clock::now();
     }
 
     last_move_time = Clock::now();
     velocity = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 0.0)) * speed;
+    keyboard_move = true;
+    stop_set = false;
     // if (direction.x || direction.z)
     // {
 
@@ -40,7 +42,13 @@ void Camera::camera_move()
 {
     printf("Velocity: (%f, %f, %f)\n", velocity.x, velocity.y, velocity.z);
 
-    std::chrono::duration<float, std::milli> difference_ms = start_move_time - last_move_time;
+    if (!keyboard_move && !stop_set)
+    {
+        stop_move_time = Clock::now();
+        stop_set = true;
+    }
+
+    std::chrono::duration<float, std::milli> difference_ms = Clock::now() - stop_move_time;
     if (difference_ms.count() > 1000)
     {
         printf("Set to 0\n");
@@ -52,7 +60,6 @@ void Camera::camera_move()
         printf("cancel?\n");
         return;
     }
-
     moved = true;
     auto now = Clock::now();
     std::chrono::duration<float, std::milli> delta_ms = now - last_move_time;

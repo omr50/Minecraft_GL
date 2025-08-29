@@ -28,9 +28,10 @@ public:
     glm::vec3 velocity = {0.0, 0.0, 0.0};
     bool moved = true;
     bool keyboard_move;
+    bool stop_set;
     std::pair<int, int> prev_chunk;
     std::pair<int, int> curr_chunk;
-    std::chrono::_V2::system_clock::time_point start_move_time = Clock::now();
+    std::chrono::_V2::system_clock::time_point stop_move_time = Clock::now();
     std::chrono::_V2::system_clock::time_point last_move_time = Clock::now();
 
     Camera();
