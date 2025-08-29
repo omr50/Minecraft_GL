@@ -113,7 +113,7 @@ void EventHandler::mouse_movement_handler()
         software_mouse_move_event = true;
     }
 
-    camera->update_camera_position((glm::vec3){0, 0, 0});
+    // camera->update_camera_position((glm::vec3){0, 0, 0});
 }
 
 void EventHandler::window_event_handler()
