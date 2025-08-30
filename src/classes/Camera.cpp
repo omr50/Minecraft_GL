@@ -53,6 +53,7 @@ void Camera::camera_move()
     {
         printf("Set to 0\n");
         velocity = (glm::vec3){0.0f, 0.0f, 0.0f};
+        stop_set = false;
     }
 
     if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
@@ -76,6 +77,7 @@ void Camera::camera_move()
     // std::chrono::duration<float, std::milli> since_last_time_ms = now - start_move_time;
     prev_chunk = curr_chunk;
     curr_chunk = get_chunk();
+    keyboard_move = false;
 }
 
 glm::mat4 Camera::create_view_matrix()
