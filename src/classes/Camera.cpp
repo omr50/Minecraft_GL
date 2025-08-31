@@ -3,6 +3,7 @@
 #include "../../include/Chunk.hpp"
 #include "../../include/Cube.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/norm.hpp>
 
 Camera::Camera()
 {
@@ -12,35 +13,43 @@ Camera::Camera()
 
 void Camera::update_camera_position(glm::vec3 direction)
 {
-    glm::mat4 camera_rotation_matrix = glm::yawPitchRoll(yaw, pitch, roll);
-    float speed = 2;
+    // direction is from keys, e.g. (-1,0,0), (0,0,-1), combos allowed
+    // Ignore pitch for movement (Minecraft walk/creative)
 
     if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
     {
-        printf("Start move!\n");
+        // printf("Start move!\n");
         stop_move_time = Clock::now();
+        last_move_time = stop_move_time;
     }
 
-    last_move_time = Clock::now();
-    velocity = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 0.0)) * speed;
-    keyboard_move = true;
-    stop_set = false;
-    // if (direction.x || direction.z)
-    // {
+    glm::mat4 R = glm::yawPitchRoll(yaw, 0.0f, 0.0f);
 
-    //     position.x += translation_amount.x;
-    //     position.z += translation_amount.z;
-    // }
-    // if (direction.y)
-    //     position.y += (speed * direction.y);
+    // Normalize only XZ so diagonals aren't faster
+    glm::vec3 dirXZ(direction.x, 0.0f, direction.z);
+    if (glm::length2(dirXZ) > 0.0f)
+        dirXZ = glm::normalize(dirXZ);
 
-    // update chunk to be able to find the direction move
-    // to later realize which
+    // Rotate to world and apply ONE speed here (units/sec)
+    glm::vec3 wish = glm::vec3(R * glm::vec4(dirXZ, 0.0f));
+    float move_speed = 7.0f; // horizontal speed
+    velocity.x = wish.x * move_speed;
+    velocity.z = wish.z * move_speed;
+
+    // Vertical is independent (no diagonal boost with XZ)
+    float vertical_speed = 7.0f;
+    velocity.y = direction.y * vertical_speed; // Space=+1, Shift=-1, else 0
+    // glm::mat4 camera_rotation_matrix = glm::yawPitchRoll(yaw, 0.0f, roll);
+    // float speed = 7;
+    // // last_move_time = Clock::now();
+    // velocity = glm::vec3(camera_rotation_matrix * glm::vec4(direction, 0.0)) * speed;
+    // keyboard_move = true;
+    // stop_set = false;
 }
 
 void Camera::camera_move()
 {
-    printf("Velocity: (%f, %f, %f)\n", velocity.x, velocity.y, velocity.z);
+    // printf("Velocity: (%f, %f, %f)\n", velocity.x, velocity.y, velocity.z);
 
     if (!keyboard_move && !stop_set)
     {
@@ -48,17 +57,17 @@ void Camera::camera_move()
         stop_set = true;
     }
 
-    std::chrono::duration<float, std::milli> difference_ms = Clock::now() - stop_move_time;
-    if (difference_ms.count() > 1000)
-    {
-        printf("Set to 0\n");
-        velocity = (glm::vec3){0.0f, 0.0f, 0.0f};
-        stop_set = false;
-    }
+    // std::chrono::duration<float, std::milli> difference_ms = Clock::now() - stop_move_time;
+    // if (difference_ms.count() > 1000)
+    // {
+    //     // printf("Set to 0\n");
+    //     velocity = (glm::vec3){0.0f, 0.0f, 0.0f};
+    //     stop_set = false;
+    // }
 
     if (velocity.x == 0.0f && velocity.y == 0.0f && velocity.z == 0.0f)
     {
-        printf("cancel?\n");
+        // printf("cancel?\n");
         return;
     }
     moved = true;
@@ -66,7 +75,7 @@ void Camera::camera_move()
     std::chrono::duration<float, std::milli> delta_ms = now - last_move_time;
     last_move_time = now;
     float delta_time_seconds = delta_ms.count() / 1000.0f;
-    float speed = 5.0f;
+    float speed = 1.0f;
     if (velocity.x)
         position.x += velocity.x * delta_time_seconds * speed;
     if (velocity.y)

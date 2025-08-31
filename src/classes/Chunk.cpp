@@ -303,7 +303,6 @@ void Chunk::get_mesh_vertices()
         return;
     if (!clean_mesh || !clean_terrain || !initialized)
         return;
-    // printf("update working?\n");
     mesh_vertices.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)
@@ -326,7 +325,7 @@ void Chunk::get_mesh_vertices()
                     // glActiveTexture(GL_TEXTURE0);
                     // Decide which texture to use (top, bottom, sides) based on face index:
                     auto offsets_to_use = (face == 5) ? face_textures[0] : // top face
-                                              (face == 4) ? face_textures[1]
+                                              (face == 4) ? face_textures[2]
                                                           :     // Top face
                                               face_textures[1]; // Other sides
 

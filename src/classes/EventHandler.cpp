@@ -21,16 +21,44 @@ void EventHandler::event_handler()
         {
             mouse_movement_handler();
         }
-        else if (e.type == SDL_MOUSEBUTTONDOWN)
-        {
-            mouse_click_handler();
-        }
+        // else if (e.type == SDL_MOUSEBUTTONDOWN)
+        // {
+        //     mouse_click_handler();
+        // }
         // later these events may be split into more distinct functions
         else if (e.type == SDL_WINDOWEVENT)
         {
             window_event_handler();
         }
     }
+
+    const Uint8 *ks = SDL_GetKeyboardState(nullptr);
+    glm::vec3 dir(0.0f);
+    if (ks[SDL_SCANCODE_W])
+        dir.z -= 1.0f;
+    if (ks[SDL_SCANCODE_S])
+        dir.z += 1.0f;
+    if (ks[SDL_SCANCODE_A])
+        dir.x -= 1.0f;
+    if (ks[SDL_SCANCODE_D])
+        dir.x += 1.0f;
+    if (ks[SDL_SCANCODE_SPACE])
+        dir.y += 1.0f;
+    if (ks[SDL_SCANCODE_LSHIFT])
+        dir.y -= 1.0f;
+
+    int mx, my;
+    if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT))
+    {
+        mouse_click_handler(false);
+    }
+
+    else if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_RIGHT))
+    {
+        mouse_click_handler(true);
+    }
+
+    camera->update_camera_position(dir);
 
     if (!moved)
     {
@@ -40,52 +68,61 @@ void EventHandler::event_handler()
 
 void EventHandler::keyboard_handler()
 {
-    glm::vec3 direction_vector = {0.0, 0.0, 0.0};
+    // if (key == SDLK_w)
+    // {
+    //     direction_vector = {0.0, 0.0, -1.0};
+    // }
+    // else if (key == SDLK_s)
+    // {
+    //     direction_vector = {0.0, 0.0, 1.0};
+    // }
+    // else if (key == SDLK_a)
+    // {
+    //     direction_vector = {-1.0, 0.0, 0.0};
+    // }
+    // else if (key == SDLK_d)
+    // {
+    //     direction_vector = {1.0, 0.0, 0.0};
+    // }
+    // else if (key == SDLK_SPACE)
+    // {
+    //     direction_vector = {0.0, 1.0, 0.0};
+    // }
+    // else if (key == SDLK_LSHIFT)
+    // {
+    //     direction_vector = {0.0, -1.0, 0.0};
+    // }
+
     auto key = e.key.keysym.sym;
-    if (key == SDLK_w)
-    {
-        direction_vector = {0.0, 0.0, -1.0};
-    }
-    else if (key == SDLK_s)
-    {
-        direction_vector = {0.0, 0.0, 1.0};
-    }
-    else if (key == SDLK_a)
-    {
-        direction_vector = {-1.0, 0.0, 0.0};
-    }
-    else if (key == SDLK_d)
-    {
-        direction_vector = {1.0, 0.0, 0.0};
-    }
-    else if (key == SDLK_SPACE)
-    {
-        direction_vector = {0.0, 1.0, 0.0};
-    }
-    else if (key == SDLK_LSHIFT)
-    {
-        direction_vector = {0.0, -1.0, 0.0};
-    }
-    else if (key == SDLK_ESCAPE)
+
+    if (key == SDLK_ESCAPE)
     {
         centered = false;
     }
-    else if (key == SDLK_x)
+    if (key == SDLK_x)
     {
         centered = true;
     }
-    camera->update_camera_position(direction_vector);
 }
 
-void EventHandler::mouse_click_handler()
+void EventHandler::mouse_click_handler(bool place)
 {
-    if (e.button.button == SDL_BUTTON_LEFT)
+    auto now = Clock::now();
+    auto difference = (place) ? 200 : 300;
+    std::chrono::duration<float, std::milli> difference_ms = now - last_click;
+
+    if (difference_ms.count() > difference)
     {
-        camera->raycast_block(renderer->terrain, &LineRenderer::points);
-    }
-    else if (e.button.button == SDL_BUTTON_RIGHT)
-    {
-        camera->place_block(renderer->terrain, &LineRenderer::points);
+        last_click = now;
+        if (!place)
+        {
+            camera->raycast_block(renderer->terrain, &LineRenderer::points);
+        }
+
+        else
+        {
+            camera->place_block(renderer->terrain, &LineRenderer::points);
+        }
     }
 }
 

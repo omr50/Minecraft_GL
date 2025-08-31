@@ -45,7 +45,7 @@ public:
     bool generated_vertices = false;
     bool sent_mesh = false;
     bool enqueued = false;
-    bool enqueued_mesh_creation = true;
+    bool enqueued_mesh_creation = false;
     bool rendered = false;
     std::mutex chunk_mutex;
 

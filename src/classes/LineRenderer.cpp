@@ -9,7 +9,7 @@ LineRenderer::LineRenderer()
     gLineProg = shader->shader_program;
     initLineRenderer();
 }
-
+//
 void LineRenderer::initLineRenderer()
 {
     // VAO/VBO

@@ -79,6 +79,13 @@ void Display::main_loop()
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     glUseProgram(Cube::shader_program);
 
+    // set up for the chunks after the texture map has loaded.
+    for (int i = 0; i < NUM_CHUNKS; i++)
+    {
+        renderer->terrain->create_chunk_mesh(&renderer->terrain->chunks[i]);
+        renderer->terrain->chunks[i].update_chunk();
+    }
+
     auto time_start = std::chrono::high_resolution_clock::now();
     int fps = 0;
     while (running)

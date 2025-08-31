@@ -1,0 +1,2 @@
+- Create a clear module/interface for converting between world, chunk, cube, and camera coordinates
+    - it should be easy to convert between all in a way that makes bugs less likely

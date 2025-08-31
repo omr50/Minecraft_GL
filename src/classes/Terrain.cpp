@@ -20,14 +20,10 @@ Terrain::Terrain(Camera *camera) : camera(camera)
         chunks[i].initialize_vertex_buffers_and_array();
         chunks[i].initialize_cubes();
         chunks[i].generate_terrain();
+        // create_chunk_mesh(&chunks[i]); // compute which faces are visible
+        // chunks[i].update_chunk();
         // chunks[i].update_chunk();
         // enqueue_update_task(&chunks[i]);
-    }
-
-    for (int i = 0; i < NUM_CHUNKS; i++)
-    {
-        create_chunk_mesh(&chunks[i]);
-        chunks[i].update_chunk();
     }
 }
 /*
