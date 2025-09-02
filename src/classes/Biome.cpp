@@ -86,6 +86,7 @@ int Biome::get_height(glm::vec2 xz)
     float ridge = ridge01 * 2.0f - 1.0f;                       // [-1,1]
     float shaped = glm::mix(detail, ridge, std::pow(biome_distrib.mountains, 0.8f));
 
+    // octaves created so that it is less sinusoidal
     for (int i = 0; i < OCT; ++i)
     {
         detail += layer_amp * glm::perlin(pw * freq); // perlin in [-1,1]
