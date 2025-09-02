@@ -16,16 +16,16 @@ enum BIOME
 #define MOUNTAINS_BASE 90
 
 #define DESERT_AMP 6
-#define PLAINS_AMP 10
+#define PLAINS_AMP 5
 #define FOREST_AMP 14
-#define MOUNTAINS_AMP 40
+#define MOUNTAINS_AMP 80
 
 #define DESERT_ROUGH 0.40
 #define PLAINS_ROUGH 0.45
 #define FOREST_ROUGH 0.50
 #define MOUNTAINS_ROUGH 0.65
 
-#define TM_PERIOD 100.0f
+#define TM_PERIOD 1000.0f
 
 #define DESERT_CENTERX 0.85
 #define DESERT_CENTERY 0.20

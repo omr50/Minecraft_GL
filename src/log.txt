@@ -1,8 +1,8 @@
 chunk 1: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -99,9 +99,9 @@ is enqueued = 0
 
 chunk 12: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -135,9 +135,9 @@ is enqueued = 0
 
 chunk 16: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -153,27 +153,27 @@ is enqueued = 0
 
 chunk 18: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 19: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 20: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -198,9 +198,9 @@ is enqueued = 0
 
 chunk 23: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -225,9 +225,9 @@ is enqueued = 0
 
 chunk 26: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -243,9 +243,9 @@ is enqueued = 0
 
 chunk 28: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -270,9 +270,9 @@ is enqueued = 0
 
 chunk 31: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -288,9 +288,9 @@ is enqueued = 0
 
 chunk 33: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -306,18 +306,18 @@ is enqueued = 0
 
 chunk 35: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 36: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -342,9 +342,9 @@ is enqueued = 0
 
 chunk 39: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -369,18 +369,18 @@ is enqueued = 0
 
 chunk 42: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 43: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -396,18 +396,18 @@ is enqueued = 0
 
 chunk 45: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 46: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -423,9 +423,9 @@ is enqueued = 0
 
 chunk 48: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -441,9 +441,9 @@ is enqueued = 0
 
 chunk 50: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -468,27 +468,27 @@ is enqueued = 0
 
 chunk 53: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 54: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 55: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -540,9 +540,9 @@ is enqueued = 0
 
 chunk 61: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -675,9 +675,9 @@ is enqueued = 0
 
 chunk 76: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -765,18 +765,18 @@ is enqueued = 0
 
 chunk 86: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 87: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -873,9 +873,9 @@ is enqueued = 0
 
 chunk 98: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -900,9 +900,9 @@ is enqueued = 0
 
 chunk 101: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1044,9 +1044,9 @@ is enqueued = 0
 
 chunk 117: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1125,9 +1125,9 @@ is enqueued = 0
 
 chunk 126: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1170,9 +1170,9 @@ is enqueued = 0
 
 chunk 131: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1368,9 +1368,9 @@ is enqueued = 0
 
 chunk 153: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1395,9 +1395,9 @@ is enqueued = 0
 
 chunk 156: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1449,18 +1449,18 @@ is enqueued = 0
 
 chunk 162: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 163: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1485,18 +1485,18 @@ is enqueued = 0
 
 chunk 166: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 167: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1629,18 +1629,18 @@ is enqueued = 0
 
 chunk 182: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
 
 chunk 183: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1719,9 +1719,9 @@ is enqueued = 0
 
 chunk 192: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1746,9 +1746,9 @@ is enqueued = 0
 
 chunk 195: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1836,9 +1836,9 @@ is enqueued = 0
 
 chunk 205: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -1971,9 +1971,9 @@ is enqueued = 0
 
 chunk 220: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 
@@ -2007,9 +2007,9 @@ is enqueued = 0
 
 chunk 224: is initialized = 1
 clean terrain = 1
-clean_mesh = 1
-generated vertices = 1
-is enqueued = 0
+clean_mesh = 0
+generated vertices = 0
+is enqueued = 1
 
 
 

@@ -136,7 +136,7 @@ void Chunk::generate_plains(int x, int y, int z, float chunk_x, float chunk_z, i
     else if (y > height - 3 && y < height)
     {
 
-        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "dirt");
     }
     else
     {
