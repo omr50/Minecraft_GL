@@ -28,6 +28,7 @@ public:
     glm::vec3 velocity = {0.0, 0.0, 0.0};
     bool moved = true;
     bool keyboard_move;
+    float move_speed = 7.0f;
     bool stop_set;
     std::pair<int, int> prev_chunk;
     std::pair<int, int> curr_chunk;

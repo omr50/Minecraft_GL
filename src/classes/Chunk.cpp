@@ -17,7 +17,7 @@ Chunk::Chunk(int x, int y)
     generate_terrain();
 }
 
-CHUNK_ZONE Chunk::get_chunk_zone()
+BIOME Chunk::get_chunk_zone()
 {
     // 0 = desert
     // 1 = forest
@@ -25,27 +25,29 @@ CHUNK_ZONE Chunk::get_chunk_zone()
     // 3 = mountains
     float global_x = chunk_coordinates.first * X;
     float global_z = chunk_coordinates.second * Z;
-    float biomeFrequency = 0.002f;
-    float noise = glm::perlin(glm::vec2(global_x, global_z) * biomeFrequency);
-    // Normalize from [-1, 1] to [0, 1]:
-    float biomeFactor = (noise + 1.0f) / 2.0f;
+    // float biomeFrequency = 0.002f;
+    // float noise = glm::perlin(glm::vec2(global_x, global_z) * biomeFrequency);
+    // // Normalize from [-1, 1] to [0, 1]:
+    // float biomeFactor = (noise + 1.0f) / 2.0f;
 
-    if (biomeFactor >= 0 && biomeFactor <= 0.25)
-    {
-        return DESERT;
-    }
-    else if (biomeFactor > 0.25 && biomeFactor <= 0.5)
-    {
-        return PLAINS;
-    }
-    else if (biomeFactor > 0.5 && biomeFactor <= 0.75)
-    {
-        return FOREST;
-    }
-    else
-    {
-        return MOUNTAINS;
-    }
+    // if (biomeFactor >= 0 && biomeFactor <= 0.25)
+    // {
+    //     return DESERT;
+    // }
+    // else if (biomeFactor > 0.25 && biomeFactor <= 0.5)
+    // {
+    //     return PLAINS;
+    // }
+    // else if (biomeFactor > 0.5 && biomeFactor <= 0.75)
+    // {
+    //     return FOREST;
+    // }
+    // else
+    // {
+    //     return MOUNTAINS;
+    // }
+
+    return Biome::get_biome((glm::vec2){global_x, global_z});
 }
 // Function to get a deterministic pseudo-random number from coordinates
 int deterministic_biased_random(int x, int y, int min, int max, double power)
@@ -64,7 +66,9 @@ int deterministic_biased_random(int x, int y, int min, int max, double power)
 
 void Chunk::generate_biome_terrain(int x, int z)
 {
-    CHUNK_ZONE zone = get_chunk_zone();
+    float wx = get_cube_x(x);
+    float wz = get_cube_z(z);
+    glm::vec2 p(wx, wz);
     // printf("got chunk zone!\n");
     // get y value that will be used for
     // the height, if y < height, stone
@@ -73,10 +77,11 @@ void Chunk::generate_biome_terrain(int x, int z)
     // printf("%f, %f\n", chunk_x, chunk_z);
     // min block height added so that total can be from 0 to 255.
     auto zone_bias = get_zone_bias();
-    float height = MIN_BLOCK_HEIGHT + generateHeight(chunk_x, chunk_z, 0.1, zone_bias);
+    float height = Biome::get_height(p);
     // printf("Block height %f\n", height);
     // printf("height is %f\n", height);
 
+    BIOME zone = Biome::get_biome(p);
     for (int y = 0; y < Y; y++)
     {
         if (zone == FOREST)
@@ -150,7 +155,7 @@ void Chunk::generate_forest(int x, int y, int z, float chunk_x, float chunk_z, i
     else if (y > height - 3 && y < height)
     {
 
-        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "wooden_plank");
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "grass");
     }
     else
     {
@@ -180,7 +185,7 @@ void Chunk::generate_mountains(int x, int y, int z, float chunk_x, float chunk_z
 
 int Chunk::get_zone_bias()
 {
-    CHUNK_ZONE zone = get_chunk_zone();
+    BIOME zone = get_chunk_zone();
     int bias;
     if (zone == DESERT)
     {
@@ -203,7 +208,7 @@ int Chunk::get_zone_bias()
 
 float Chunk::generateHeight(float x, float z, float scale, float heightMultiplier)
 {
-    CHUNK_ZONE zone = get_chunk_zone();
+    BIOME zone = get_chunk_zone();
     float frequency = 1;
     float amplitude = 1;
     if (zone == MOUNTAINS)
@@ -262,7 +267,7 @@ void Chunk::initialize_cubes()
 void Chunk::generate_terrain()
 {
     // printf("Generating terrain!\n");
-    CHUNK_ZONE zone = get_chunk_zone();
+    BIOME zone = get_chunk_zone();
     // initialize all cubes
     for (int x = 0; x < X; x++)
     {

@@ -1,6 +1,7 @@
 #pragma once
 #include "../include/Cube.hpp"
 #include "../include/Renderable.hpp"
+#include "../include/Biome.hpp"
 #include <glm/gtc/noise.hpp>
 #include <vector>
 #include <mutex>
@@ -20,13 +21,13 @@ struct Vertex
     float v;
 };
 
-enum CHUNK_ZONE
-{
-    DESERT = 0,
-    FOREST = 1,
-    PLAINS = 2,
-    MOUNTAINS = 3
-};
+// enum CHUNK_ZONE
+// {
+//     DESERT = 0,
+//     FOREST = 1,
+//     PLAINS = 2,
+//     MOUNTAINS = 3
+// };
 
 class Chunk
 {
@@ -52,7 +53,7 @@ public:
     Chunk();
     Chunk(int x, int y);
     float generateHeight(float x, float z, float scale, float heightMultiplier);
-    CHUNK_ZONE get_chunk_zone();
+    BIOME get_chunk_zone();
     int get_zone_bias();
     void generate_biome_terrain(int x, int z);
     void generate_desert(int x, int y, int z, float chunk_x, float chunk_z, int height);

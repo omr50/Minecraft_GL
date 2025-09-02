@@ -32,7 +32,6 @@ void Camera::update_camera_position(glm::vec3 direction)
 
     // Rotate to world and apply ONE speed here (units/sec)
     glm::vec3 wish = glm::vec3(R * glm::vec4(dirXZ, 0.0f));
-    float move_speed = 7.0f; // horizontal speed
     velocity.x = wish.x * move_speed;
     velocity.z = wish.z * move_speed;
 
@@ -177,7 +176,7 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
 
     auto ray_pos = position;
 
-    for (float i = 0; i < 100; i += 0.001)
+    for (float i = 0; i < 15; i += 0.001)
     {
         auto ray_coord = ray_pos + look_direction * i;
         // (0.5 added because blocks are centered)
@@ -231,7 +230,7 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
 
     auto ray_pos = position;
 
-    for (float i = 0; i < 100; i += 0.001)
+    for (float i = 0; i < 15; i += 0.001)
     {
         auto ray_coord = ray_pos + look_direction * i;
         // (0.5 added because blocks are centered)

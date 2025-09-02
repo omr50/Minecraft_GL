@@ -12,7 +12,7 @@ void EventHandler::event_handler()
     // bool moved = false;
     while (SDL_PollEvent(&e))
     {
-        if (e.type == SDL_KEYDOWN)
+        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
         {
             moved = true;
             keyboard_handler();
@@ -103,6 +103,13 @@ void EventHandler::keyboard_handler()
     {
         centered = true;
     }
+    if (key == SDLK_LCTRL)
+    {
+        if (e.type == SDL_KEYDOWN)
+            camera->move_speed = 25.0f;
+        else
+            camera->move_speed = 8.0f;
+    }
 }
 
 void EventHandler::mouse_click_handler(bool place)
@@ -117,11 +124,13 @@ void EventHandler::mouse_click_handler(bool place)
         if (!place)
         {
             camera->raycast_block(renderer->terrain, &LineRenderer::points);
+            printf("Place block!\n");
         }
 
         else
         {
             camera->place_block(renderer->terrain, &LineRenderer::points);
+            printf("Remove block!\n");
         }
     }
 }
