@@ -72,29 +72,20 @@ int Biome::get_height(glm::vec2 xz)
     float layer_amp = 1.0f;     // internal octave amplitude
     float freq = 1.0f / 120.0f; // base frequency (feature size 120 blocks)
 
-    const int OCT = 4; // 4 layers
+    const int OCT = 15; // 4 layers
+    for (int i = 0; i < OCT; ++i)
+    {
+        detail += layer_amp * glm::perlin(xz * freq); // perlin in [-1,1]
+        freq *= lacunarity;                           // features 2x smaller each octave
+        layer_amp *= gain;                            // each octave contributes less
+    }
+
     // Normalize fBm to roughly [-1,1]
     // max_sum ~= 1 + gain + gain^2 + ... + gain^(OCT-1)
     float max_sum = (1.0f - std::pow(gain, OCT)) / (1.0f - gain);
     detail /= max_sum;
 
-    glm::vec2 q(glm::perlin(xz / 800.0f + glm::vec2(5.2f, 1.3f)),
-                glm::perlin(xz / 800.0f + glm::vec2(-3.7f, 2.1f)));
-    glm::vec2 pw = xz + 25.0f * q;
-
-    float ridge01 = 1.0f - std::abs(glm::perlin(xz / 120.0f)); // [0,1]
-    float ridge = ridge01 * 2.0f - 1.0f;                       // [-1,1]
-    float shaped = glm::mix(detail, ridge, std::pow(biome_distrib.mountains, 0.8f));
-
-    // octaves created so that it is less sinusoidal
-    for (int i = 0; i < OCT; ++i)
-    {
-        detail += layer_amp * glm::perlin(pw * freq); // perlin in [-1,1]
-        freq *= lacunarity;                           // features 2x smaller each octave
-        layer_amp *= gain;                            // each octave contributes less
-    }
-
-    float h = base + amp_biome * shaped * detail + 30.0f * macro;
+    float h = base + amp_biome * detail + 30.0f * macro;
     return (int)std::floor(h);
 }
 
