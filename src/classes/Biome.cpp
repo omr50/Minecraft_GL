@@ -72,7 +72,7 @@ int Biome::get_height(glm::vec2 xz)
     float layer_amp = 1.0f;     // internal octave amplitude
     float freq = 1.0f / 120.0f; // base frequency (feature size 120 blocks)
 
-    const int OCT = 15; // 4 layers
+    const int OCT = 4; // 4 layers
     for (int i = 0; i < OCT; ++i)
     {
         detail += layer_amp * glm::perlin(xz * freq); // perlin in [-1,1]
