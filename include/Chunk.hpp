@@ -49,6 +49,7 @@ public:
     bool enqueued_mesh_creation = false;
     bool rendered = false;
     std::mutex chunk_mutex;
+    std::vector<int> heightMap;
 
     Chunk();
     Chunk(int x, int y);

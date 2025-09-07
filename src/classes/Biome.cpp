@@ -4,11 +4,24 @@ static int base[4] = {DESERT_BASE, PLAINS_BASE, FOREST_BASE, MOUNTAINS_BASE};
 
 BIOME_DISTRIBUTION Biome::get_biome_distribution(glm::vec2 xz)
 {
-    float T = glm::perlin(xz / TM_PERIOD);
-    T = 0.5f * (T + 1.0f);
+    // float T = glm::perlin(xz / TM_PERIOD);
+    // T = 0.5f * (T + 1.0f);
 
-    glm::vec2 xzM = (xz + glm::vec2(1000.0f, -1000.0f)) / TM_PERIOD;
-    float M = 0.5f * (glm::perlin(xzM) + 1.0f);
+    // glm::vec2 xzM = (xz + glm::vec2(1000.0f, -1000.0f)) / TM_PERIOD;
+    // float M = 0.5f * (glm::perlin(xzM) + 1.0f);
+
+    glm::vec2 q(glm::perlin(xz / 900.0f + glm::vec2(5.2f, 1.3f)),
+                glm::perlin(xz / 900.0f + glm::vec2(-3.7f, 2.1f)));
+    glm::vec2 xzB = xz + 40.0f * q; // small bend of the climate space
+
+    float T = 0.5f * (glm::perlin(xzB / TM_PERIOD) + 1.0f);
+    float M = 0.5f * (glm::perlin((xzB + glm::vec2(1000, -1000)) / TM_PERIOD) + 1.0f);
+
+    // small jitter still ok:
+    T += 0.05f * glm::perlin(xz / 150.0f);
+    M += 0.05f * glm::perlin(xz / 180.0f + 100.0f);
+    T = glm::clamp(T, 0.0f, 1.0f);
+    M = glm::clamp(M, 0.0f, 1.0f);
 
     auto gaussian = [](float d, float sigma)
     {
@@ -19,7 +32,10 @@ BIOME_DISTRIBUTION Biome::get_biome_distribution(glm::vec2 xz)
     glm::vec2 plainsC(PLAINS_CENTERX, PLAINS_CENTERY);
     glm::vec2 forestC(FOREST_CENTERX, FOREST_CENTERY);
 
-    float sigma = 0.10f;
+    float sigma = 0.20f;
+
+    // auto T2 = T + 0.05 * perlin(xz / 150.0f); // small amplitude
+    // auto M2 = M + 0.05 * perlin(xz / 180.0f + 100.0f);
     glm::vec2 tm(T, M);
 
     float sDesert = gaussian(glm::distance(tm, desertC), sigma);
@@ -28,8 +44,21 @@ BIOME_DISTRIBUTION Biome::get_biome_distribution(glm::vec2 xz)
 
     float sForest = gaussian(glm::distance(tm, forestC), sigma);
 
-    float E = 0.5f * (glm::perlin(xz / 1000.0f) + 1.0f);
+    // float E = 0.5f * (glm::perlin(xz / 1000.0f) + 1.0f);
+    float E = 0.5f * (glm::perlin(xz / 1200.0f) + 1.0f); // mountain mask scale
+    float mLow = glm::smoothstep(0.45f, 0.60f, E);       // foothills
+    float mHigh = glm::smoothstep(0.70f, 0.85f, E);      // peaks
+    float mFoot = glm::max(mLow - mHigh, 0.0f);
+
+    // penalize plains where foothills present; slightly boost forest there
+    sPlains *= (1.0f - 0.7f * mFoot);
+    sForest *= (1.0f + 0.3f * mFoot);
     float sMtn = glm::smoothstep(MOUNTAINS_CENTERX, MOUNTAINS_CENTERY, E);
+
+    sDesert *= 1.30f;
+    sForest *= 1.20f;
+    sPlains *= 0.90f;
+    sMtn *= 0.90f;
 
     float sum = sDesert + sPlains + sForest + sMtn + 1e-6f;
     float wDesert = sDesert / sum;

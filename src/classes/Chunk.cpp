@@ -1,7 +1,9 @@
 #include "../../include/Chunk.hpp"
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 #include <cstdlib>
+#include <unordered_set>
 
 Chunk::Chunk()
 {
@@ -64,47 +66,235 @@ int deterministic_biased_random(int x, int y, int min, int max, double power)
     return result;
 }
 
+inline float weight_of(const BIOME_DISTRIBUTION &w, BIOME b)
+{
+    switch (b)
+    {
+    case DESERT:
+        return w.desert;
+    case PLAINS:
+        return w.plains;
+    case FOREST:
+        return w.forest;
+    case MOUNTAINS:
+        return w.mountains;
+    }
+    return 0.0f;
+}
+
+inline void top2_biomes(const BIOME_DISTRIBUTION &w, BIOME &b0, BIOME &b1)
+{
+    float vals[NUM_BIOMES] = {w.desert, w.plains, w.forest, w.mountains};
+    int i0 = 0, i1 = 1;
+    if (vals[i1] > vals[i0])
+        std::swap(i0, i1);
+    for (int i = 2; i < NUM_BIOMES; ++i)
+    {
+        if (vals[i] >= vals[i0])
+        {
+            i1 = i0;
+            i0 = i;
+        }
+        else if (vals[i] > vals[i1])
+        {
+            i1 = i;
+        }
+    }
+    b0 = static_cast<BIOME>(i0);
+    b1 = static_cast<BIOME>(i1);
+}
+
+inline float hash01_int(int x, int z)
+{
+    uint32_t h = 2166136261u;
+    h ^= static_cast<uint32_t>(x) + 0x9e3779b9u + (h << 6) + (h >> 2);
+    h ^= static_cast<uint32_t>(z) + 0x85ebca6bu + (h << 6) + (h >> 2);
+    // Final mixing (xorshift-ish)
+    h ^= h >> 16;
+    h *= 0x7feb352dU;
+    h ^= h >> 15;
+    h *= 0x846ca68bU;
+    h ^= h >> 16;
+    return (h) * (1.0f / 4294967296.0f); // [0,1)
+}
+
+inline int H_local(Chunk *chunk, int lx, int lz)
+{
+    // clamp to chunk to avoid out-of-bounds; good enough for slope
+    lx = std::max(0, std::min(X - 1, lx));
+    lz = std::max(0, std::min(Z - 1, lz));
+    return chunk->heightMap[lx * Z + lz];
+}
+
+struct PairHash
+{
+    template <class T1, class T2>
+    std::size_t operator()(const std::pair<T1, T2> &p) const
+    {
+        auto h1 = std::hash<T1>{}(p.first);
+        auto h2 = std::hash<T2>{}(p.second);
+        // Combine hashes (e.g., using boost::hash_combine idea)
+        return h1 ^ (h2 << 1);
+    }
+};
+
+inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int, int>, struct PairHash> &prev_visited, int iteration, Chunk *chunk, bool start = true)
+{
+    if (x < 0 || x >= X || z < 0 || z >= Z || y < 0 || y >= Y)
+        return;
+
+    if (prev_visited.find({x, z}) != prev_visited.end())
+        return;
+
+    prev_visited.insert({x, z});
+
+    float currMult = std::pow(1.15, iteration);
+    auto chunk_x = chunk->get_cube_x(x);
+    auto chunk_z = chunk->get_cube_z(z);
+    auto hash = hash01_int(chunk_x, chunk_z);
+    // printf("hash: %f\n", hash);
+    // function calls should naturally die off as divisor gets bigger.
+    // to give trees that natural look (larger leaves at the bottom, smaller ones on top)
+    if ((2 - currMult - hash / 3) > 0.2)
+    {
+        if (!start)
+        {
+            chunk->blocks[chunk->get_index(x, y, z)].update_state(chunk->get_cube_x(x), y, chunk->get_cube_z(z), "leaf");
+        }
+        if (iteration < 4)
+            iteration++;
+        create_leaves(x + 1, y, z, prev_visited, iteration, chunk, false);
+        create_leaves(x - 1, y, z, prev_visited, iteration, chunk, false);
+        create_leaves(x, y, z + 1, prev_visited, iteration, chunk, false);
+        create_leaves(x, y, z - 1, prev_visited, iteration, chunk, false);
+    }
+}
+
 void Chunk::generate_biome_terrain(int x, int z)
 {
     float wx = get_cube_x(x);
     float wz = get_cube_z(z);
     glm::vec2 p(wx, wz);
-    // printf("got chunk zone!\n");
-    // get y value that will be used for
-    // the height, if y < height, stone
-    // if greater, air.
-    float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
-    // printf("%f, %f\n", chunk_x, chunk_z);
-    // min block height added so that total can be from 0 to 255.
-    auto zone_bias = get_zone_bias();
-    float height = Biome::get_height(p);
-    // printf("Block height %f\n", height);
-    // printf("height is %f\n", height);
 
-    BIOME zone = Biome::get_biome(p);
-    for (int y = 0; y < Y; y++)
+    auto W = Biome::get_biome_distribution(p);
+    BIOME B0, B1;
+    top2_biomes(W, B0, B1);
+    float edge = 1.0f - weight_of(W, B0);
+
+    int Hc = Biome::get_height(p);
+    int Hx1 = Biome::get_height(p + (glm::vec2)(1, 0));
+    int Hx2 = Biome::get_height(p + (glm::vec2)(-1, 0));
+    int Hz1 = Biome::get_height(p + (glm::vec2)(0, 1));
+    int Hz2 = Biome::get_height(p + (glm::vec2)(0, -1));
+    int max_h = Hc - Hx1;
+    max_h = (max_h < abs(Hc - Hx1)) ? abs(Hc - Hx1) : max_h;
+    max_h = (max_h < abs(Hc - Hx2)) ? abs(Hc - Hx2) : max_h;
+    max_h = (max_h < abs(Hc - Hz1)) ? abs(Hc - Hz1) : max_h;
+    max_h = (max_h < abs(Hc - Hz2)) ? abs(Hc - Hz2) : max_h;
+
+    int slope = max_h;
+    int Hmean = (Hx1 + Hx2 + Hz1 + Hz2) / 4;
+    int resid = Hc - Hmean;
+    std::string top;
+    float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
+
+    // slope override
+    if (slope > 2 || resid > 2)
+        top = "stone";
+    else
     {
-        if (zone == FOREST)
+        // edge borrow decision (deterministic)
+        float h = hash01_int(wx, wz);
+        float cluster = 0.5f * (glm::perlin(p / 45.0f) + 1.0f);
+        float borrowP = edge * 0.65f;
+        borrowP = 0.7f * borrowP + 0.3f * (borrowP * cluster);
+        BIOME B = (h < borrowP ? B1 : B0);
+
+        // per-biome surface with a dash of slope
+        switch (B)
         {
-            generate_forest(x, y, z, chunk_x, chunk_z, height);
-            // printf("generated a forest!\n");
+        case PLAINS:
+            top = (slope <= 1 ? "grass" : "stone");
+            break;
+        case FOREST:
+            top = (slope <= 2 ? "grass" : "stone");
+            break;
+        case DESERT:
+            top = (resid < 1 ? "sand" : (slope >= 2 ? "stone" : "sand"));
+            break;
+        case MOUNTAINS:
+            top = (slope >= 2 || resid > 1 ? "stone" : "grass");
+            break;
         }
-        else if (zone == PLAINS)
+
+        if (B == FOREST && h > 0.99)
         {
-            generate_plains(x, y, z, chunk_x, chunk_z, height);
-            // printf("generated a plains!\n");
-        }
-        if (zone == DESERT)
-        {
-            generate_desert(x, y, z, chunk_x, chunk_z, height);
-            // printf("generated a desert!\n");
-        }
-        if (zone == MOUNTAINS)
-        {
-            generate_mountains(x, y, z, chunk_x, chunk_z, height);
-            // printf("generated a mountain!\n");
+            int tree_height = 5 + (int)(h / 0.25);
+            for (int i = 0; i < tree_height; i++)
+            {
+                blocks[get_index(x, Hc + 1 + i, z)].update_state(chunk_x, Hc + 1 + i, chunk_z, "wood");
+            }
+
+            float h2 = hash01_int(h, h);
+
+            std::unordered_set<std::pair<int, int>, PairHash> prev_map;
+            for (int i = tree_height - 1 - round(h2); i < tree_height + 3; i++)
+            {
+                int iteration = i - tree_height + 1 + round(h2);
+                if (i > tree_height)
+                    create_leaves(x, Hc + i, z, prev_map, iteration, this, false);
+                else
+                    create_leaves(x, Hc + i, z, prev_map, iteration, this);
+                prev_map.clear();
+            }
         }
     }
+
+    for (int y = 0; y < Hc - 1; y++)
+    {
+
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
+    }
+    blocks[get_index(x, Hc, z)].update_state(chunk_x, Hc, chunk_z, top);
+
+    // std::vector<int> heightMap; // size X*Z
+
+    // // printf("got chunk zone!\n");
+    // // get y value that will be used for
+    // // the height, if y < height, stone
+    // // if greater, air.
+    // float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
+    // // printf("%f, %f\n", chunk_x, chunk_z);
+    // // min block height added so that total can be from 0 to 255.
+    // auto zone_bias = get_zone_bias();
+    // float height = Biome::get_height(p);
+    // // printf("Block height %f\n", height);
+    // // printf("height is %f\n", height);
+
+    // BIOME zone = Biome::get_biome(p);
+    // for (int y = 0; y < Y; y++)
+    // {
+    //     if (zone == FOREST)
+    //     {
+    //         generate_forest(x, y, z, chunk_x, chunk_z, height);
+    //         // printf("generated a forest!\n");
+    //     }
+    //     else if (zone == PLAINS)
+    //     {
+    //         generate_plains(x, y, z, chunk_x, chunk_z, height);
+    //         // printf("generated a plains!\n");
+    //     }
+    //     if (zone == DESERT)
+    //     {
+    //         generate_desert(x, y, z, chunk_x, chunk_z, height);
+    //         // printf("generated a desert!\n");
+    //     }
+    //     if (zone == MOUNTAINS)
+    //     {
+    //         generate_mountains(x, y, z, chunk_x, chunk_z, height);
+    //         // printf("generated a mountain!\n");
+    //     }
+    // }
 }
 
 void Chunk::generate_desert(int x, int y, int z, float chunk_x, float chunk_z, int height)
@@ -136,7 +326,7 @@ void Chunk::generate_plains(int x, int y, int z, float chunk_x, float chunk_z, i
     else if (y > height - 3 && y < height)
     {
 
-        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "dirt");
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "wooden_plank");
     }
     else
     {
@@ -268,6 +458,17 @@ void Chunk::generate_terrain()
 {
     // printf("Generating terrain!\n");
     BIOME zone = get_chunk_zone();
+    // Fill before you write blocks:
+    heightMap.resize(X * Z);
+    for (int lx = 0; lx < X; ++lx)
+    {
+        for (int lz = 0; lz < Z; ++lz)
+        {
+            float wx = get_cube_x(lx);
+            float wz = get_cube_z(lz);
+            heightMap[lx * Z + lz] = Biome::get_height(glm::vec2(wx, wz));
+        }
+    }
     // initialize all cubes
     for (int x = 0; x < X; x++)
     {
