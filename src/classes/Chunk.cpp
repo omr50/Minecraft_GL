@@ -155,7 +155,7 @@ inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int,
     // printf("hash: %f\n", hash);
     // function calls should naturally die off as divisor gets bigger.
     // to give trees that natural look (larger leaves at the bottom, smaller ones on top)
-    if ((2 - currMult - hash / 3) > 0.2)
+    if ((2.05 - currMult - hash / 3) > 0.2)
     {
         if (!start)
         {
