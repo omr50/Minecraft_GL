@@ -250,6 +250,15 @@ void Chunk::generate_biome_terrain(int x, int z)
         }
     }
 
+    if (Hc <= 54)
+    {
+        for (int y = Hc + 1; y <= 62; y++)
+        {
+
+            blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "water");
+        }
+    }
+
     for (int y = 0; y < Hc - 1; y++)
     {
 
