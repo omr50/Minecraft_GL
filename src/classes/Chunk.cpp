@@ -1,4 +1,5 @@
 #include "../../include/Chunk.hpp"
+#include "../../include/Terrain.hpp"
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -140,8 +141,32 @@ struct PairHash
 
 inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int, int>, struct PairHash> &prev_visited, int iteration, Chunk *chunk, bool start = true)
 {
+    Chunk *final_chunk = chunk;
+    printf("working!\n");
     if (x < 0 || x >= X || z < 0 || z >= Z || y < 0 || y >= Y)
-        return;
+    {
+        int wx = chunk->get_cube_x(x), wz = chunk->get_cube_z(z);
+        int cx = wx / X;
+        if (x < 0 && x % X != 0)
+            cx--;
+        int cz = wz / Z;
+        if (z < 0 && z % Z != 0)
+            cz--;
+        for (int i = 0; i < NUM_CHUNKS; i++)
+        {
+            printf("access 1!\n");
+            auto test_chunk = &chunk->all_chunks[i];
+            printf("access 2!\n");
+            if (test_chunk->chunk_coordinates.first == cx && test_chunk->chunk_coordinates.second == cz)
+            {
+                final_chunk = test_chunk;
+                printf("got the test chunk!\n");
+                break;
+            }
+        }
+    }
+
+    printf("working 2!\n");
 
     if (prev_visited.find({x, z}) != prev_visited.end())
         return;
@@ -159,7 +184,7 @@ inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int,
     {
         if (!start)
         {
-            chunk->blocks[chunk->get_index(x, y, z)].update_state(chunk->get_cube_x(x), y, chunk->get_cube_z(z), "leaf");
+            final_chunk->blocks[final_chunk->get_index(x, y, z)].update_state(final_chunk->get_cube_x(x), y, final_chunk->get_cube_z(z), "leaf");
         }
         if (iteration < 4)
             iteration++;
@@ -252,7 +277,7 @@ void Chunk::generate_biome_terrain(int x, int z)
 
     if (Hc <= 54)
     {
-        for (int y = Hc + 1; y <= 62; y++)
+        for (int y = Hc + 1; y <= Hc + 3; y++)
         {
 
             blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "water");

@@ -34,6 +34,7 @@ class Chunk
 public:
     int chunk_num;
     Cube *blocks;
+    Chunk *all_chunks;
     std::pair<int, int> chunk_coordinates;
     std::vector<Vertex> mesh_vertices;
     std::vector<glm::mat4> instance_vector;
