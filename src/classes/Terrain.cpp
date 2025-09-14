@@ -4,7 +4,6 @@
 Terrain::Terrain(Camera *camera) : camera(camera)
 {
     thread_pool = new ThreadPool(7);
-    printf("Test!");
     std::pair<int, int> positions[NUM_CHUNKS];
     new_positions(positions);
     // set previous position to different value so that
@@ -15,15 +14,18 @@ Terrain::Terrain(Camera *camera) : camera(camera)
 
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
+        chunks[i].all_chunks = chunks;
         chunks[i].chunk_num = i;
         chunks[i].chunk_coordinates.first = positions[i].first;
         chunks[i].chunk_coordinates.second = positions[i].second;
         chunks[i].initialize_vertex_buffers_and_array();
         chunks[i].initialize_cubes();
-        chunks[i].generate_terrain();
-        chunks[i].all_chunks = chunks;
+    }
+    for (int i = 0; i < NUM_CHUNKS; i++)
+    {
 
-        printf("Test2!");
+        chunks[i].generate_terrain();
+
         // create_chunk_mesh(&chunks[i]); // compute which faces are visible
         // chunks[i].update_chunk();
         // chunks[i].update_chunk();

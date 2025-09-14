@@ -139,59 +139,80 @@ struct PairHash
     }
 };
 
-inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int, int>, struct PairHash> &prev_visited, int iteration, Chunk *chunk, bool start = true)
+inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int, int>, struct PairHash> &prev_visited, int iteration, Chunk *chunk, Chunk *original_chunk, bool start = true)
 {
-    Chunk *final_chunk = chunk;
-    printf("working!\n");
-    if (x < 0 || x >= X || z < 0 || z >= Z || y < 0 || y >= Y)
+    Chunk *final_chunk = original_chunk;
+    bool found_chunk = true;
+    // printf("before (%d, %d, %d)\n", x, y, z);
+    int cx = x / X;
+    if (x < 0 && x % X != 0)
+        cx--;
+    int cz = z / Z;
+    if (z < 0 && z % Z != 0)
+        cz--;
+
+    if (cx != original_chunk->chunk_coordinates.first || cz != original_chunk->chunk_coordinates.second)
     {
-        int wx = chunk->get_cube_x(x), wz = chunk->get_cube_z(z);
-        int cx = wx / X;
-        if (x < 0 && x % X != 0)
-            cx--;
-        int cz = wz / Z;
-        if (z < 0 && z % Z != 0)
-            cz--;
+        found_chunk = false;
+
         for (int i = 0; i < NUM_CHUNKS; i++)
         {
-            printf("access 1!\n");
             auto test_chunk = &chunk->all_chunks[i];
-            printf("access 2!\n");
             if (test_chunk->chunk_coordinates.first == cx && test_chunk->chunk_coordinates.second == cz)
             {
+                // printf("found chunk!\n");
                 final_chunk = test_chunk;
-                printf("got the test chunk!\n");
+                found_chunk = true;
                 break;
             }
         }
     }
 
-    printf("working 2!\n");
-
-    if (prev_visited.find({x, z}) != prev_visited.end())
+    if (!found_chunk)
+    {
         return;
+    }
 
+    // printf("1\n");
+    if (prev_visited.find({x, z}) != prev_visited.end())
+    {
+        // printf("Return?\n");
+        return;
+    }
+
+    // printf("2\n");
     prev_visited.insert({x, z});
 
+    // printf("3\n");
     float currMult = std::pow(1.15, iteration);
-    auto chunk_x = chunk->get_cube_x(x);
-    auto chunk_z = chunk->get_cube_z(z);
+    auto chunk_x = original_chunk->chunk_coordinates.first;
+    auto chunk_z = original_chunk->chunk_coordinates.second;
     auto hash = hash01_int(chunk_x, chunk_z);
     // printf("hash: %f\n", hash);
     // function calls should naturally die off as divisor gets bigger.
     // to give trees that natural look (larger leaves at the bottom, smaller ones on top)
+    // printf("4\n");
     if ((2.05 - currMult - hash / 3) > 0.2)
     {
+
         if (!start)
         {
-            final_chunk->blocks[final_chunk->get_index(x, y, z)].update_state(final_chunk->get_cube_x(x), y, final_chunk->get_cube_z(z), "leaf");
+            // printf("(%d, %d %d)\n", x, y, z);
+            // printf("4\n");
+            int local_x = x - (cx * X);
+            int local_z = z - (cz * Z);
+
+            final_chunk->blocks[final_chunk->get_index(local_x, y, local_z)].update_state(x, y, z, "leaf");
+            // printf("5\n");
         }
-        if (iteration < 4)
-            iteration++;
-        create_leaves(x + 1, y, z, prev_visited, iteration, chunk, false);
-        create_leaves(x - 1, y, z, prev_visited, iteration, chunk, false);
-        create_leaves(x, y, z + 1, prev_visited, iteration, chunk, false);
-        create_leaves(x, y, z - 1, prev_visited, iteration, chunk, false);
+        // if (iteration < 4)
+        iteration++;
+        // printf("iteration: %d\n", iteration);
+        create_leaves(x + 1, y, z, prev_visited, iteration, final_chunk, original_chunk, false);
+        create_leaves(x - 1, y, z, prev_visited, iteration, final_chunk, original_chunk, false);
+        create_leaves(x, y, z + 1, prev_visited, iteration, final_chunk, original_chunk, false);
+        create_leaves(x, y, z - 1, prev_visited, iteration, final_chunk, original_chunk, false);
+        // printf("6\n");
     }
 }
 
@@ -267,9 +288,9 @@ void Chunk::generate_biome_terrain(int x, int z)
             {
                 int iteration = i - tree_height + 1 + round(h2);
                 if (i > tree_height)
-                    create_leaves(x, Hc + i, z, prev_map, iteration, this, false);
+                    create_leaves(wx, Hc + i, wz, prev_map, iteration, this, this, false);
                 else
-                    create_leaves(x, Hc + i, z, prev_map, iteration, this);
+                    create_leaves(wx, Hc + i, wz, prev_map, iteration, this, this);
                 prev_map.clear();
             }
         }
