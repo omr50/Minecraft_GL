@@ -76,6 +76,7 @@ void Display::main_loop()
     // Cube::add_all_block_textures();
     Cube::initialize_texture_map("../textures/texture_atlas_2.png");
     Cube::setup_cube_shaders();
+    renderer->init_hotbar();
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     glUseProgram(Cube::shader_program);
 

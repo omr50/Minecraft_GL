@@ -8,6 +8,7 @@
 #include "./Terrain.hpp"
 #include "./Crosshair.hpp"
 #include "./LineRenderer.hpp"
+#include "./Shader.hpp"
 #include <SDL2/SDL.h>
 
 class Renderer
@@ -23,12 +24,17 @@ public:
     Terrain *terrain;
     Crosshair *crosshair;
     LineRenderer *lineRenderer;
+    GLuint hotbar_texture;
+    GLuint hotbarVAO, hotbarVBO;
+    Shader *hotbarShader;
 
     Renderer(Camera *camera);
     void add_block(Cube *cube);
     void render_blocks();
     void send_matrix_to_shader(glm::mat4 *matrix);
     void render_chunks(SDL_Window *window);
+    void draw_hotbar();
+    void init_hotbar();
     static void set3DState();
     static void setUIState();
 };

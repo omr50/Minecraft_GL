@@ -12,12 +12,12 @@ enum BIOME
 
 #define DESERT_BASE 50
 #define PLAINS_BASE 58
-#define FOREST_BASE 64
+#define FOREST_BASE 60
 #define MOUNTAINS_BASE 90
 
 #define DESERT_AMP 6
 #define PLAINS_AMP 5
-#define FOREST_AMP 14
+#define FOREST_AMP 30
 #define MOUNTAINS_AMP 80
 
 #define DESERT_ROUGH 0.40

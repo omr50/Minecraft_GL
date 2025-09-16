@@ -130,6 +130,7 @@ void Cube::initialize_texture_map(std::string texture_atlas_filename)
     FaceUV wood_top_offset = {{5.0f * texture_square_size, 1.0f * texture_square_size}};
     FaceUV leaf_offet = {{4.0f * texture_square_size, 3.0f * texture_square_size}};
     FaceUV water_offset = {{14.0f * texture_square_size, 0.0f * texture_square_size}};
+    FaceUV water_offset2 = {{14.0f * texture_square_size, 2.0f * texture_square_size}};
 
     FaceUV grass_top_offset = {{0.0f, 0.0f * texture_square_size}};
     FaceUV grass_bottom_offset = dirt_offset;
@@ -143,6 +144,7 @@ void Cube::initialize_texture_map(std::string texture_atlas_filename)
     add_block_to_map("wooden_plank", wooden_plank_offset, wooden_plank_offset, wooden_plank_offset);
     add_block_to_map("wood", wood_top_offset, wood_side_offset, wood_top_offset);
     add_block_to_map("water", water_offset, water_offset, water_offset);
+    add_block_to_map("water2", water_offset2, water_offset2, water_offset2);
 
     add_block_to_map("grass", grass_top_offset, grass_side_offset, grass_bottom_offset);
     add_block_to_map("leaf", leaf_offet, leaf_offet, leaf_offet);

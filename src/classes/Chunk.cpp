@@ -192,7 +192,7 @@ inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int,
     // function calls should naturally die off as divisor gets bigger.
     // to give trees that natural look (larger leaves at the bottom, smaller ones on top)
     // printf("4\n");
-    if ((2.05 - currMult - hash / 3) > 0.2)
+    if ((2.15 - currMult - hash / 3) > 0.2)
     {
 
         if (!start)
@@ -298,10 +298,16 @@ void Chunk::generate_biome_terrain(int x, int z)
 
     if (Hc <= 54)
     {
-        for (int y = Hc + 1; y <= Hc + 3; y++)
+        auto h = 54;
+        while (true)
         {
-
-            blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "water");
+            if (h < 0)
+                break;
+            if (blocks[get_index(x, h, z)].block_type == "air")
+                blocks[get_index(x, h, z)].update_state(chunk_x, h, chunk_z, "water");
+            else
+                break;
+            h--;
         }
     }
 
@@ -705,6 +711,10 @@ void Chunk::draw_chunk(bool rendered_chunks[])
     // printf("drawing chunk\n");
     // printf("Chunk (%d, %d) DRAWING: size of mesh vertices = %d\n", chunk_coordinates.first, chunk_coordinates.second, mesh_vertices.size());
     glBindVertexArray(chunk_vao);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Cube::texture_atlas);
+    glUniform1i(glGetUniformLocation(Cube::shader_program, "uTexture"), 0);
+
     // glDrawArraysInstanced(GL_TRIANGLES, 0, 6, terrain.chunks[i].instance_vector.size());
 
     // always draw, but only draw if
