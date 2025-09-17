@@ -54,9 +54,33 @@ void Renderer::render_chunks(SDL_Window *window)
     bool camera_moved = terrain->camera_moved();
     // don't render when camera doesn't move
     // keep screen as is.
-    static time_t start = clock();
-    static time_t end = clock();
-    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    static clock_t start = clock();
+    static clock_t end = clock();
+    time_t water_timer = clock();
+    static bool water_frame = false;
+    // double elapsed_ms = (double)(water_timer - start) * 1000.0 / CLOCKS_PER_SEC;
+    // if (elapsed_ms > 300.0f)
+    // {
+    //     printf("time elapsed\n");
+    //     start = water_timer;
+    //     for (int i = 0; i < NUM_CHUNKS; i++)
+    //     {
+    //         Chunk *chunk = &terrain->chunks[i];
+    //         if (!chunk->contains_water)
+    //             continue;
+    //         chunk->update_water_blocks(water_frame);
+    //         chunk->needs_remesh();
+    //         // terrain->enqueue_update_task(&terrain->chunks[j]);
+    //         {
+    //             std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
+    //             terrain->create_chunk_mesh(chunk);
+    //             // printf("after chunk lock!\n");
+    //         }
+    //         chunk->update_chunk();
+    //         water_frame = !water_frame;
+    //         terrain->camera->moved = true;
+    //     }
+    // }
     if (camera_moved)
     {
         std::fill(std::begin(terrain->rendered_chunks), std::end(terrain->rendered_chunks), false);
@@ -69,7 +93,7 @@ void Renderer::render_chunks(SDL_Window *window)
     }
     if (camera_moved || num_chunks_rendered < NUM_CHUNKS)
     {
-        start = end;
+        // start = end;
         terrain->shift_chunks();
         glm::mat4 view_projection_matrix = camera->get_view_projection_matrix();
         send_matrix_to_shader(&view_projection_matrix);

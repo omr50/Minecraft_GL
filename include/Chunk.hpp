@@ -49,6 +49,7 @@ public:
     bool enqueued = false;
     bool enqueued_mesh_creation = false;
     bool rendered = false;
+    bool contains_water = false;
     std::mutex chunk_mutex;
     std::vector<int> heightMap;
 
@@ -77,5 +78,6 @@ public:
     bool ready_to_buffer();
     bool is_renderable();
     bool in_chunk_coords(int x, int z);
+    void update_water_blocks(bool frame);
     // void draw() override;
 };

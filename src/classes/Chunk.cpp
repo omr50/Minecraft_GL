@@ -298,6 +298,7 @@ void Chunk::generate_biome_terrain(int x, int z)
 
     if (Hc <= 54)
     {
+        contains_water = true;
         auto h = 54;
         while (true)
         {
@@ -770,3 +771,22 @@ clean_mesh = 0
 generated vertices = 0
 
 */
+
+void Chunk::update_water_blocks(bool frame)
+{
+    for (int x = 0; x < X; x++)
+    {
+        for (int z = 0; z < Z; z++)
+        {
+            for (int y = 0; y < 75; y++)
+            {
+                float world_x = get_cube_x(x);
+                float world_z = get_cube_z(z);
+                std::string water_frame = (frame) ? "water" : "water2";
+                auto block = blocks[get_index(x, y, z)];
+                if (block.block_type == "water" || block.block_type == "water2")
+                    block.update_state(world_x, y, world_z, water_frame);
+            }
+        }
+    }
+}
