@@ -254,6 +254,8 @@ void Chunk::generate_biome_terrain(int x, int z)
         float cluster = 0.5f * (glm::perlin(p / 45.0f) + 1.0f);
         float borrowP = edge * 0.65f;
         borrowP = 0.7f * borrowP + 0.3f * (borrowP * cluster);
+        if (B0 == DESERT || B1 == DESERT)
+            borrowP *= 0.35f;
         BIOME B = (h < borrowP ? B1 : B0);
 
         // per-biome surface with a dash of slope
@@ -273,7 +275,8 @@ void Chunk::generate_biome_terrain(int x, int z)
             break;
         }
 
-        if (B == FOREST && h > 0.99)
+        // create trees
+        if (B == FOREST && h > 0.99 && Hc > 54)
         {
             int tree_height = 5 + (int)(h / 0.25);
             for (int i = 0; i < tree_height; i++)
@@ -295,6 +298,10 @@ void Chunk::generate_biome_terrain(int x, int z)
             }
         }
     }
+    if (Hc == 54)
+    {
+        top = "sand";
+    }
 
     if (Hc <= 54)
     {
@@ -312,11 +319,13 @@ void Chunk::generate_biome_terrain(int x, int z)
         }
     }
 
-    for (int y = 0; y < Hc - 1; y++)
+    for (int y = 0; y < Hc - 4; y++)
     {
 
         blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "stone");
     }
+    for (int y = Hc - 4; y < Hc - 1; y++)
+        blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "dirt");
     blocks[get_index(x, Hc, z)].update_state(chunk_x, Hc, chunk_z, top);
 
     // std::vector<int> heightMap; // size X*Z
