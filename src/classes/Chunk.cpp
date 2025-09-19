@@ -562,16 +562,18 @@ float Chunk::get_cube_z(int z)
     return chunk_coordinates.second * Z + z;
 }
 
-void Chunk::get_mesh_vertices()
+void Chunk::get_mesh_vertices(bool frame)
 {
     // printf("mesh vertices func working?\n");
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
+    auto &mesh = (frame) ? (mesh_vertices2) : (mesh_vertices);
+    printf("mesh1:%d, mesh2: %d\n", mesh_vertices.size(), mesh_vertices2.size());
     if (generated_vertices)
         return;
-    if (!clean_mesh || !clean_terrain || !initialized)
+    if (!clean_terrain || !initialized)
         return;
-    mesh_vertices.clear();
+    mesh.clear();
     instance_vector.clear();
     for (int x = 0; x < X; x++)
         for (int y = 0; y < Y; y++)
@@ -620,14 +622,27 @@ void Chunk::get_mesh_vertices()
                         vertex.z = block.z + localZ;
                         vertex.u = offsets_to_use.offset.x + localU * (1.0f / 16.0f);
                         vertex.v = offsets_to_use.offset.y + localV * (1.0f / 16.0f);
-                        mesh_vertices.push_back(vertex);
+                        mesh.push_back(vertex);
                     }
                 }
             }
 
+    if (frame)
+        return;
+    if (contains_water)
+    {
+        update_water_blocks(false);
+        get_mesh_vertices(!frame);
+    }
+    else
+    {
+        mesh_vertices2 = mesh_vertices;
+    }
+
     // printf("vertices size: %d\n", mesh_vertices.size());
     // printf("instance vector size: %d\n", instance_vector.size());
     // printf("Chunk (%d, %d) mesh created\n", chunk_coordinates.first, chunk_coordinates.second);
+
     generated_vertices = true;
 }
 
@@ -638,7 +653,7 @@ void Chunk::update_chunk()
     // thread safe. only will be called if camera moved or if block added/destroyed
     // so that we only update if necessary.
     std::lock_guard<std::mutex> lock(chunk_mutex);
-    get_mesh_vertices();
+    get_mesh_vertices(false);
 }
 
 void Chunk::buffer_data()
@@ -657,7 +672,8 @@ void Chunk::buffer_data()
 
     // Geometry VBO
     glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-    glBufferData(GL_ARRAY_BUFFER, mesh_vertices.size() * sizeof(Vertex), mesh_vertices.data(), GL_DYNAMIC_DRAW);
+    auto &mesh = (frame) ? mesh_vertices2 : mesh_vertices;
+    glBufferData(GL_ARRAY_BUFFER, mesh.size() * sizeof(Vertex), mesh.data(), GL_DYNAMIC_DRAW);
 
     // Position attribute (location = 0)
     glEnableVertexAttribArray(0);
@@ -683,7 +699,6 @@ void Chunk::buffer_data()
     // Unbind VAO and VBO
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     sent_mesh = true;
 }
 
@@ -702,7 +717,6 @@ void Chunk::draw_chunk(bool rendered_chunks[])
     // }
     // printf("ready to buffer!\n");
     buffer_data();
-
     // std::lock_guard<std::mutex> lock(chunk_mutex);
     if (!clean_mesh)
     {
@@ -720,7 +734,8 @@ void Chunk::draw_chunk(bool rendered_chunks[])
 
     // always draw, but only draw if
     // printf("vertice SIZE: %d\n", mesh_vertices.size());
-    glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
+    auto &mesh = (frame) ? mesh_vertices2 : mesh_vertices;
+    glDrawArrays(GL_TRIANGLES, 0, mesh.size());
     glBindVertexArray(0);
     chunk_mutex.unlock();
     // printf("Fully DRAWN THE CHUNK!!!!!!\n");
@@ -782,9 +797,9 @@ void Chunk::update_water_blocks(bool frame)
             {
                 float world_x = get_cube_x(x);
                 float world_z = get_cube_z(z);
-                std::string water_frame = (frame) ? "water" : "water2";
-                auto block = blocks[get_index(x, y, z)];
-                if (block.block_type == "water" || block.block_type == "water2")
+                std::string water_frame = (frame) ? "water" : "cobble_stone";
+                auto &block = blocks[get_index(x, y, z)];
+                if (block.block_type == "water" || block.block_type == "cobble_stone")
                     block.update_state(world_x, y, world_z, water_frame);
             }
         }

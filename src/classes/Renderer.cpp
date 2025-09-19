@@ -58,29 +58,24 @@ void Renderer::render_chunks(SDL_Window *window)
     static clock_t end = clock();
     time_t water_timer = clock();
     static bool water_frame = false;
-    // double elapsed_ms = (double)(water_timer - start) * 1000.0 / CLOCKS_PER_SEC;
-    // if (elapsed_ms > 300.0f)
-    // {
-    //     printf("time elapsed\n");
-    //     start = water_timer;
-    //     for (int i = 0; i < NUM_CHUNKS; i++)
-    //     {
-    //         Chunk *chunk = &terrain->chunks[i];
-    //         if (!chunk->contains_water)
-    //             continue;
-    //         chunk->update_water_blocks(water_frame);
-    //         chunk->needs_remesh();
-    //         // terrain->enqueue_update_task(&terrain->chunks[j]);
-    //         {
-    //             std::lock_guard<std::mutex> lock(chunk->chunk_mutex);
-    //             terrain->create_chunk_mesh(chunk);
-    //             // printf("after chunk lock!\n");
-    //         }
-    //         chunk->update_chunk();
-    //         water_frame = !water_frame;
-    //         terrain->camera->moved = true;
-    //     }
-    // }
+    double elapsed_ms = (double)(water_timer - start) * 1000.0 / CLOCKS_PER_SEC;
+    if (elapsed_ms > 300.0f)
+    {
+        start = water_timer;
+        for (int i = 0; i < NUM_CHUNKS; i++)
+        {
+            Chunk *chunk = &terrain->chunks[i];
+            chunk->frame = !chunk->frame;
+            terrain->rendered_chunks[chunk->chunk_num] = false;
+            if (!chunk->contains_water)
+                continue;
+            water_frame = !water_frame;
+            terrain->camera->moved = true;
+            chunk->sent_mesh = false;
+            chunk->rendered = false;
+            camera->moved = true;
+        }
+    }
     if (camera_moved)
     {
         std::fill(std::begin(terrain->rendered_chunks), std::end(terrain->rendered_chunks), false);
@@ -91,6 +86,8 @@ void Renderer::render_chunks(SDL_Window *window)
     {
         num_chunks_rendered += (terrain->rendered_chunks[i] ? 1 : 0);
     }
+    if (num_chunks_rendered < NUM_CHUNKS)
+        printf("some chunks not rendered\n");
     if (camera_moved || num_chunks_rendered < NUM_CHUNKS)
     {
         // start = end;

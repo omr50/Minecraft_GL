@@ -37,6 +37,7 @@ public:
     Chunk *all_chunks;
     std::pair<int, int> chunk_coordinates;
     std::vector<Vertex> mesh_vertices;
+    std::vector<Vertex> mesh_vertices2;
     std::vector<glm::mat4> instance_vector;
     GLuint geometry_vbo;
     GLuint instance_vbo;
@@ -50,6 +51,7 @@ public:
     bool enqueued_mesh_creation = false;
     bool rendered = false;
     bool contains_water = false;
+    bool frame = false;
     std::mutex chunk_mutex;
     std::vector<int> heightMap;
 
@@ -69,7 +71,7 @@ public:
     int get_index(int x, int y, int z);
     float get_cube_x(int x);
     float get_cube_z(int z);
-    void get_mesh_vertices();
+    void get_mesh_vertices(bool frame);
     void update_chunk();
     void buffer_data();
     void draw_chunk(bool rendered_chunks[]);
