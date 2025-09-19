@@ -86,8 +86,6 @@ void Renderer::render_chunks(SDL_Window *window)
     {
         num_chunks_rendered += (terrain->rendered_chunks[i] ? 1 : 0);
     }
-    if (num_chunks_rendered < NUM_CHUNKS)
-        printf("some chunks not rendered\n");
     if (camera_moved || num_chunks_rendered < NUM_CHUNKS)
     {
         // start = end;

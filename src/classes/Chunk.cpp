@@ -562,89 +562,182 @@ float Chunk::get_cube_z(int z)
     return chunk_coordinates.second * Z + z;
 }
 
-void Chunk::get_mesh_vertices(bool frame)
+static inline const std::array<FaceUV, 3> &texFor(const std::string &type)
 {
-    // printf("mesh vertices func working?\n");
-    // printf("vertices size: %d\n", mesh_vertices.size());
-    // printf("instance vector size: %d\n", instance_vector.size());
-    auto &mesh = (frame) ? (mesh_vertices2) : (mesh_vertices);
-    printf("mesh1:%d, mesh2: %d\n", mesh_vertices.size(), mesh_vertices2.size());
+    auto it = Cube::texture_map.find(type);
+    if (it == Cube::texture_map.end())
+    {
+        fprintf(stderr, "[texture_map] Missing entry for '%s'\n", type.c_str());
+        static const std::array<FaceUV, 3> fallback =
+            {FaceUV{{0, 0}}, FaceUV{{0, 0}}, FaceUV{{0, 0}}};
+        return fallback;
+    }
+    return it->second;
+}
+
+void Chunk::get_mesh_vertices(bool building_alt)
+{
+    auto &mesh = building_alt ? mesh_vertices2 : mesh_vertices;
+
     if (generated_vertices)
         return;
     if (!clean_terrain || !initialized)
         return;
+
+    // Always rebuild from scratch
     mesh.clear();
+    if (!building_alt)
+        mesh_vertices2.clear();
     instance_vector.clear();
+
     for (int x = 0; x < X; x++)
         for (int y = 0; y < Y; y++)
             for (int z = 0; z < Z; z++)
             {
-                auto block = blocks[get_index(x, y, z)];
+                const auto &block = blocks[get_index(x, y, z)];
                 if (block.block_type == "air")
                     continue;
 
-                std::array<FaceUV, 3> face_textures = Cube::texture_map[block.block_type];
+                // Decide which *material* to use for UVs, without changing the block itself.
+                // Example: animate water by switching its tile in the alt frame.
+                std::string mat = block.block_type;
+                if (building_alt && block.block_type == "water")
+                {
+                    mat = "cobble_stone"; // or "cobble_stone" if you prefer that test
+                }
+
+                const auto &face_textures = texFor(mat);
+
                 for (int face = 0; face < 6; face++)
                 {
-                    // if non-renderable / not in mesh (continue)
                     if (!block.renderable_face[face])
                         continue;
-                    // one matrix per face, not per vertice
-                    // instance_vector.push_back(block.model_matrix);
 
-                    // glActiveTexture(GL_TEXTURE0);
-                    // Decide which texture to use (top, bottom, sides) based on face index:
-                    auto offsets_to_use = (face == 5) ? face_textures[0] : // top face
-                                              (face == 4) ? face_textures[2]
-                                                          :     // Top face
-                                              face_textures[1]; // Other sides
+                    const auto &offsets_to_use =
+                        (face == 5) ? face_textures[0] : // top
+                            (face == 4) ? face_textures[2]
+                                        :     // bottom
+                            face_textures[1]; // sides
 
-                    // set up texture offsets
-                    std::string side;
-                    if (face == 5)
-                        side = "bottom";
-                    else if (face == 4)
-                        side = "top";
-                    else
-                        side = "sides";
-                    // printf("side is: %s\n", side.c_str());
-                    Vertex vertex;
                     for (int i = 0; i < 6; i++)
                     {
-                        // give world coordinates and
-                        float localX = Cube::faces[face][0 + 5 * i]; // e.g. -0.5, +0.5, etc.
+                        Vertex v;
+                        float localX = Cube::faces[face][0 + 5 * i];
                         float localY = Cube::faces[face][1 + 5 * i];
                         float localZ = Cube::faces[face][2 + 5 * i];
                         float localU = Cube::faces[face][3 + 5 * i];
                         float localV = Cube::faces[face][4 + 5 * i];
-                        vertex.x = block.x + localX;
-                        vertex.y = block.y + localY;
-                        vertex.z = block.z + localZ;
-                        vertex.u = offsets_to_use.offset.x + localU * (1.0f / 16.0f);
-                        vertex.v = offsets_to_use.offset.y + localV * (1.0f / 16.0f);
-                        mesh.push_back(vertex);
+                        v.x = block.x + localX;
+                        v.y = block.y + localY;
+                        v.z = block.z + localZ;
+                        v.u = offsets_to_use.offset.x + localU * (1.0f / 16.0f);
+                        v.v = offsets_to_use.offset.y + localV * (1.0f / 16.0f);
+                        mesh.push_back(v);
                     }
                 }
             }
 
-    if (frame)
-        return;
-    if (contains_water)
+    if (!building_alt)
     {
-        update_water_blocks(false);
-        get_mesh_vertices(!frame);
+        // Build alt immediately after base so both are in sync
+        if (contains_water)
+        {
+            get_mesh_vertices(true);
+        }
+        else
+        {
+            mesh_vertices2 = mesh_vertices;
+        }
+        generated_vertices = true;
+        clean_mesh = true;
+        // Optional: printf to verify sizes are equal (or nearly equal if topography differs)
+        // printf("built base=%zu alt=%zu\n", mesh_vertices.size(), mesh_vertices2.size());
     }
-    else
-    {
-        mesh_vertices2 = mesh_vertices;
-    }
-
-    // printf("vertices size: %d\n", mesh_vertices.size());
-    // printf("instance vector size: %d\n", instance_vector.size());
-    // printf("Chunk (%d, %d) mesh created\n", chunk_coordinates.first, chunk_coordinates.second);
-
-    generated_vertices = true;
 }
+
+// void Chunk::get_mesh_vertices(bool frame)
+// {
+//     // printf("mesh vertices func working?\n");
+//     // printf("vertices size: %d\n", mesh_vertices.size());
+//     // printf("instance vector size: %d\n", instance_vector.size());
+//     auto &mesh = (frame) ? (mesh_vertices2) : (mesh_vertices);
+//     printf("mesh1:%d, mesh2: %d\n", mesh_vertices.size(), mesh_vertices2.size());
+//     if (generated_vertices)
+//         return;
+//     if (!clean_terrain || !initialized)
+//         return;
+//     mesh.clear();
+//     instance_vector.clear();
+//     for (int x = 0; x < X; x++)
+//         for (int y = 0; y < Y; y++)
+//             for (int z = 0; z < Z; z++)
+//             {
+//                 auto block = blocks[get_index(x, y, z)];
+//                 if (block.block_type == "air")
+//                     continue;
+
+//                 std::array<FaceUV, 3> face_textures = Cube::texture_map[block.block_type];
+//                 for (int face = 0; face < 6; face++)
+//                 {
+//                     // if non-renderable / not in mesh (continue)
+//                     if (!block.renderable_face[face])
+//                         continue;
+//                     // one matrix per face, not per vertice
+//                     // instance_vector.push_back(block.model_matrix);
+
+//                     // glActiveTexture(GL_TEXTURE0);
+//                     // Decide which texture to use (top, bottom, sides) based on face index:
+//                     auto offsets_to_use = (face == 5) ? face_textures[0] : // top face
+//                                               (face == 4) ? face_textures[2]
+//                                                           :     // Top face
+//                                               face_textures[1]; // Other sides
+
+//                     // set up texture offsets
+//                     std::string side;
+//                     if (face == 5)
+//                         side = "bottom";
+//                     else if (face == 4)
+//                         side = "top";
+//                     else
+//                         side = "sides";
+//                     // printf("side is: %s\n", side.c_str());
+//                     Vertex vertex;
+//                     for (int i = 0; i < 6; i++)
+//                     {
+//                         // give world coordinates and
+//                         float localX = Cube::faces[face][0 + 5 * i]; // e.g. -0.5, +0.5, etc.
+//                         float localY = Cube::faces[face][1 + 5 * i];
+//                         float localZ = Cube::faces[face][2 + 5 * i];
+//                         float localU = Cube::faces[face][3 + 5 * i];
+//                         float localV = Cube::faces[face][4 + 5 * i];
+//                         vertex.x = block.x + localX;
+//                         vertex.y = block.y + localY;
+//                         vertex.z = block.z + localZ;
+//                         vertex.u = offsets_to_use.offset.x + localU * (1.0f / 16.0f);
+//                         vertex.v = offsets_to_use.offset.y + localV * (1.0f / 16.0f);
+//                         mesh.push_back(vertex);
+//                     }
+//                 }
+//             }
+
+//     if (frame)
+//         return;
+//     if (contains_water)
+//     {
+//         update_water_blocks(false);
+//         get_mesh_vertices(!frame);
+//     }
+//     else
+//     {
+//         mesh_vertices2 = mesh_vertices;
+//     }
+
+//     // printf("vertices size: %d\n", mesh_vertices.size());
+//     // printf("instance vector size: %d\n", instance_vector.size());
+//     // printf("Chunk (%d, %d) mesh created\n", chunk_coordinates.first, chunk_coordinates.second);
+
+//     generated_vertices = true;
+// }
 
 void Chunk::update_chunk()
 {
