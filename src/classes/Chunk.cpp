@@ -598,12 +598,12 @@ void Chunk::get_mesh_vertices(bool building_alt)
                 if (block.block_type == "air")
                     continue;
 
-                // Decide which *material* to use for UVs, without changing the block itself.
-                // Example: animate water by switching its tile in the alt frame.
                 std::string mat = block.block_type;
+                bool flipX = false;
                 if (building_alt && block.block_type == "water")
                 {
-                    mat = "cobble_stone"; // or "cobble_stone" if you prefer that test
+                    mat = "water2";
+                    flipX = true;
                 }
 
                 const auto &face_textures = texFor(mat);
@@ -621,17 +621,29 @@ void Chunk::get_mesh_vertices(bool building_alt)
 
                     for (int i = 0; i < 6; i++)
                     {
+                        const float TILE = 1.0f / 16.0f; // or 1.0f / GRID_WIDTH
+
+                        float u01 = Cube::faces[face][3 + 5 * i]; // 0 or 1
+                        float v01 = Cube::faces[face][4 + 5 * i]; // 0 or 1
+
+                        if (flipX)
+                            u01 = 1.0f - u01; // horizontal mirror
+                        // if you ever want vertical mirror instead:
+                        // if (flipX) v01 = 1.0f - v01;
+
                         Vertex v;
                         float localX = Cube::faces[face][0 + 5 * i];
                         float localY = Cube::faces[face][1 + 5 * i];
                         float localZ = Cube::faces[face][2 + 5 * i];
-                        float localU = Cube::faces[face][3 + 5 * i];
-                        float localV = Cube::faces[face][4 + 5 * i];
+
                         v.x = block.x + localX;
                         v.y = block.y + localY;
                         v.z = block.z + localZ;
-                        v.u = offsets_to_use.offset.x + localU * (1.0f / 16.0f);
-                        v.v = offsets_to_use.offset.y + localV * (1.0f / 16.0f);
+
+                        // pack with the flipped (or unflipped) 0..1 value
+                        v.u = offsets_to_use.offset.x + u01 * TILE;
+                        v.v = offsets_to_use.offset.y + v01 * TILE;
+
                         mesh.push_back(v);
                     }
                 }
@@ -650,8 +662,6 @@ void Chunk::get_mesh_vertices(bool building_alt)
         }
         generated_vertices = true;
         clean_mesh = true;
-        // Optional: printf to verify sizes are equal (or nearly equal if topography differs)
-        // printf("built base=%zu alt=%zu\n", mesh_vertices.size(), mesh_vertices2.size());
     }
 }
 

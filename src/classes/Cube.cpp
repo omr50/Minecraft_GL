@@ -144,7 +144,7 @@ void Cube::initialize_texture_map(std::string texture_atlas_filename)
     add_block_to_map("wooden_plank", wooden_plank_offset, wooden_plank_offset, wooden_plank_offset);
     add_block_to_map("wood", wood_top_offset, wood_side_offset, wood_top_offset);
     add_block_to_map("water", water_offset, water_offset, water_offset);
-    add_block_to_map("water2", water_offset2, water_offset2, water_offset2);
+    add_block_to_map("water2", water_offset, water_offset, water_offset);
 
     add_block_to_map("grass", grass_top_offset, grass_side_offset, grass_bottom_offset);
     add_block_to_map("leaf", leaf_offet, leaf_offet, leaf_offet);
