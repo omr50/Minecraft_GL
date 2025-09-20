@@ -33,8 +33,11 @@ public:
     // to this rendererer class.
     GLuint hotbar_texture;
     GLuint hotbarVAO, hotbarVBO;
+    GLuint selectorVAO, selectorVBO;
+    int selector_slot_index;
     Shader *hotbarShader;
     Shader *blockShader;
+    Shader *selectorShader;
     Block block_img[9];
 
     Quad hotbar_slot_quad(int k);
@@ -45,4 +48,7 @@ public:
     void add_block(int index, std::string block_img_path);
     void draw_blocks();
     Quad quad_helper(int index);
+    Quad selector_slot_quad(int index);
+    void update_selector();
+    void draw_selector();
 };

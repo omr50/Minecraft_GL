@@ -4,6 +4,7 @@
 #include <glm/gtx/euler_angles.hpp>
 #include "./Cube.hpp"
 #include "./Terrain.hpp"
+#include "./HUD.hpp"
 #include <chrono>
 using Clock = std::chrono::high_resolution_clock;
 

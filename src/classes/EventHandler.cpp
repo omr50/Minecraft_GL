@@ -30,39 +30,71 @@ void EventHandler::event_handler()
         {
             window_event_handler();
         }
-    }
 
-    const Uint8 *ks = SDL_GetKeyboardState(nullptr);
-    glm::vec3 dir(0.0f);
-    if (ks[SDL_SCANCODE_W])
-        dir.z -= 1.0f;
-    if (ks[SDL_SCANCODE_S])
-        dir.z += 1.0f;
-    if (ks[SDL_SCANCODE_A])
-        dir.x -= 1.0f;
-    if (ks[SDL_SCANCODE_D])
-        dir.x += 1.0f;
-    if (ks[SDL_SCANCODE_SPACE])
-        dir.y += 1.0f;
-    if (ks[SDL_SCANCODE_LSHIFT])
-        dir.y -= 1.0f;
+        if (e.type == SDL_MOUSEWHEEL)
+        {
+            // Compute sign: +1 for up/right, -1 for down/left, 0 if no scroll on that axis
+            int step = 0;
 
-    int mx, my;
-    if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT))
-    {
-        mouse_click_handler(false);
-    }
+            auto &selected = renderer->hud->selector_slot_index;
+            if (e.wheel.y != 0)
+            {
+                step = (e.wheel.y > 0) ? +1 : -1; // vertical wheel
+            }
+            else if (e.wheel.x != 0)
+            {
+                step = (e.wheel.x > 0) ? +1 : -1; // horizontal wheels/trackpads
+            }
 
-    else if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_RIGHT))
-    {
-        mouse_click_handler(true);
-    }
+            // Respect “natural”/flipped scrolling
+            // if (e.wheel.direction == SDL_MOUSEWHEEL_FLIPPED)
+            // {
+            //     step = -step;
+            // }
 
-    camera->update_camera_position(dir);
+            // If you only want to react when there *is* a scroll:
+            if (step != 0)
+            {
+                selected = (selected + step + 9) % 9; // wrap 0..8
+            }
+            else
+            {
+                selected = selected + step;
+            }
+        }
 
-    if (!moved)
-    {
-        camera->update_camera_position({0.0, 0.0, 0.0});
+        const Uint8 *ks = SDL_GetKeyboardState(nullptr);
+        glm::vec3 dir(0.0f);
+        if (ks[SDL_SCANCODE_W])
+            dir.z -= 1.0f;
+        if (ks[SDL_SCANCODE_S])
+            dir.z += 1.0f;
+        if (ks[SDL_SCANCODE_A])
+            dir.x -= 1.0f;
+        if (ks[SDL_SCANCODE_D])
+            dir.x += 1.0f;
+        if (ks[SDL_SCANCODE_SPACE])
+            dir.y += 1.0f;
+        if (ks[SDL_SCANCODE_LSHIFT])
+            dir.y -= 1.0f;
+
+        int mx, my;
+        if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT))
+        {
+            mouse_click_handler(false);
+        }
+
+        else if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_RIGHT))
+        {
+            mouse_click_handler(true);
+        }
+
+        camera->update_camera_position(dir);
+
+        if (!moved)
+        {
+            camera->update_camera_position({0.0, 0.0, 0.0});
+        }
     }
 }
 
