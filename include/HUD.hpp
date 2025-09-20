@@ -8,11 +8,10 @@
 #include "./Terrain.hpp"
 #include "./Crosshair.hpp"
 #include "./LineRenderer.hpp"
-#include "./HUD.hpp"
 #include "./Shader.hpp"
 #include <SDL2/SDL.h>
 
-class Renderer
+class HUD
 {
 
 public:
@@ -20,19 +19,15 @@ public:
     // or later on have another class made for doing the
     // intense calculations then passing final renderables
     // to this rendererer class.
-    std::vector<Cube *> all_blocks;
-    Camera *camera;
-    Terrain *terrain;
-    Crosshair *crosshair;
-    LineRenderer *lineRenderer;
-    HUD *hud;
+    GLuint hotbar_texture;
+    GLuint block_texture;
+    GLuint hotbarVAO, hotbarVBO;
+    GLuint blockVAO, blockVBO;
+    Shader *hotbarShader;
+    Shader *blockShader;
 
-    Renderer(Camera *camera);
-    void add_block(Cube *cube);
-    void render_blocks();
-    void send_matrix_to_shader(glm::mat4 *matrix);
-    void render_chunks(SDL_Window *window);
+    HUD();
 
-    static void set3DState();
-    static void setUIState();
+    void init_hotbar();
+    void draw_hotbar();
 };
