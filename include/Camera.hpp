@@ -12,11 +12,12 @@ using Clock = std::chrono::high_resolution_clock;
 #define HEIGHT 600.0f
 
 class Terrain;
-
+class HUD;
 class Camera
 {
 
 public:
+    HUD *hud;
     glm::vec3 position = {0.0, 76.0, 0.0};
     float rotation_angle = 0.0f;
     float fov = glm::radians(60.0f);

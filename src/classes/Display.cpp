@@ -13,6 +13,7 @@ Display::Display()
 
     camera = new Camera();
     renderer = new Renderer(camera);
+    camera->hud = renderer->hud;
     event_handler = new EventHandler(camera, window, &running, renderer);
     SDL_ShowCursor(SDL_DISABLE);
     SDL_SetRelativeMouseMode(SDL_TRUE);

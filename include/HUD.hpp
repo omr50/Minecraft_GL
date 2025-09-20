@@ -3,7 +3,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include "./Cube.hpp"
-#include "./Camera.hpp"
 #include "./Chunk.hpp"
 #include "./Terrain.hpp"
 #include "./Crosshair.hpp"

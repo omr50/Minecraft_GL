@@ -9,6 +9,7 @@ Camera::Camera()
 {
     prev_chunk = get_chunk();
     curr_chunk = prev_chunk;
+    hud = nullptr;
 }
 
 void Camera::update_camera_position(glm::vec3 direction)
@@ -281,7 +282,9 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
                             index = terrain->chunks[k].get_index(block_x, wy, block_z);
                             // get previous block (for now just testing on the current block)
                             points->push_back(std::make_pair(ray_pos, ray_coord));
-                            terrain->chunks[k].blocks[index].block_type = "wooden_plank";
+                            std::string block_types[9] = {"grass", "stone", "dirt", "cobble_stone", "wooden_plank", "wood", "brick", "glass", "obsidian"};
+                            std::string block_type = block_types[hud->selector_slot_index];
+                            terrain->chunks[k].blocks[index].block_type = block_type;
                             terrain->chunks[k].needs_remesh();
                             // terrain->enqueue_update_task(&terrain->chunks[j]);
                             {
