@@ -11,6 +11,18 @@
 #include "./Shader.hpp"
 #include <SDL2/SDL.h>
 
+struct Block
+{
+    GLuint blockVAO;
+    GLuint blockVBO;
+    GLuint block_texture;
+};
+
+struct Quad
+{
+    float x0, y0, x1, y1; // bottom-left (x0,y0), top-right (x1,y1)
+};
+
 class HUD
 {
 
@@ -20,14 +32,17 @@ public:
     // intense calculations then passing final renderables
     // to this rendererer class.
     GLuint hotbar_texture;
-    GLuint block_texture;
     GLuint hotbarVAO, hotbarVBO;
-    GLuint blockVAO, blockVBO;
     Shader *hotbarShader;
     Shader *blockShader;
+    Block block_img[9];
 
+    Quad hotbar_slot_quad(int k);
     HUD();
 
     void init_hotbar();
     void draw_hotbar();
+    void add_block(int index, std::string block_img_path);
+    void draw_blocks();
+    Quad quad_helper(int index);
 };

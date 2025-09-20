@@ -104,6 +104,7 @@ void Renderer::render_chunks(SDL_Window *window)
         crosshair->draw_crosshair();
         // draw the Hotbar
         hud->draw_hotbar();
+        hud->draw_blocks();
         SDL_GL_SwapWindow(window);
     }
     terrain->camera->moved = false;
