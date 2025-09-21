@@ -165,9 +165,9 @@ void HUD::draw_hotbar()
 
 void HUD::draw_blocks()
 {
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glDisable(GL_DEPTH_TEST);
+    // glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glUseProgram(blockShader->shader_program);
     for (int i = 0; i < 9; i++)
     {
@@ -179,8 +179,8 @@ void HUD::draw_blocks()
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
-    glEnable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
+    // glEnable(GL_DEPTH_TEST);
+    // glDisable(GL_BLEND);
 }
 
 Quad HUD::quad_helper(int k)
@@ -230,9 +230,9 @@ void HUD::update_selector()
 
 void HUD::draw_selector()
 {
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glDisable(GL_DEPTH_TEST);
+    // glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glUseProgram(selectorShader->shader_program);
     GLint colorLoc = glGetUniformLocation(selectorShader->shader_program, "uColor");
@@ -243,6 +243,6 @@ void HUD::draw_selector()
     glDrawArrays(GL_LINE_LOOP, 0, 4);
     glBindVertexArray(0);
 
-    glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
+    // glDisable(GL_BLEND);
+    // glEnable(GL_DEPTH_TEST);
 }

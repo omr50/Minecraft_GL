@@ -255,7 +255,7 @@ void Chunk::generate_biome_terrain(int x, int z)
         float borrowP = edge * 0.65f;
         borrowP = 0.7f * borrowP + 0.3f * (borrowP * cluster);
         if (B0 == DESERT || B1 == DESERT)
-            borrowP *= 0.35f;
+            borrowP *= 0.05f;
         BIOME B = (h < borrowP ? B1 : B0);
 
         // per-biome surface with a dash of slope
@@ -298,7 +298,7 @@ void Chunk::generate_biome_terrain(int x, int z)
             }
         }
     }
-    if (Hc == 54)
+    if (Hc == 55)
     {
         top = "sand";
     }
@@ -317,6 +317,7 @@ void Chunk::generate_biome_terrain(int x, int z)
                 break;
             h--;
         }
+        top = "sand";
     }
 
     for (int y = 0; y < Hc - 4; y++)
@@ -495,8 +496,10 @@ float Chunk::generateHeight(float x, float z, float scale, float heightMultiplie
 void Chunk::initialize_vertex_buffers_and_array()
 {
     glGenVertexArrays(1, &chunk_vao);
+    glGenVertexArrays(1, &chunk_opaque_vao);
     // glGenBuffers(1, &instance_vbo);
     glGenBuffers(1, &geometry_vbo);
+    glGenBuffers(1, &opaque_vbo);
     glBindVertexArray(chunk_vao);
     // glBindVertexArray(0);
 }
@@ -586,7 +589,7 @@ static inline const std::array<FaceUV, 3> &texFor(const std::string &type)
 
 void Chunk::get_mesh_vertices(bool building_alt)
 {
-    auto &mesh = building_alt ? mesh_vertices2 : mesh_vertices;
+    auto &opaque_mesh = building_alt ? mesh_vertices_opaque : mesh_vertices_opaque2;
 
     if (generated_vertices)
         return;
@@ -594,9 +597,11 @@ void Chunk::get_mesh_vertices(bool building_alt)
         return;
 
     // Always rebuild from scratch
-    mesh.clear();
+    opaque_mesh.clear();
+    mesh_vertices.clear();
+    // mesh_vertices_opaque.clear();
     if (!building_alt)
-        mesh_vertices2.clear();
+        mesh_vertices_opaque2.clear();
     instance_vector.clear();
 
     for (int x = 0; x < X; x++)
@@ -653,7 +658,10 @@ void Chunk::get_mesh_vertices(bool building_alt)
                         v.u = offsets_to_use.offset.x + u01 * TILE;
                         v.v = offsets_to_use.offset.y + v01 * TILE;
 
-                        mesh.push_back(v);
+                        if (block.block_type == "water")
+                            opaque_mesh.push_back(v);
+                        else
+                            mesh_vertices.push_back(v);
                     }
                 }
             }
@@ -665,10 +673,10 @@ void Chunk::get_mesh_vertices(bool building_alt)
         {
             get_mesh_vertices(true);
         }
-        else
-        {
-            mesh_vertices2 = mesh_vertices;
-        }
+        // else
+        // {
+        //     mesh_vertices2 = mesh_vertices;
+        // }
         generated_vertices = true;
         clean_mesh = true;
     }
@@ -768,7 +776,7 @@ void Chunk::update_chunk()
     get_mesh_vertices(false);
 }
 
-void Chunk::buffer_data()
+void Chunk::buffer_data(std::string type)
 {
     // no need to buffer data if
     // mesh was already sent and clean.
@@ -780,12 +788,26 @@ void Chunk::buffer_data()
     // WHEN FIRST BECOMES CLEAN.
     // if (clean_mesh)
     // return;
-    glBindVertexArray(chunk_vao);
+    std::vector<Vertex> *mesh;
 
     // Geometry VBO
-    glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
-    auto &mesh = (frame) ? mesh_vertices2 : mesh_vertices;
-    glBufferData(GL_ARRAY_BUFFER, mesh.size() * sizeof(Vertex), mesh.data(), GL_DYNAMIC_DRAW);
+
+    if (type == "opaque")
+    {
+
+        glBindVertexArray(chunk_opaque_vao);
+        glBindBuffer(GL_ARRAY_BUFFER, opaque_vbo);
+        mesh = (frame) ? &mesh_vertices_opaque2 : &mesh_vertices_opaque;
+    }
+    else
+    {
+
+        glBindVertexArray(chunk_vao);
+        glBindBuffer(GL_ARRAY_BUFFER, geometry_vbo);
+        mesh = &mesh_vertices;
+    }
+
+    glBufferData(GL_ARRAY_BUFFER, mesh->size() * sizeof(Vertex), mesh->data(), GL_DYNAMIC_DRAW);
 
     // Position attribute (location = 0)
     glEnableVertexAttribArray(0);
@@ -811,7 +833,13 @@ void Chunk::buffer_data()
     // Unbind VAO and VBO
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    sent_mesh = true;
+    if (type == "land")
+        sent_non_opaque_mesh = true;
+    else if (type == "opaque")
+        sent_opaque_mesh = true;
+
+    if (sent_opaque_mesh && sent_non_opaque_mesh)
+        sent_mesh = true;
 }
 
 void Chunk::draw_chunk(bool rendered_chunks[])
@@ -828,7 +856,9 @@ void Chunk::draw_chunk(bool rendered_chunks[])
     //     return;
     // }
     // printf("ready to buffer!\n");
-    buffer_data();
+    glDisable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    buffer_data("land");
     // std::lock_guard<std::mutex> lock(chunk_mutex);
     if (!clean_mesh)
     {
@@ -846,8 +876,18 @@ void Chunk::draw_chunk(bool rendered_chunks[])
 
     // always draw, but only draw if
     // printf("vertice SIZE: %d\n", mesh_vertices.size());
-    auto &mesh = (frame) ? mesh_vertices2 : mesh_vertices;
-    glDrawArrays(GL_TRIANGLES, 0, mesh.size());
+    glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
+    // glBindVertexArray(0);
+
+    buffer_data("opaque");
+    glEnable(GL_BLEND);
+    glBindVertexArray(chunk_opaque_vao);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, Cube::texture_atlas);
+    glUniform1i(glGetUniformLocation(Cube::shader_program, "uTexture"), 0);
+    auto &mesh = (frame) ? mesh_vertices_opaque2 : mesh_vertices_opaque;
+    if (mesh.size())
+        glDrawArrays(GL_TRIANGLES, 0, mesh.size());
     glBindVertexArray(0);
     chunk_mutex.unlock();
     // printf("Fully DRAWN THE CHUNK!!!!!!\n");
@@ -859,6 +899,8 @@ void Chunk::needs_remesh()
 {
     clean_mesh = false;
     sent_mesh = false;
+    sent_opaque_mesh = false;
+    sent_non_opaque_mesh = false;
     generated_vertices = false;
     rendered = false;
 }
@@ -870,6 +912,8 @@ void Chunk::new_chunk_state()
     clean_mesh = false;
     generated_vertices = false;
     sent_mesh = false;
+    sent_opaque_mesh = false;
+    sent_non_opaque_mesh = false;
     rendered = false;
 }
 

@@ -72,6 +72,8 @@ void Renderer::render_chunks(SDL_Window *window)
             water_frame = !water_frame;
             terrain->camera->moved = true;
             chunk->sent_mesh = false;
+            chunk->sent_opaque_mesh = false;
+            chunk->sent_non_opaque_mesh = false;
             chunk->rendered = false;
             camera->moved = true;
         }

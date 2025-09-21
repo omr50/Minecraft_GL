@@ -80,6 +80,11 @@ void Display::main_loop()
     renderer->hud->init_hotbar();
     glClearColor(0.527f, 0.805f, 0.918f, 1.0f);
     glUseProgram(Cube::shader_program);
+    // glDisable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glDepthMask(GL_FALSE); // don't write depth for water
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // set up for the chunks after the texture map has loaded.
     for (int i = 0; i < NUM_CHUNKS; i++)

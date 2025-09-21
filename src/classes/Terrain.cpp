@@ -218,6 +218,8 @@ void Terrain::create_chunk_mesh(Chunk *chunk)
             }
     chunk->clean_mesh = true;
     chunk->sent_mesh = false;
+    chunk->sent_opaque_mesh = false;
+    chunk->sent_non_opaque_mesh = false;
     chunk->generated_vertices = false;
 }
 
@@ -233,18 +235,26 @@ void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
     // printf("%d %d %d cube face renderability x y z\n", x, y, z);
     if (cube->block_type == "air")
         return;
-    // front
-    cube->renderable_face[0] = determine_renderability(x, y, z + 1);
-    // back
-    cube->renderable_face[1] = determine_renderability(x, y, z - 1);
-    // left face
-    cube->renderable_face[2] = determine_renderability(x - 1, y, z);
-    // right face
-    cube->renderable_face[3] = determine_renderability(x + 1, y, z);
-    // bottom
-    cube->renderable_face[4] = determine_renderability(x, y - 1, z);
-    // top
-    cube->renderable_face[5] = determine_renderability(x, y + 1, z);
+    if (cube->block_type == "water" && y != 54)
+        return;
+
+    if (cube->block_type == "water")
+        cube->renderable_face[5] = determine_renderability(x, y + 1, z);
+    else
+    {
+        // front
+        cube->renderable_face[0] = determine_renderability(x, y, z + 1);
+        // back
+        cube->renderable_face[1] = determine_renderability(x, y, z - 1);
+        // left face
+        cube->renderable_face[2] = determine_renderability(x - 1, y, z);
+        // right face
+        cube->renderable_face[3] = determine_renderability(x + 1, y, z);
+        // bottom
+        cube->renderable_face[4] = determine_renderability(x, y - 1, z);
+        // top
+        cube->renderable_face[5] = determine_renderability(x, y + 1, z);
+    }
     // printf("%d %d %d %d %d %d\n", cube->renderable_face[0], cube->renderable_face[1], cube->renderable_face[2], cube->renderable_face[3], cube->renderable_face[4], cube->renderable_face[5]);
 }
 
@@ -319,7 +329,7 @@ bool Terrain::determine_renderability(int x, int y, int z)
         // printf("WHY THE IS IT NULL\n");
         return true;
     }
-    return cube->block_type == "air";
+    return cube->block_type == "air" || cube->block_type == "water";
 }
 
 int Terrain::get_chunk_index(std::pair<int, int> chunk_coords)
