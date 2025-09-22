@@ -5,7 +5,7 @@
 #include "../include/ThreadPool.hpp"
 #include <glm/glm.hpp>
 // change
-#define NUM_CHUNKS 225
+#define NUM_CHUNKS 361
 
 // chunk will implement renderable
 // we want to draw on a larger scal
@@ -24,6 +24,7 @@ public:
     int num_chunks_rendered = 0;
     // only access this array through main thread, won't need any threads
     bool rendered_chunks[NUM_CHUNKS] = {0};
+    bool rendered_water[NUM_CHUNKS] = {0};
 
     Terrain(Camera *camera);
     void shift_chunks();

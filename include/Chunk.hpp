@@ -55,7 +55,7 @@ public:
     bool enqueued = false;
     bool enqueued_mesh_creation = false;
     bool rendered = false;
-    bool contains_water = false;
+    bool contains_opaque = false;
     bool frame = false;
     std::mutex chunk_mutex;
     std::vector<int> heightMap;
@@ -80,6 +80,7 @@ public:
     void update_chunk();
     void buffer_data(std::string type);
     void draw_chunk(bool rendered_chunks[]);
+    void draw_water(bool rendered_chunks[]);
     void needs_remesh();
     void new_chunk_state();
     bool ready_to_buffer();

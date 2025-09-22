@@ -67,7 +67,7 @@ void Renderer::render_chunks(SDL_Window *window)
             Chunk *chunk = &terrain->chunks[i];
             chunk->frame = !chunk->frame;
             terrain->rendered_chunks[chunk->chunk_num] = false;
-            if (!chunk->contains_water)
+            if (!chunk->contains_opaque)
                 continue;
             water_frame = !water_frame;
             terrain->camera->moved = true;
@@ -81,14 +81,17 @@ void Renderer::render_chunks(SDL_Window *window)
     if (camera_moved)
     {
         std::fill(std::begin(terrain->rendered_chunks), std::end(terrain->rendered_chunks), false);
+        std::fill(std::begin(terrain->rendered_water), std::end(terrain->rendered_water), false);
     }
 
     int num_chunks_rendered = 0;
+    int num_water_rendered = 0;
     for (int i = 0; i < NUM_CHUNKS; i++)
     {
         num_chunks_rendered += (terrain->rendered_chunks[i] ? 1 : 0);
+        num_water_rendered += (terrain->rendered_water[i] ? 1 : 0);
     }
-    if (camera_moved || num_chunks_rendered < NUM_CHUNKS)
+    if (camera_moved || num_chunks_rendered < NUM_CHUNKS || num_water_rendered < NUM_CHUNKS)
     {
         // start = end;
         terrain->shift_chunks();
@@ -103,17 +106,30 @@ void Renderer::render_chunks(SDL_Window *window)
                 terrain->chunks[i].draw_chunk(terrain->rendered_chunks);
             }
         }
+        for (int i = 0; i < NUM_CHUNKS; i++)
+        {
+            // glBindVertexArray(terrain->chunks[i].chunk_vao);
+            terrain->chunks[i].draw_water(terrain->rendered_water);
+        }
         crosshair->draw_crosshair();
         // draw the Hotbar
         hud->draw_hotbar();
         hud->draw_blocks();
         hud->update_selector();
         hud->draw_selector();
+        // glDisable(GL_BLEND);
         SDL_GL_SwapWindow(window);
     }
     terrain->camera->moved = false;
 }
+/*
+-------------------------------------------------------------------------------------------
+Thinking of basically checking if all 4 around the chunk are rendered to then render water.
+Find out how to swap window but the same time "keep" what's on the screen, not really erasing and re-doing?
+(am i already doing that, or not, with the chunks being drawn because they aren't done on the same iteration)
+-------------------------------------------------------------------------------------------
 
+*/
 void Renderer::set3DState()
 {
     glEnable(GL_DEPTH_TEST);

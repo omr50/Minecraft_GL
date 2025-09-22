@@ -2,8 +2,8 @@
 #include "../../include/Shader.hpp"
 #include <chrono>
 
-#define WIDTH 800.0
-#define HEIGHT 600.0
+#define WIDTH 1600.0
+#define HEIGHT 1200.0
 
 Display::Display()
 {

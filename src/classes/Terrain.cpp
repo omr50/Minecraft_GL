@@ -329,7 +329,7 @@ bool Terrain::determine_renderability(int x, int y, int z)
         // printf("WHY THE IS IT NULL\n");
         return true;
     }
-    return cube->block_type == "air" || cube->block_type == "water";
+    return cube->block_type == "air" || cube->block_type == "water" || cube->block_type == "glass";
 }
 
 int Terrain::get_chunk_index(std::pair<int, int> chunk_coords)

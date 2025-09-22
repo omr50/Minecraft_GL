@@ -110,8 +110,10 @@ void Cube::add_texture(std::string texture_filename)
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // For the atlas texture
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // no mipmaps
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // no mipmaps
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -0.25f);
 
     GLenum format = channels == 4 ? GL_RGBA : GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, image);
@@ -137,6 +139,7 @@ void Cube::initialize_texture_map(std::string texture_atlas_filename)
     FaceUV brick_offset = {{7.0f * texture_square_size, 0.0f * texture_square_size}};
     FaceUV glass_offset = {{1.0f * texture_square_size, 3.0f * texture_square_size}};
     FaceUV obsidian_offset = {{5.0f * texture_square_size, 2.0f * texture_square_size}};
+    FaceUV gravel_offset = {{3.0f * texture_square_size, 1.0f * texture_square_size}};
 
     FaceUV grass_top_offset = {{0.0f, 0.0f * texture_square_size}};
     FaceUV grass_bottom_offset = dirt_offset;
@@ -157,6 +160,7 @@ void Cube::initialize_texture_map(std::string texture_atlas_filename)
 
     add_block_to_map("grass", grass_top_offset, grass_side_offset, grass_bottom_offset);
     add_block_to_map("leaf", leaf_offet, leaf_offet, leaf_offet);
+    add_block_to_map("gravel", gravel_offset, gravel_offset, gravel_offset);
 }
 void Cube::add_block_to_map(std::string block_type, FaceUV offset_top, FaceUV offset_side, FaceUV offset_bottom)
 {

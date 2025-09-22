@@ -200,7 +200,7 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
                     continue;
                 }
                 int index = terrain->chunks[j].get_index(block_x, wy, block_z);
-                if (terrain->chunks[j].blocks[index].block_type != "air")
+                if (terrain->chunks[j].blocks[index].block_type != "air" && terrain->chunks[j].blocks[index].block_type != "water")
                 {
                     // printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
                     // printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
@@ -254,7 +254,7 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
                     continue;
                 }
                 int index = terrain->chunks[j].get_index(block_x, wy, block_z);
-                if (terrain->chunks[j].blocks[index].block_type != "air")
+                if (terrain->chunks[j].blocks[index].block_type != "air" && terrain->chunks[j].blocks[index].block_type != "water")
                 {
                     auto prev_coord = ray_pos + look_direction * static_cast<float>(i - 0.001);
 
@@ -285,6 +285,8 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
                             std::string block_types[9] = {"grass", "stone", "dirt", "cobble_stone", "wooden_plank", "wood", "brick", "glass", "obsidian"};
                             std::string block_type = block_types[hud->selector_slot_index];
                             terrain->chunks[k].blocks[index].block_type = block_type;
+                            if (block_type == "glass")
+                                terrain->chunks[k].contains_opaque = true;
                             terrain->chunks[k].needs_remesh();
                             // terrain->enqueue_update_task(&terrain->chunks[j]);
                             {

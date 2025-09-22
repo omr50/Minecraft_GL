@@ -8,8 +8,8 @@
 #include <chrono>
 using Clock = std::chrono::high_resolution_clock;
 
-#define WIDTH 800.0f
-#define HEIGHT 600.0f
+#define WIDTH 1600.0f
+#define HEIGHT 1200.0f
 
 class Terrain;
 class HUD;

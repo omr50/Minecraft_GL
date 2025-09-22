@@ -305,7 +305,8 @@ void Chunk::generate_biome_terrain(int x, int z)
 
     if (Hc <= 54)
     {
-        contains_water = true;
+        // contains water
+        contains_opaque = true;
         auto h = 54;
         while (true)
         {
@@ -317,7 +318,12 @@ void Chunk::generate_biome_terrain(int x, int z)
                 break;
             h--;
         }
-        top = "sand";
+        if (Hc == 54 || Hc == 53)
+            top = "sand";
+        else if (Hc == 52)
+            top = "gravel";
+        else if (Hc < 52)
+            top = "dirt";
     }
 
     for (int y = 0; y < Hc - 4; y++)
@@ -658,7 +664,7 @@ void Chunk::get_mesh_vertices(bool building_alt)
                         v.u = offsets_to_use.offset.x + u01 * TILE;
                         v.v = offsets_to_use.offset.y + v01 * TILE;
 
-                        if (block.block_type == "water")
+                        if (block.block_type == "water" || block.block_type == "glass")
                             opaque_mesh.push_back(v);
                         else
                             mesh_vertices.push_back(v);
@@ -669,7 +675,7 @@ void Chunk::get_mesh_vertices(bool building_alt)
     if (!building_alt)
     {
         // Build alt immediately after base so both are in sync
-        if (contains_water)
+        if (contains_opaque)
         {
             get_mesh_vertices(true);
         }
@@ -856,8 +862,10 @@ void Chunk::draw_chunk(bool rendered_chunks[])
     //     return;
     // }
     // printf("ready to buffer!\n");
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     buffer_data("land");
     // std::lock_guard<std::mutex> lock(chunk_mutex);
     if (!clean_mesh)
@@ -879,8 +887,47 @@ void Chunk::draw_chunk(bool rendered_chunks[])
     glDrawArrays(GL_TRIANGLES, 0, mesh_vertices.size());
     // glBindVertexArray(0);
 
+    // buffer_data("opaque");
+    // glEnable(GL_BLEND);
+    // glBindVertexArray(chunk_opaque_vao);
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, Cube::texture_atlas);
+    // glUniform1i(glGetUniformLocation(Cube::shader_program, "uTexture"), 0);
+    // auto &mesh = (frame) ? mesh_vertices_opaque2 : mesh_vertices_opaque;
+    // if (mesh.size())
+    //     glDrawArrays(GL_TRIANGLES, 0, mesh.size());
+    // glBindVertexArray(0);
+    chunk_mutex.unlock();
+    // printf("Fully DRAWN THE CHUNK!!!!!!\n");
+    rendered = true;
+    rendered_chunks[chunk_num] = true;
+}
+
+void Chunk::draw_water(bool rendered_water[])
+{
+    // try lock instead of holding up main thread
+    // for some fucking reason, try lock doesn't unlock out of scope!!!!
+    if (!chunk_mutex.try_lock())
+        return;
+    // std::lock_guard<std::mutex> chunk_lock(chunk_mutex);
+
+    // if (is_renderable())
+    // {
+    //     chunk_mutex.unlock();
+    //     return;
+    // }
+    // printf("ready to buffer!\n");
+    // std::lock_guard<std::mutex> lock(chunk_mutex);
+    if (!clean_mesh)
+    {
+        chunk_mutex.unlock();
+        return;
+    }
     buffer_data("opaque");
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_FALSE);
+
     glBindVertexArray(chunk_opaque_vao);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, Cube::texture_atlas);
@@ -891,8 +938,8 @@ void Chunk::draw_chunk(bool rendered_chunks[])
     glBindVertexArray(0);
     chunk_mutex.unlock();
     // printf("Fully DRAWN THE CHUNK!!!!!!\n");
-    rendered = true;
-    rendered_chunks[chunk_num] = true;
+    // rendered = true;
+    rendered_water[chunk_num] = true;
 }
 
 void Chunk::needs_remesh()
