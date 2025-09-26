@@ -34,7 +34,7 @@ public:
     std::pair<int, int> get_center_chunk_coordinates(float x, float z);
     void create_mesh();
     void cube_face_renderability(Chunk *chunk, Cube *cube);
-    bool determine_renderability(int x, int y, int z);
+    bool determine_renderability(int x, int y, int z, std::string prev_block = "");
     int get_chunk_index(std::pair<int, int> chunk_coords);
     void draw() override;
     bool camera_moved();

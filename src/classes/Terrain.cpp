@@ -1,6 +1,8 @@
 #include "../../include/Terrain.hpp"
 #include <chrono>
 
+#include <SDL2/SDL_mixer.h>
+
 Terrain::Terrain(Camera *camera) : camera(camera)
 {
     thread_pool = new ThreadPool(7);
@@ -233,32 +235,33 @@ void Terrain::cube_face_renderability(Chunk *chunk, Cube *cube)
     int y = cube->y;
     int z = cube->z;
     // printf("%d %d %d cube face renderability x y z\n", x, y, z);
-    if (cube->block_type == "air")
+    auto block_type = cube->block_type;
+    if (block_type == "air")
         return;
-    if (cube->block_type == "water" && y != 54)
+    if (block_type == "water" && y != 54)
         return;
 
-    if (cube->block_type == "water")
-        cube->renderable_face[5] = determine_renderability(x, y + 1, z);
+    if (block_type == "water")
+        cube->renderable_face[5] = determine_renderability(x, y + 1, z, block_type);
     else
     {
         // front
-        cube->renderable_face[0] = determine_renderability(x, y, z + 1);
+        cube->renderable_face[0] = determine_renderability(x, y, z + 1, block_type);
         // back
-        cube->renderable_face[1] = determine_renderability(x, y, z - 1);
+        cube->renderable_face[1] = determine_renderability(x, y, z - 1, block_type);
         // left face
-        cube->renderable_face[2] = determine_renderability(x - 1, y, z);
+        cube->renderable_face[2] = determine_renderability(x - 1, y, z, block_type);
         // right face
-        cube->renderable_face[3] = determine_renderability(x + 1, y, z);
+        cube->renderable_face[3] = determine_renderability(x + 1, y, z, block_type);
         // bottom
-        cube->renderable_face[4] = determine_renderability(x, y - 1, z);
+        cube->renderable_face[4] = determine_renderability(x, y - 1, z, block_type);
         // top
-        cube->renderable_face[5] = determine_renderability(x, y + 1, z);
+        cube->renderable_face[5] = determine_renderability(x, y + 1, z, block_type);
     }
     // printf("%d %d %d %d %d %d\n", cube->renderable_face[0], cube->renderable_face[1], cube->renderable_face[2], cube->renderable_face[3], cube->renderable_face[4], cube->renderable_face[5]);
 }
 
-bool Terrain::determine_renderability(int x, int y, int z)
+bool Terrain::determine_renderability(int x, int y, int z, std::string prev_block)
 {
     // determine chunk of the cube
     // a manual floor for negative value cases
@@ -329,6 +332,8 @@ bool Terrain::determine_renderability(int x, int y, int z)
         // printf("WHY THE IS IT NULL\n");
         return true;
     }
+    if (prev_block == "glass")
+        return cube->block_type == "air" || cube->block_type == "water";
     return cube->block_type == "air" || cube->block_type == "water" || cube->block_type == "glass";
 }
 
