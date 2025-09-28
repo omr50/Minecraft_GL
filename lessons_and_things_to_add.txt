@@ -8,3 +8,4 @@ Things to add:
 - persistence with compression
 - Music & sound (blocks breaking/adding)
 - cloud / sky instead of background blue clear sky color
+- Multiplayer

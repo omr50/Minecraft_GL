@@ -6,6 +6,7 @@
 #include "./EventHandler.hpp"
 #include "./Camera.hpp"
 #include "./Renderer.hpp"
+#include "./Audio.hpp"
 
 class Display
 {
