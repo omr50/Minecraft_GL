@@ -14,7 +14,7 @@ Display::Display()
     camera = new Camera();
     renderer = new Renderer(camera);
     camera->hud = renderer->hud;
-    event_handler = new EventHandler(camera, window, &running, renderer);
+    event_handler = new EventHandler(camera, window, &running, renderer, &audioPlayer);
     SDL_ShowCursor(SDL_DISABLE);
     SDL_SetRelativeMouseMode(SDL_TRUE);
     main_loop();
@@ -95,6 +95,8 @@ void Display::main_loop()
 
     auto time_start = std::chrono::high_resolution_clock::now();
     int fps = 0;
+    audioPlayer.start_background_music();
+
     while (running)
     {
         // printf("got to this point?\n");

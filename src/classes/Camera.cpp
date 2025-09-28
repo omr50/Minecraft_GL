@@ -170,7 +170,7 @@ inline int half_round(float a)
 {
 }
 
-void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points)
+void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points, Audio *audioPlayer)
 {
     auto look_direction = get_look_direction();
     int eye_height = 1.6;
@@ -224,7 +224,7 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
     }
 }
 
-void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points)
+void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points, Audio *audioPlayer)
 {
     auto look_direction = get_look_direction();
     int eye_height = 1.6;
@@ -275,6 +275,7 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
                             {
                                 return;
                             }
+                            audioPlayer->play_place_SFX();
                             // printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
                             // printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
                             // printf("Prev Ray found (%f, %f, %f)\n", prev_coord.x, prev_coord.y, ray_coord.z);

@@ -20,6 +20,7 @@ private:
     EventHandler *event_handler;
     Renderer *renderer;
     bool centered = true;
+    Audio audioPlayer = Audio();
 
 public:
     Display();

@@ -7,8 +7,10 @@ Audio::Audio()
 {
     init_sdl_audio();
     init_sdl_mixer();
-    load_background_music("../../background_music.mp3");
-    load_place_sound("../../place_block.mp3");
+    open_device(48000, 1024);
+    Mix_AllocateChannels(32);
+    load_background_music("../Audio_files/background_music.mp3");
+    load_place_SFX("../Audio_files/place_block.mp3");
 }
 void Audio::init_sdl_audio()
 {
@@ -34,9 +36,6 @@ void Audio::open_device(int sampling_rate, int buffer_samples)
     }
 }
 
-void load_background_music(std::string path);
-void load_place_sound(std::string path);
-void load_break_sound(std::string path);
 void Audio::load_background_music(std::string path)
 {
     // "../../Audio_files/background_music.mp3"

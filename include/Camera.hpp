@@ -4,6 +4,7 @@
 #include <glm/gtx/euler_angles.hpp>
 #include "./Cube.hpp"
 #include "./Terrain.hpp"
+#include "./Audio.hpp"
 #include "./HUD.hpp"
 #include <chrono>
 using Clock = std::chrono::high_resolution_clock;
@@ -46,9 +47,9 @@ public:
     std::pair<int, int> get_chunk();
     std::pair<int, int> get_direction();
     glm::vec3 get_look_direction();
-    void raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points);
+    void raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points, Audio *audioPlayer);
     std::pair<int, int> get_ray_chunk(int x, int z);
-    void place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points);
+    void place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm::vec3>> *points, Audio *audioPlayer);
     glm::vec3 get_ray_end(Terrain *terrain, int iterations);
     void draw_ray();
 };

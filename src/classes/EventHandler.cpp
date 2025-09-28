@@ -5,7 +5,7 @@
 #define WIDTH 800.0
 #define HEIGHT 600.0
 
-EventHandler::EventHandler(Camera *camera, SDL_Window *window, bool *running, Renderer *renderer) : running(running), window(window), camera(camera), renderer(renderer) {}
+EventHandler::EventHandler(Camera *camera, SDL_Window *window, bool *running, Renderer *renderer, Audio *audioHandler) : running(running), window(window), camera(camera), renderer(renderer), audioPlayer(audioHandler) {}
 
 void EventHandler::event_handler()
 {
@@ -155,14 +155,12 @@ void EventHandler::mouse_click_handler(bool place)
         last_click = now;
         if (!place)
         {
-            camera->raycast_block(renderer->terrain, &LineRenderer::points);
-            printf("Place block!\n");
+            camera->raycast_block(renderer->terrain, &LineRenderer::points, audioPlayer);
         }
 
         else
         {
-            camera->place_block(renderer->terrain, &LineRenderer::points);
-            printf("Remove block!\n");
+            camera->place_block(renderer->terrain, &LineRenderer::points, audioPlayer);
         }
     }
 }
