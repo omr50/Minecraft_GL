@@ -94,7 +94,7 @@ void Display::main_loop()
     }
 
     auto time_start = std::chrono::high_resolution_clock::now();
-    int fps = 0;
+    // int fps = 0;
     audioPlayer.start_background_music();
 
     while (running)
@@ -118,14 +118,14 @@ void Display::main_loop()
         // SDL_Delay(5);
 
         auto time_end = std::chrono::high_resolution_clock::now();
-        fps++;
-        if (std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count() > 1000)
-        {
-            // printf("FPS: %d\n", fps);
-            // find a way to control fps limits
-            fps = 0;
-            time_start = std::chrono::high_resolution_clock::now();
-        }
+        // fps++;
+        // if (std::chrono::duration_cast<std::chrono::milliseconds>(time_end - time_start).count() > 1000)
+        // {
+        //     // printf("FPS: %d\n", fps);
+        //     // find a way to control fps limits
+        //     fps = 0;
+        //     time_start = std::chrono::high_resolution_clock::now();
+        // }
     }
 
     SDL_DestroyWindow(window);
