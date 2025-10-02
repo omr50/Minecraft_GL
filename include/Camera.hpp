@@ -6,6 +6,7 @@
 #include "./Terrain.hpp"
 #include "./Audio.hpp"
 #include "./HUD.hpp"
+#include "./Persistence.hpp"
 #include <chrono>
 using Clock = std::chrono::high_resolution_clock;
 
@@ -19,6 +20,7 @@ class Camera
 
 public:
     HUD *hud;
+    Persistence *world_saver;
     glm::vec3 position = {0.0, 76.0, 0.0};
     float rotation_angle = 0.0f;
     float fov = glm::radians(60.0f);
@@ -38,7 +40,7 @@ public:
     std::chrono::_V2::system_clock::time_point stop_move_time = Clock::now();
     std::chrono::_V2::system_clock::time_point last_move_time = Clock::now();
 
-    Camera();
+    Camera(Persistence *world_saver);
     void update_camera_position(glm::vec3 direction);
     void camera_move();
     glm::mat4 create_view_matrix();

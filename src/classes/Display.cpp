@@ -10,11 +10,11 @@ Display::Display()
     // initialize gl and sdl before creating
     // variables which will use opengl functions.
     init_gl_sdl();
-
-    camera = new Camera();
+    world_saver = new Persistence();
+    camera = new Camera(world_saver);
     renderer = new Renderer(camera);
     camera->hud = renderer->hud;
-    event_handler = new EventHandler(camera, window, &running, renderer, &audioPlayer);
+    event_handler = new EventHandler(camera, window, &running, renderer, &audioPlayer, world_saver);
     SDL_ShowCursor(SDL_DISABLE);
     SDL_SetRelativeMouseMode(SDL_TRUE);
     main_loop();

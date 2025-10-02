@@ -6,6 +6,7 @@
 #include "./EventHandler.hpp"
 #include "./Camera.hpp"
 #include "./Renderer.hpp"
+#include "./Persistence.hpp"
 #include "./Audio.hpp"
 
 class Display
@@ -21,6 +22,7 @@ private:
     Renderer *renderer;
     bool centered = true;
     Audio audioPlayer = Audio();
+    Persistence *world_saver;
 
 public:
     Display();
