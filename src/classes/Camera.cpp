@@ -288,7 +288,7 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
                             std::string block_type = block_types[hud->selector_slot_index];
                             terrain->chunks[k].blocks[index].block_type = block_type;
 
-                            world_saver->addBlockToMap({block_x, wy, block_z}, terrain->chunks[j].global_chunk_num, block_type);
+                            world_saver->addBlockToMap({block_x, wy, block_z}, terrain->chunks[k].global_chunk_num, block_type);
 
                             if (block_type == "glass")
                                 terrain->chunks[k].contains_opaque = true;

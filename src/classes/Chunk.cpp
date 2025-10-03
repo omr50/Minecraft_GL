@@ -344,7 +344,6 @@ void Chunk::generate_biome_terrain(int x, int z)
 
     if (world_saver->modifiedBlocksMap.find(global_chunk_num) != world_saver->modifiedBlocksMap.end())
     {
-        printf("Found block in map!\n");
         auto innerMap = world_saver->modifiedBlocksMap[global_chunk_num];
         for (auto &innerPair : innerMap)
         {
