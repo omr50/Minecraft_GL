@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <stdint.h>
 
 struct BlockCoord
 {
@@ -31,10 +32,10 @@ class Persistence
 
 public:
     std::string log_file;
-    std::unordered_map<int, std::unordered_map<BlockCoord, std::string, BlockCoordHash>> modifiedBlocksMap;
+    std::unordered_map<uint64_t, std::unordered_map<BlockCoord, std::string, BlockCoordHash>> modifiedBlocksMap;
 
     void loadBlocksFromLogFile();
     void writeBlocksToLogFile();
-    void addBlockToMap(BlockCoord block_coord, int chunk_id, std::string block_type);
+    void addBlockToMap(BlockCoord block_coord, uint64_t chunk_id, std::string block_type);
     void saveFile();
 };

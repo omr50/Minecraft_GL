@@ -22,6 +22,7 @@ Terrain::Terrain(Camera *camera) : camera(camera)
         chunks[i].chunk_coordinates.second = positions[i].second;
         chunks[i].initialize_vertex_buffers_and_array();
         chunks[i].initialize_cubes();
+        chunks[i].world_saver = camera->world_saver;
     }
     for (int i = 0; i < NUM_CHUNKS; i++)
     {

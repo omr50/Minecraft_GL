@@ -218,6 +218,11 @@ inline void create_leaves(int x, int y, int z, std::unordered_set<std::pair<int,
 
 void Chunk::generate_biome_terrain(int x, int z)
 {
+    // global_chunk_num = ((uint64_t)(uint32_t)chunk_coordinates.first << 32) | (uint32_t)chunk_coordinates.second;
+    uint64_t ux = (uint32_t)chunk_coordinates.first;
+    uint64_t uz = (uint32_t)chunk_coordinates.second;
+    global_chunk_num = (ux << 32) | uz;
+
     float wx = get_cube_x(x);
     float wz = get_cube_z(z);
     glm::vec2 p(wx, wz);
@@ -334,6 +339,22 @@ void Chunk::generate_biome_terrain(int x, int z)
     for (int y = Hc - 4; y < Hc - 1; y++)
         blocks[get_index(x, y, z)].update_state(chunk_x, y, chunk_z, "dirt");
     blocks[get_index(x, Hc, z)].update_state(chunk_x, Hc, chunk_z, top);
+
+    // for each chunk if it exists in the map, then just make the changes to the blocks necessary
+
+    if (world_saver->modifiedBlocksMap.find(global_chunk_num) != world_saver->modifiedBlocksMap.end())
+    {
+        printf("Found block in map!\n");
+        auto innerMap = world_saver->modifiedBlocksMap[global_chunk_num];
+        for (auto &innerPair : innerMap)
+        {
+            const BlockCoord &coord = innerPair.first;
+            const std::string &blockType = innerPair.second;
+            if (blockType == "glass")
+                contains_opaque = true;
+            blocks[get_index(coord.x, coord.y, coord.z)].update_state(get_cube_x(coord.x), coord.y, get_cube_z(coord.z), blockType);
+        }
+    }
 
     // std::vector<int> heightMap; // size X*Z
 

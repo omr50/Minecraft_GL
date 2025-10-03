@@ -2,6 +2,7 @@
 #include "../include/Cube.hpp"
 #include "../include/Renderable.hpp"
 #include "../include/Biome.hpp"
+#include "../include/Persistence.hpp"
 #include <glm/gtc/noise.hpp>
 #include <vector>
 #include <mutex>
@@ -33,7 +34,9 @@ class Chunk
 {
 public:
     int chunk_num;
+    uint64_t global_chunk_num;
     Cube *blocks;
+    Persistence *world_saver;
     Chunk *all_chunks;
     std::pair<int, int> chunk_coordinates;
     std::vector<Vertex> mesh_vertices;

@@ -11,6 +11,7 @@ Display::Display()
     // variables which will use opengl functions.
     init_gl_sdl();
     world_saver = new Persistence();
+    world_saver->loadBlocksFromLogFile();
     camera = new Camera(world_saver);
     renderer = new Renderer(camera);
     camera->hud = renderer->hud;

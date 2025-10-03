@@ -207,7 +207,7 @@ void EventHandler::window_event_handler()
         // fflush(stdout);
         // dup2(stdout_copy, STDOUT_FILENO); // Restore original stdout
         // close(fd);
-        world_saver->writeBlocksToLogFile();
+        world_saver->saveFile();
         std::cout << "Exiting screen!" << std::endl;
         *running = false;
     }

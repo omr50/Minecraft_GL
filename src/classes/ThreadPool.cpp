@@ -36,6 +36,10 @@ void ThreadPool::worker_loop()
             conditional.wait(lock, [this]
                              { return !task_queue.empty() || stop; });
 
+            if (stop && task_queue.empty())
+            {
+                continue; // exit thread cleanly
+            }
             // if (stop && task_queue.empty())
             // return;
 
