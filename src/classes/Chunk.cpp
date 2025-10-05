@@ -354,45 +354,6 @@ void Chunk::generate_biome_terrain(int x, int z)
             blocks[get_index(coord.x, coord.y, coord.z)].update_state(get_cube_x(coord.x), coord.y, get_cube_z(coord.z), blockType);
         }
     }
-
-    // std::vector<int> heightMap; // size X*Z
-
-    // // printf("got chunk zone!\n");
-    // // get y value that will be used for
-    // // the height, if y < height, stone
-    // // if greater, air.
-    // float chunk_x = get_cube_x(x), chunk_z = get_cube_z(z);
-    // // printf("%f, %f\n", chunk_x, chunk_z);
-    // // min block height added so that total can be from 0 to 255.
-    // auto zone_bias = get_zone_bias();
-    // float height = Biome::get_height(p);
-    // // printf("Block height %f\n", height);
-    // // printf("height is %f\n", height);
-
-    // BIOME zone = Biome::get_biome(p);
-    // for (int y = 0; y < Y; y++)
-    // {
-    //     if (zone == FOREST)
-    //     {
-    //         generate_forest(x, y, z, chunk_x, chunk_z, height);
-    //         // printf("generated a forest!\n");
-    //     }
-    //     else if (zone == PLAINS)
-    //     {
-    //         generate_plains(x, y, z, chunk_x, chunk_z, height);
-    //         // printf("generated a plains!\n");
-    //     }
-    //     if (zone == DESERT)
-    //     {
-    //         generate_desert(x, y, z, chunk_x, chunk_z, height);
-    //         // printf("generated a desert!\n");
-    //     }
-    //     if (zone == MOUNTAINS)
-    //     {
-    //         generate_mountains(x, y, z, chunk_x, chunk_z, height);
-    //         // printf("generated a mountain!\n");
-    //     }
-    // }
 }
 
 void Chunk::generate_desert(int x, int y, int z, float chunk_x, float chunk_z, int height)
