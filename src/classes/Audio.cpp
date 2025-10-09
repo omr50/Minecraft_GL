@@ -9,8 +9,25 @@ Audio::Audio()
     init_sdl_mixer();
     open_device(48000, 1024);
     Mix_AllocateChannels(32);
-    load_background_music("../Audio_files/background_music.mp3");
-    load_place_SFX("../Audio_files/place_block.mp3");
+    load_background_music("../Audio_files/background_music.ogg");
+    load_place_SFX("../Audio_files/place_grass.ogg", 0);
+    load_place_SFX("../Audio_files/place_stone.ogg", 1);
+    load_place_SFX("../Audio_files/place_grass.ogg", 2); // dirt
+    load_place_SFX("../Audio_files/place_stone.ogg", 3); // cobble
+    load_place_SFX("../Audio_files/place_wood.ogg", 4);  // plank
+    load_place_SFX("../Audio_files/place_wood.ogg", 5);
+    load_place_SFX("../Audio_files/place_brick.ogg", 6);
+    load_place_SFX("../Audio_files/place_stone.ogg", 7);
+    load_place_SFX("../Audio_files/place_stone.ogg", 8);
+    //    add_block(0, "../textures/grass_block.png");
+    // add_block(1, "../textures/stone_block.png");
+    // add_block(2, "../textures/dirt_block.png");
+    // add_block(3, "../textures/cobblestone_block.png");
+    // add_block(4, "../textures/woodenplank_block.png");
+    // add_block(5, "../textures/log_block.png");
+    // add_block(6, "../textures/brick_block.png");
+    // add_block(7, "../textures/glass_block.png");
+    // add_block(8, "../textures/obsidian_block.png");
 }
 void Audio::init_sdl_audio()
 {
@@ -46,18 +63,18 @@ void Audio::load_background_music(std::string path)
     }
 }
 
-void Audio::load_place_SFX(std::string path)
+void Audio::load_place_SFX(std::string path, int index)
 {
-    block_place_SFX = Mix_LoadWAV(path.c_str());
+    block_place_SFX[index] = Mix_LoadWAV(path.c_str());
     if (!block_place_SFX)
     {
         std::cerr << "Load place sound failed: " << Mix_GetError() << "\n";
     }
 }
 
-void Audio::load_break_SFX(std::string path)
+void Audio::load_break_SFX(std::string path, int index)
 {
-    block_break_SFX = Mix_LoadWAV(path.c_str());
+    block_break_SFX[index] = Mix_LoadWAV(path.c_str());
     if (!block_break_SFX)
     {
         std::cerr << "Load break sound failed: " << Mix_GetError() << "\n";
@@ -72,18 +89,18 @@ void Audio::start_background_music()
     }
 }
 
-void Audio::play_break_SFX()
+void Audio::play_break_SFX(int index)
 {
-    int ch = Mix_PlayChannel(-1, block_break_SFX, 0);
+    int ch = Mix_PlayChannel(-1, block_break_SFX[index], 0);
     if (ch == -1)
     {
         std::cerr << "Play break SFX failed: " << Mix_GetError() << "\n";
     }
 }
 
-void Audio::play_place_SFX()
+void Audio::play_place_SFX(int index)
 {
-    int ch = Mix_PlayChannel(-1, block_place_SFX, 0);
+    int ch = Mix_PlayChannel(-1, block_place_SFX[index], 0);
     if (ch == -1)
     {
         std::cerr << "Play place SFX failed: " << Mix_GetError() << "\n";
@@ -93,8 +110,8 @@ void Audio::audio_shutdown()
 {
     Mix_HaltChannel(-1);
     Mix_HaltMusic();
-    Mix_FreeChunk(block_place_SFX);
-    Mix_FreeChunk(block_break_SFX);
+    // Mix_FreeChunk(block_place_SFX);
+    // Mix_FreeChunk(block_break_SFX);
     Mix_FreeMusic(main_background_music);
     Mix_CloseAudio();
     Mix_Quit();
