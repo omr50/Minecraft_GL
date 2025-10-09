@@ -26,8 +26,8 @@ Audio::Audio()
     load_break_SFX("../Audio_files/place_stone.ogg", 3); // cobble
     load_break_SFX("../Audio_files/break_wood.ogg", 4);  // plank
     load_break_SFX("../Audio_files/break_wood.ogg", 5);
-    load_break_SFX("../Audio_files/place_brick.ogg", 6);
-    load_break_SFX("../Audio_files/place_stone.ogg", 7);
+    load_break_SFX("../Audio_files/break_brick.ogg", 6);
+    load_break_SFX("../Audio_files/break_glass.ogg", 7);
     load_break_SFX("../Audio_files/place_stone.ogg", 8);
 }
 void Audio::init_sdl_audio()
