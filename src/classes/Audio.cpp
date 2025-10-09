@@ -19,15 +19,16 @@ Audio::Audio()
     load_place_SFX("../Audio_files/place_brick.ogg", 6);
     load_place_SFX("../Audio_files/place_stone.ogg", 7);
     load_place_SFX("../Audio_files/place_stone.ogg", 8);
-    //    add_block(0, "../textures/grass_block.png");
-    // add_block(1, "../textures/stone_block.png");
-    // add_block(2, "../textures/dirt_block.png");
-    // add_block(3, "../textures/cobblestone_block.png");
-    // add_block(4, "../textures/woodenplank_block.png");
-    // add_block(5, "../textures/log_block.png");
-    // add_block(6, "../textures/brick_block.png");
-    // add_block(7, "../textures/glass_block.png");
-    // add_block(8, "../textures/obsidian_block.png");
+
+    load_break_SFX("../Audio_files/place_grass.ogg", 0);
+    load_break_SFX("../Audio_files/place_stone.ogg", 1);
+    load_break_SFX("../Audio_files/place_grass.ogg", 2); // dirt
+    load_break_SFX("../Audio_files/place_stone.ogg", 3); // cobble
+    load_break_SFX("../Audio_files/break_wood.ogg", 4);  // plank
+    load_break_SFX("../Audio_files/break_wood.ogg", 5);
+    load_break_SFX("../Audio_files/place_brick.ogg", 6);
+    load_break_SFX("../Audio_files/place_stone.ogg", 7);
+    load_break_SFX("../Audio_files/place_stone.ogg", 8);
 }
 void Audio::init_sdl_audio()
 {

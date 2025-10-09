@@ -207,6 +207,24 @@ void Camera::raycast_block(Terrain *terrain, std::vector<std::pair<glm::vec3, gl
                     // printf("Index: %d\n", index);
                     // get previous block (for now just testing on the current block)
                     points->push_back(std::make_pair(ray_pos, ray_coord));
+
+                    std::string block_types[9] = {"grass", "stone", "dirt", "cobble_stone", "wooden_plank", "wood", "brick", "glass", "obsidian"};
+                    auto block_type = terrain->chunks[j].blocks[index].block_type;
+                    bool found_block = false;
+                    for (int k = 0; k < 9; k++)
+                    {
+                        if (block_type == block_types[k])
+                        {
+
+                            audioPlayer->play_break_SFX(k);
+                            found_block = true;
+                            break;
+                        }
+                    }
+
+                    if (!found_block)
+                        audioPlayer->play_break_SFX(0);
+
                     terrain->chunks[j].blocks[index].block_type = "air";
                     world_saver->addBlockToMap({block_x, wy, block_z}, terrain->chunks[j].global_chunk_num, "air");
                     terrain->chunks[j].needs_remesh();
@@ -276,7 +294,7 @@ void Camera::place_block(Terrain *terrain, std::vector<std::pair<glm::vec3, glm:
                             {
                                 return;
                             }
-                            audioPlayer->play_place_SFX();
+                            audioPlayer->play_place_SFX(hud->selector_slot_index);
                             // printf("Ray found (%f, %f, %f)\n", ray_coord.x, ray_coord.y, ray_coord.z);
                             // printf("wx: %d, wy: %d, wz: %d)\n", wx, wy, wz);
                             // printf("Prev Ray found (%f, %f, %f)\n", prev_coord.x, prev_coord.y, ray_coord.z);
