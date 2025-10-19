@@ -6,6 +6,6 @@
 Things to add:
 
 - persistence with compression (done)
-- Music & sound (blocks breaking/adding) (currently done for adding, not for breaking, also add variety, block sounds)
+- Music & sound (blocks breaking/adding) (done)
 - cloud / sky instead of background blue clear sky color 
 - Multiplayer
