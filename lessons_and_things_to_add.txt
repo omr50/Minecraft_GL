@@ -9,3 +9,5 @@ Things to add:
 - Music & sound (blocks breaking/adding) (done)
 - cloud / sky instead of background blue clear sky color (to be continued) 
 - Multiplayer (to be continued)
+- survival mode (to be continued)
+- mobs with path finding like A* algo (to be continued)
