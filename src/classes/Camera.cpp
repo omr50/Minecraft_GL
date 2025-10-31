@@ -9,6 +9,7 @@ Camera::Camera(Persistence *world_saver) : world_saver(world_saver)
 {
     prev_chunk = get_chunk();
     curr_chunk = prev_chunk;
+    // initialized later
     hud = nullptr;
 }
 
